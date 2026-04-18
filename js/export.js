@@ -44,7 +44,8 @@ window.Export = (function() {
       '',
       '--- PHASE 1: THE ANCESTORS ---',
       'Ancestor: ' + _getCardText(dc.ancestor, lang),
-      'Value: ' + _getCardText(dc.value, lang),
+      'Value 1: ' + _getCardText(dc.values && dc.values[0], lang),
+      'Value 2: ' + _getCardText(dc.values && dc.values[1], lang),
       '',
       "Ancestor's name: " + (np.p1_name || '\u2014'),
       'Background: ' + (np.p1_background || '\u2014'),
@@ -138,8 +139,8 @@ window.Export = (function() {
     }
     y += 3;
 
-    addText('VALUE', { size: 8, bold: true, color: '#1a6b6b' });
-    addText(_getCardText(dc.value, lang), { size: 14, bold: true });
+    addText('VALUES', { size: 8, bold: true, color: '#1a6b6b' });
+    addText(_getCardText(dc.values && dc.values[0], lang) + ' / ' + _getCardText(dc.values && dc.values[1], lang), { size: 12, bold: true });
     y += 3;
 
     addText('CHALLENGE', { size: 8, bold: true, color: '#c45c2b' });
@@ -248,7 +249,8 @@ window.Export = (function() {
       '</div>' +
       '<div style="display:flex;gap:24px;justify-content:center;margin-bottom:24px;">' +
         _cardBlock(dc.ancestor, lang, '#6b3a1f') +
-        _cardBlock(dc.value, lang, '#1a6b6b') +
+        _cardBlock(dc.values && dc.values[0], lang, '#1a6b6b') +
+        _cardBlock(dc.values && dc.values[1], lang, '#1a6b6b') +
         _cardBlock(dc.challenge, lang, '#c45c2b') +
       '</div>' +
       '<div style="background:#fff;border-radius:8px;padding:20px;border-left:4px solid #2d5a27;">' +

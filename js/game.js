@@ -19,7 +19,7 @@ window.Game = (function () {
     phase: 0,
     drawnCards: {
       ancestor: null,
-      value: null,
+      values: [],   // BUG 6/13: was drawnCards.value (single), now array of up to 2
       tools: [],
       challenge: null
     },
@@ -56,7 +56,6 @@ window.Game = (function () {
       elapsed: 0
     },
     linesVeils: false,
-    playerCount: 3,
     challengeMode: 'random',
     completed: false
   };
@@ -102,8 +101,9 @@ window.Game = (function () {
     _drawnIds.clear();
     var dc = _state.drawnCards;
     if (dc.ancestor) _drawnIds.add(dc.ancestor.id);
-    if (dc.value) _drawnIds.add(dc.value.id);
-    if (dc.tools) dc.tools.forEach(function (t) { _drawnIds.add(t.id); });
+    // BUG 6/13: values is now an array
+    if (dc.values) dc.values.forEach(function (v) { if (v) _drawnIds.add(v.id); });
+    if (dc.tools) dc.tools.forEach(function (t) { if (t) _drawnIds.add(t.id); });
     if (dc.challenge) _drawnIds.add(dc.challenge.id);
   }
 
@@ -128,6 +128,12 @@ window.Game = (function () {
         if (!saved) return false;
         var parsed = JSON.parse(saved);
         if (parsed.version !== VERSION) return false;
+        // Migrate old single drawnCards.value to values array
+        if (parsed.drawnCards && parsed.drawnCards.value !== undefined) {
+          var oldVal = parsed.drawnCards.value;
+          parsed.drawnCards.values = oldVal ? [oldVal] : [];
+          delete parsed.drawnCards.value;
+        }
         _state = deepMerge(JSON.parse(JSON.stringify(DEFAULT_STATE)), parsed);
         _rebuildDrawnIds();
         return true;
@@ -184,11 +190,38 @@ window.Game = (function () {
       return this.drawCard(type);
     },
 
+    // BUG 9: update timer phase/mode based on screen
     goTo: function (screen) {
       _state.screen = screen;
+
+      // Map screen to timer phase number (mode is managed by timer itself)
+      var screenPhaseMap = {
+        'phase1-draw':      1,
+        'phase1-notepad':   1,
+        'phase2-challenge': 2,
+        'phase2-notepad':   2,
+        'phase3-notepad':   3,
+        'phase4':           4
+      };
+      if (screenPhaseMap[screen] !== undefined) {
+        var newPhase = screenPhaseMap[screen];
+        if (_state.timer.phase !== newPhase) {
+          // Phase changed: reset elapsed, reset to writing mode
+          _state.timer = Object.assign({}, _state.timer, {
+            phase: newPhase,
+            mode: 'writing',
+            elapsed: 0,
+            startedAt: _state.timer.active ? Date.now() : null
+          });
+        }
+        // If same phase, leave timer state completely untouched
+      }
+
       this.saveState();
       this.emit('screenChange', screen);
       if (window.UI) window.UI.showScreen(screen);
+      // Update timer badge after screen change
+      if (window.Timer && window.Timer._updateBadge) window.Timer._updateBadge();
     },
 
     on: function (event, fn) {
@@ -266,7 +299,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Timer badge
   var timerBadge = $('timer-badge');
-  if (timerBadge) timerBadge.addEventListener('click', function () { showModal('modal-timer'); });
+  if (timerBadge) timerBadge.addEventListener('click', function () {
+    showModal('modal-timer');
+    if (window.UI && window.UI.updateTimerModal) window.UI.updateTimerModal();
+  });
 
   // ── 4. Back buttons (delegated) ────────────────────────────
   document.addEventListener('click', function (e) {
@@ -284,6 +320,8 @@ document.addEventListener('DOMContentLoaded', function () {
       hideEl($('overlay-resume'));
       var st = window.Game.getState();
       if (window.UI) window.UI.showScreen(st.screen);
+      // Restore timer interval if it was running before the page reload
+      if (window.Timer) window.Timer.restore();
     });
   }
 
@@ -301,6 +339,8 @@ document.addEventListener('DOMContentLoaded', function () {
   if (btnConfirmRestart) {
     btnConfirmRestart.addEventListener('click', function () {
       window.Game.resetState();
+      // FIX 2: clear all notepad textarea values in DOM
+      document.querySelectorAll('.notepad-field').forEach(function(ta) { ta.value = ''; });
       hideModal('modal-restart');
       window.Game.goTo('welcome');
     });
@@ -357,7 +397,17 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!card) return;
       var level = card.getAttribute('data-level');
       window.Game.setState({ solarpunkLevel: level });
-      window.Game.goTo('game-intro');
+      if (level === 'deep') {
+        window.Game.goTo('technique');
+      } else {
+        window.Game.goTo('game-intro');
+        // auto-render appropriate intro after short delay (screen transition needs to complete)
+        // level 'new' or 'curious' → full intro; level 'familiar' → brief intro
+        setTimeout(function() {
+          var mode = (level === 'familiar') ? 'brief' : 'full';
+          if (window.UI && window.UI.renderGameIntro) window.UI.renderGameIntro(mode);
+        }, 80);
+      }
     });
   }
 
@@ -417,36 +467,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Player count stepper
-  var playerCountDisplay = $('player-count-display');
-  var MIN_PLAYERS = 2;
-  var MAX_PLAYERS = 8;
-
-  function updatePlayerDisplay() {
-    var st = window.Game.getState();
-    if (playerCountDisplay) playerCountDisplay.textContent = st.playerCount;
-  }
-
-  var btnPlayersMinus = $('btn-players-minus');
-  var btnPlayersPlus = $('btn-players-plus');
-  if (btnPlayersMinus) {
-    btnPlayersMinus.addEventListener('click', function () {
-      var st = window.Game.getState();
-      if (st.playerCount > MIN_PLAYERS) {
-        window.Game.setState({ playerCount: st.playerCount - 1 });
-        updatePlayerDisplay();
-      }
-    });
-  }
-  if (btnPlayersPlus) {
-    btnPlayersPlus.addEventListener('click', function () {
-      var st = window.Game.getState();
-      if (st.playerCount < MAX_PLAYERS) {
-        window.Game.setState({ playerCount: st.playerCount + 1 });
-        updatePlayerDisplay();
-      }
-    });
-  }
+  // BUG 3: playerCount stepper removed
 
   var btnBeginGame = $('btn-begin-game');
   if (btnBeginGame) {
@@ -515,28 +536,49 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ── 14. Phase 1 Draw screen ───────────────────────────────
+  // ── 14. Phase 1 Draw screen (BUG 6: draws 5 cards total) ──
 
-  // Track what has been drawn in this draw session
-  var _p1DrawnTypes = {};
-
+  // handleDeckClick: handles ancestor, value (up to 2), tool (up to 2)
   function handleDeckClick(deckEl) {
     var type = deckEl.getAttribute('data-type');
     if (!type) return;
 
-    // For phase 1: ancestor & value (one each)
+    var st = window.Game.getState();
+    var dc = JSON.parse(JSON.stringify(st.drawnCards));
+
+    // Enforce limits per type
+    if (type === 'ancestor') {
+      if (dc.ancestor) return; // already drawn
+    } else if (type === 'value') {
+      if ((dc.values || []).length >= 2) return; // max 2
+    } else if (type === 'tool') {
+      if ((dc.tools || []).length >= 2) return; // max 2
+    }
+
     var card = window.Game.drawCard(type);
     if (!card) return;
 
-    var st = window.Game.getState();
-    var newDrawn = JSON.parse(JSON.stringify(st.drawnCards));
-
     if (type === 'ancestor') {
-      newDrawn.ancestor = card;
+      dc.ancestor = card;
+      deckEl.classList.add('dealt');
+      deckEl.classList.remove('ready-to-draw');
     } else if (type === 'value') {
-      newDrawn.value = card;
+      if (!dc.values) dc.values = [];
+      dc.values.push(card);
+      if (dc.values.length >= 2) {
+        deckEl.classList.add('dealt');
+        deckEl.classList.remove('ready-to-draw');
+      }
+    } else if (type === 'tool') {
+      if (!dc.tools) dc.tools = [];
+      dc.tools.push(card);
+      if (dc.tools.length >= 2) {
+        deckEl.classList.add('dealt');
+        deckEl.classList.remove('ready-to-draw');
+      }
     }
-    window.Game.setState({ drawnCards: newDrawn });
+
+    window.Game.setState({ drawnCards: dc });
 
     // Render card in hand
     if (window.Cards && window.Cards.renderInHand) {
@@ -546,100 +588,94 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update progress dots
     _updateP1Progress();
 
-    // Show continue when both drawn
+    // FIX 9: update deck visibility and instruction text after draw
     var updated = window.Game.getState();
-    if (updated.drawnCards.ancestor && updated.drawnCards.value) {
-      showEl($('btn-p1-continue'));
+    if (window.UI) {
+      window.UI.updateDeckVisibility(updated.drawnCards);
+      window.UI.updateDrawStepInstruction(updated.drawnCards);
     }
   }
 
   function _updateP1Progress() {
     var st = window.Game.getState();
+    var dc = st.drawnCards;
     var dots = document.querySelectorAll('#draw-progress-p1 .progress-dot');
     dots.forEach(function (dot) {
       var forType = dot.getAttribute('data-for');
-      if (forType === 'ancestor' && st.drawnCards.ancestor) dot.classList.add('filled');
-      if (forType === 'value' && st.drawnCards.value) dot.classList.add('filled');
+      if (forType === 'ancestor' && dc.ancestor) dot.classList.add('filled');
+      if (forType === 'value1' && (dc.values || []).length >= 1) dot.classList.add('filled');
+      if (forType === 'value2' && (dc.values || []).length >= 2) dot.classList.add('filled');
+      if (forType === 'tool1' && (dc.tools || []).length >= 1) dot.classList.add('filled');
+      if (forType === 'tool2' && (dc.tools || []).length >= 2) dot.classList.add('filled');
     });
-    // Show redraw panel once at least one card is drawn
-    if (st.drawnCards.ancestor || st.drawnCards.value) {
-      showEl($('redraw-panel'));
-    }
   }
 
-  // Deck stack clicks (delegated)
+  // Deck stack clicks (delegated) — Phase 1 only now
   document.addEventListener('click', function (e) {
     var stack = e.target.closest('.deck-stack');
     if (!stack) return;
     var screenP1 = $('screen-phase1-draw');
-    var screenP3 = $('screen-phase3-draw');
     if (screenP1 && screenP1.style.display !== 'none' && screenP1.contains(stack)) {
       handleDeckClick(stack);
     }
-    if (screenP3 && screenP3.style.display !== 'none' && screenP3.contains(stack)) {
-      handleDeckClickP3(stack);
-    }
+    // Phase 3 draw screen removed from flow (BUG 6)
   });
 
+  // FIX 7: btn-p1-continue now goes to phase2-challenge (challenge drawn there)
   var btnP1Continue = $('btn-p1-continue');
   if (btnP1Continue) {
     btnP1Continue.addEventListener('click', function () {
-      // Populate ref cards strip
-      if (window.UI && window.UI.renderRefCards) {
-        var st = window.Game.getState();
-        window.UI.renderRefCards([st.drawnCards.ancestor, st.drawnCards.value], $('ref-cards-p1'));
-      }
-      window.Game.goTo('phase1-notepad');
+      window.Game.goTo('phase2-challenge');
     });
   }
 
-  // Redraw (phase 1)
-  var _selectedForRedraw = new Set();
+  // FIX 7: Redraw uses card ID to find exact DOM element, not type (avoids replacing wrong card)
   var btnDoRedraw = $('btn-do-redraw');
   if (btnDoRedraw) {
     btnDoRedraw.addEventListener('click', function () {
-      _selectedForRedraw.forEach(function (cardId) {
-        var st = window.Game.getState();
-        var dc = JSON.parse(JSON.stringify(st.drawnCards));
-        if (dc.ancestor && dc.ancestor.id === cardId) {
-          var newCard = window.Game.reDrawCard(cardId, 'ancestor');
-          if (newCard) {
-            dc.ancestor = newCard;
-            if (window.Cards && window.Cards.replaceInHand) window.Cards.replaceInHand(newCard, $('hand-phase1'), 'ancestor');
-          }
+      if (!window.Cards || !window.Cards.getRedrawSelection) return;
+      var selectedIds = window.Cards.getRedrawSelection();
+      if (!selectedIds.length) return;
+
+      var st = window.Game.getState();
+      var dc = JSON.parse(JSON.stringify(st.drawnCards));
+      var handEl = $('hand-phase1');
+
+      selectedIds.forEach(function (cardId) {
+        var oldEl = document.querySelector('.card[data-id="' + cardId + '"]');
+        var type = oldEl ? oldEl.dataset.type : null;
+        if (!type) return;
+
+        var newCard = window.Game.reDrawCard(cardId, type);
+        if (!newCard) return;
+
+        // Update state object
+        if (type === 'ancestor') {
+          dc.ancestor = newCard;
+        } else if (type === 'value') {
+          var valIdx = (dc.values || []).findIndex(function (v) { return v && v.id === cardId; });
+          if (valIdx !== -1) dc.values[valIdx] = newCard;
+        } else if (type === 'tool') {
+          var toolIdx = (dc.tools || []).findIndex(function (t) { return t && t.id === cardId; });
+          if (toolIdx !== -1) dc.tools[toolIdx] = newCard;
         }
-        if (dc.value && dc.value.id === cardId) {
-          var newCard2 = window.Game.reDrawCard(cardId, 'value');
-          if (newCard2) {
-            dc.value = newCard2;
-            if (window.Cards && window.Cards.replaceInHand) window.Cards.replaceInHand(newCard2, $('hand-phase1'), 'value');
-          }
+
+        // Animate: flip out old, deal new
+        if (oldEl && handEl) {
+          window.Cards.animateRedraw(oldEl, newCard, null);
         }
-        window.Game.setState({ drawnCards: dc });
       });
-      _selectedForRedraw.clear();
+
+      window.Game.setState({ drawnCards: dc });
     });
   }
 
-  // Card selection for redraw (delegated)
-  document.addEventListener('click', function (e) {
-    var cardEl = e.target.closest('.hand-card[data-card-id]');
-    if (!cardEl) return;
-    var id = cardEl.getAttribute('data-card-id');
-    if (_selectedForRedraw.has(id)) {
-      _selectedForRedraw.delete(id);
-      cardEl.classList.remove('selected-for-redraw');
-    } else {
-      _selectedForRedraw.add(id);
-      cardEl.classList.add('selected-for-redraw');
-    }
-  });
-
   // ── 15. Phase 1 Notepad screen ────────────────────────────
+  // FIX 7: challenge already drawn before phase1-notepad, so continue to phase2-notepad
   var btnP1nContinue = $('btn-p1n-continue');
   if (btnP1nContinue) {
     btnP1nContinue.addEventListener('click', function () {
-      window.Game.goTo('phase2-challenge');
+      window.Game.goTo('phase2-notepad');
     });
   }
 
@@ -654,13 +690,7 @@ document.addEventListener('DOMContentLoaded', function () {
       dc.challenge = card;
       window.Game.setState({ drawnCards: dc, challengeMode: 'random' });
 
-      var area = $('challenge-card-area');
-      if (area && window.Cards && window.Cards.render) {
-        area.innerHTML = '';
-        area.appendChild(window.Cards.render(card));
-      }
-      showEl($('challenge-display'));
-      hideEl($('challenge-grid'));
+      if (window.UI && window.UI.renderChallengeCard) window.UI.renderChallengeCard(card);
     });
   }
 
@@ -690,14 +720,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // FIX 7: after challenge confirmed, go to phase1-notepad (character intro writing)
   var btnChallengeConfirm = $('btn-challenge-confirm');
   if (btnChallengeConfirm) {
     btnChallengeConfirm.addEventListener('click', function () {
-      if (window.UI && window.UI.renderRefCards) {
-        var st = window.Game.getState();
-        window.UI.renderRefCards([st.drawnCards.challenge], $('ref-cards-p2'));
-      }
-      window.Game.goTo('phase2-notepad');
+      window.Game.goTo('phase1-notepad');
     });
   }
 
@@ -705,85 +732,19 @@ document.addEventListener('DOMContentLoaded', function () {
   var btnP2nContinue = $('btn-p2n-continue');
   if (btnP2nContinue) {
     btnP2nContinue.addEventListener('click', function () {
-      window.Game.goTo('phase3-draw');
-    });
-  }
-
-  // ── 18. Phase 3 Draw screen ───────────────────────────────
-  function handleDeckClickP3(deckEl) {
-    var st = window.Game.getState();
-    var tools = (st.drawnCards.tools || []).slice();
-    if (tools.length >= 2) return; // already have both
-    var card = window.Game.drawCard('tool');
-    if (!card) return;
-    tools.push(card);
-    window.Game.setState({ drawnCards: Object.assign({}, st.drawnCards, { tools: tools }) });
-
-    if (window.Cards && window.Cards.renderInHand) {
-      window.Cards.renderInHand(card, $('hand-phase3'), 'tool');
-    }
-
-    _updateP3Progress();
-    var updated = window.Game.getState();
-    if (updated.drawnCards.tools && updated.drawnCards.tools.length >= 2) {
-      showEl($('btn-p3-continue'));
-    }
-  }
-
-  function _updateP3Progress() {
-    var st = window.Game.getState();
-    var tools = st.drawnCards.tools || [];
-    var dots = document.querySelectorAll('#draw-progress-p3 .progress-dot');
-    dots.forEach(function (dot, i) {
-      if (tools[i]) dot.classList.add('filled');
-    });
-    if (tools.length > 0) showEl($('redraw-panel-p3'));
-  }
-
-  // Redraw (phase 3)
-  var _selectedForRedrawP3 = new Set();
-  var btnDoRedrawP3 = $('btn-do-redraw-p3');
-  if (btnDoRedrawP3) {
-    btnDoRedrawP3.addEventListener('click', function () {
-      _selectedForRedrawP3.forEach(function (cardId) {
-        var st = window.Game.getState();
-        var dc = JSON.parse(JSON.stringify(st.drawnCards));
-        var idx = dc.tools.findIndex(function (t) { return t.id === cardId; });
-        if (idx !== -1) {
-          var newCard = window.Game.reDrawCard(cardId, 'tool');
-          if (newCard) {
-            dc.tools[idx] = newCard;
-            if (window.Cards && window.Cards.replaceInHand) window.Cards.replaceInHand(newCard, $('hand-phase3'), 'tool-' + idx);
-          }
-        }
-        window.Game.setState({ drawnCards: dc });
-      });
-      _selectedForRedrawP3.clear();
-    });
-  }
-
-  var btnP3Continue = $('btn-p3-continue');
-  if (btnP3Continue) {
-    btnP3Continue.addEventListener('click', function () {
-      if (window.UI && window.UI.renderRefCards) {
-        var st = window.Game.getState();
-        window.UI.renderRefCards(st.drawnCards.tools, $('ref-cards-p3'));
-      }
+      // BUG 6/constraint: skip phase3-draw, go directly to phase3-notepad
       window.Game.goTo('phase3-notepad');
     });
   }
+
+  // ── 18. Phase 3 Draw screen — REMOVED FROM FLOW (BUG 6) ───
+  // Screen HTML kept but flow never navigates here.
+  // Redraw for tools now handled within Phase 1 draw.
 
   // ── 19. Phase 3 Notepad screen ────────────────────────────
   var btnP3nContinue = $('btn-p3n-continue');
   if (btnP3nContinue) {
     btnP3nContinue.addEventListener('click', function () {
-      if (window.UI && window.UI.renderRefCards) {
-        var st = window.Game.getState();
-        var allCards = [st.drawnCards.ancestor, st.drawnCards.value, st.drawnCards.challenge]
-          .concat(st.drawnCards.tools || [])
-          .filter(Boolean);
-        window.UI.renderRefCards(allCards, $('ref-cards-p4'));
-      }
       window.Game.goTo('phase4');
     });
   }
@@ -858,11 +819,14 @@ document.addEventListener('DOMContentLoaded', function () {
       c.classList.toggle('active', c.getAttribute('data-lang') === lang);
     });
 
+    // FIX 13: re-render export screen if currently visible
+    var currentState = window.Game.getState();
+    if (currentState.screen === 'export' && window.UI && window.UI.renderExport) {
+      window.UI.renderExport();
+    }
+
     if (window.twemoji) twemoji.parse(document.body);
   });
-
-  // ── 24. Close lang modal explicit btn ─────────────────────
-  // (already handled in modalCloseIds above via btn-close-lang)
 
   // ── 25. Timer modal toggle ────────────────────────────────
   var btnTimerToggle = $('btn-timer-toggle');
@@ -875,6 +839,25 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         if (window.Timer && window.Timer.resume) window.Timer.resume();
         window.Game.setState({ timer: { active: true, startedAt: Date.now() } });
+      }
+    });
+  }
+
+  // "Next Phase" button in timer modal
+  var btnNextPhase = $('btn-next-phase');
+  if (btnNextPhase) {
+    btnNextPhase.addEventListener('click', function () {
+      var st = window.Game.getState();
+      var nextScreenMap = {
+        'phase1-notepad':   'phase2-notepad',
+        'phase2-notepad':   'phase3-notepad',
+        'phase3-notepad':   'phase4',
+        'phase4':           'export'
+      };
+      var nextScreen = nextScreenMap[st.screen];
+      if (nextScreen) {
+        hideModal('modal-timer');
+        window.Game.goTo(nextScreen);
       }
     });
   }
@@ -894,13 +877,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var st = window.Game.getState();
     var n = st.notepad;
     Object.keys(n).forEach(function (key) {
-      // Convert notepad key to form field name attribute (they match)
       var fieldName = key;
       var el = document.querySelector('textarea[name="' + fieldName + '"]');
       if (el && n[key]) el.value = n[key];
     });
-    // Restore player count
-    if (playerCountDisplay) playerCountDisplay.textContent = st.playerCount;
     // Restore lines/veils
     if (checkLinesVeils) checkLinesVeils.checked = !!st.linesVeils;
     // Restore timer table values
@@ -916,9 +896,20 @@ document.addEventListener('DOMContentLoaded', function () {
     if (badge && window.Timer && window.Timer.getDisplay) {
       badge.textContent = window.Timer.getDisplay();
     }
-    // Keep player count display in sync
-    if (playerCountDisplay) playerCountDisplay.textContent = st.playerCount;
+    // BUG 10: update next-phase button visibility in timer modal
+    _updateNextPhaseBtn(st.screen);
   });
+
+  function _updateNextPhaseBtn(screen) {
+    var btn = $('btn-next-phase');
+    if (!btn) return;
+    var gameNotepadScreens = ['phase1-notepad', 'phase2-notepad', 'phase3-notepad', 'phase4'];
+    if (gameNotepadScreens.indexOf(screen) !== -1) {
+      btn.style.display = '';
+    } else {
+      btn.style.display = 'none';
+    }
+  }
 
   // ── 29. Initial i18n pass ─────────────────────────────────
   if (window.UI && window.UI.refreshI18n) window.UI.refreshI18n();

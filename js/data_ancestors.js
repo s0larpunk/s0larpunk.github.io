@@ -29,7 +29,7 @@ window._ANCESTORS = [
     subtitles: { en: ['sage', 'mentor', 'advisor'], ru: ['мудрец', 'наставник', 'советник'] },
     explainMore: {
       en: 'The Elder carries the living memory of what has been tried, failed, and occasionally succeeded — a reservoir of hard-won wisdom that shortcuts decades of collective error. They do not command but counsel, offering perspective that only time and honest reflection can produce. In a solarpunk community, their presence is an anchor against the amnesia of constant novelty.',
-      ru: 'Старейшина хранит живую память о том, что было испробовано, провалилось и порой увенчалось успехом — резервуар выстраданной мудрости, позволяющей избежать десятилетий коллективных ошибок. Он не командует, а советует, предлагая перспективу, которую даёт только время и честное осмысление. В солярпанк-сообществе его присутствие — якорь против амнезии непрестанной новизны.'
+      ru: 'Старейшина хранит живую память о том, что было испробовано, провалилось и порой увенчалось успехом — резервуар выстраданной мудрости, позволяющей избежать десятилетий коллективных ошибок. Он не командует, а советует, предлагая перспективу, которую даёт только время и честное осмысление. В соларпанк-сообществе его присутствие — якорь против амнезии непрестанной новизны.'
     }
   },
   {
@@ -62,7 +62,7 @@ window._ANCESTORS = [
     subtitles: { en: ['programmer', 'whistleblower', 'cryptographer'], ru: ['программист', 'разоблачитель', 'криптограф'] },
     explainMore: {
       en: 'The Hacker believes that information wants to be free and that systems — digital or social — can always be repurposed toward justice. They build open tools, punch holes in surveillance architectures, and expose the mechanisms of control that hide behind clean interfaces. In a solarpunk world they are the guardians of epistemic autonomy, ensuring that no one monopolises the means of knowing.',
-      ru: 'Хакер убеждён, что информация стремится быть свободной, а системы — цифровые или социальные — всегда можно перенаправить на службу справедливости. Он создаёт открытые инструменты, пробивает бреши в архитектурах слежки и обнажает механизмы контроля, скрытые за опрятными интерфейсами. В солярпанк-мире хакеры — стражи эпистемической автономии, не позволяющие никому монополизировать средства познания.'
+      ru: 'Хакер убеждён, что информация стремится быть свободной, а системы — цифровые или социальные — всегда можно перенаправить на службу справедливости. Он создаёт открытые инструменты, пробивает бреши в архитектурах слежки и обнажает механизмы контроля, скрытые за опрятными интерфейсами. В соларпанк-мире хакеры — стражи эпистемической автономии, не позволяющие никому монополизировать средства познания.'
     }
   },
   {
@@ -95,7 +95,7 @@ window._ANCESTORS = [
     subtitles: { en: ['skeptic', 'satirist', 'gadfly'], ru: ['скептик', 'сатирик', 'овод'] },
     explainMore: {
       en: 'The Critic refuses the comfortable consensus and names the contradictions that everyone else has agreed not to see. Through satire, rigorous questioning, and stubborn honesty they protect communities from self-deception and groupthink. Their sting is uncomfortable but necessary — solarpunk without self-criticism is just aesthetics.',
-      ru: 'Критик отвергает удобный консенсус и называет противоречия, которые все остальные договорились не замечать. С помощью сатиры, строгих вопросов и упрямой честности он защищает сообщества от самообмана и группового мышления. Его укус неприятен, но необходим — солярпанк без самокритики — лишь эстетика.'
+      ru: 'Критик отвергает удобный консенсус и называет противоречия, которые все остальные договорились не замечать. С помощью сатиры, строгих вопросов и упрямой честности он защищает сообщества от самообмана и группового мышления. Его укус неприятен, но необходим — соларпанк без самокритики — лишь эстетика.'
     }
   },
   {

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "solarpunk",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "4242", "."],
+      "port": 4242
+    }
+  ]
+}

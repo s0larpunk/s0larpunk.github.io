@@ -12,7 +12,7 @@ window._TOOLS_B = [
     year: '01998',
     explainMore: {
       en: 'Participatory budgeting gives communities direct power to decide how public funds are spent, turning passive taxpayers into active co-designers of their neighborhoods. Pioneered in Porto Alegre, Brazil, it has spread globally as a proven method for redistributing resources toward marginalized communities. In a solarpunk future, participatory budgeting becomes the default infrastructure for collective resource stewardship at every scale.',
-      ru: 'Партиципаторный бюджет даёт сообществам прямую власть над распределением общественных средств, превращая пассивных налогоплательщиков в активных со-проектировщиков своих кварталов. Зародившись в Порту-Алегри, Бразилия, он распространился по всему миру как проверенный метод перераспределения ресурсов в пользу маргинализированных общин. В солярпанк-будущем партиципаторный бюджет становится стандартной инфраструктурой коллективного управления ресурсами на всех уровнях.'
+      ru: 'Партиципаторный бюджет даёт сообществам прямую власть над распределением общественных средств, превращая пассивных налогоплательщиков в активных со-проектировщиков своих кварталов. Зародившись в Порту-Алегри, Бразилия, он распространился по всему миру как проверенный метод перераспределения ресурсов в пользу маргинализированных общин. В соларпанк-будущем партиципаторный бюджет становится стандартной инфраструктурой коллективного управления ресурсами на всех уровнях.'
     }
   },
   {
@@ -28,7 +28,7 @@ window._TOOLS_B = [
     year: '02015',
     explainMore: {
       en: 'Agroecology integrates ecological principles into farming, restoring biodiversity, soil health, and local food sovereignty against industrial monocultures. Peasant and indigenous farming movements around the world have championed it as both a science and a practice of resistance to corporate control of food systems. For solarpunk, agroecology represents the living foundation of communities that feed themselves in harmony with the land.',
-      ru: 'Агроэкология интегрирует экологические принципы в земледелие, восстанавливая биоразнообразие, здоровье почв и местный продовольственный суверенитет вопреки промышленным монокультурам. Крестьянские и коренные земледельческие движения по всему миру отстаивают её как науку и практику сопротивления корпоративному контролю над продовольственными системами. Для солярпанка агроэкология — живой фундамент сообществ, которые кормят себя в гармонии с землёй.'
+      ru: 'Агроэкология интегрирует экологические принципы в земледелие, восстанавливая биоразнообразие, здоровье почв и местный продовольственный суверенитет вопреки промышленным монокультурам. Крестьянские и коренные земледельческие движения по всему миру отстаивают её как науку и практику сопротивления корпоративному контролю над продовольственными системами. Для соларпанка агроэкология — живой фундамент сообществ, которые кормят себя в гармонии с землёй.'
     }
   },
   {
@@ -44,7 +44,7 @@ window._TOOLS_B = [
     year: '01982',
     explainMore: {
       en: 'Performance art and street theater have long been tools for making the political visceral and immediate, staging dissent in public space where it cannot be ignored. From die-ins to flash mobs to living statues, activists use the body as a medium to disrupt normalcy and provoke collective imagination. In a solarpunk world, performance celebrates life, mourns what was lost, and rehearses the futures we are building together.',
-      ru: 'Перформанс и уличный театр давно стали инструментами придания политическому конкретности и остроты — они разворачивают инакомыслие в публичном пространстве, где его невозможно игнорировать. От символических акций до флешмобов — активисты используют тело как медиум, чтобы нарушить привычный порядок и пробудить коллективное воображение. В солярпанк-мире перформанс празднует жизнь, оплакивает утраченное и репетирует будущее, которое мы строим вместе.'
+      ru: 'Перформанс и уличный театр давно стали инструментами придания политическому конкретности и остроты — они разворачивают инакомыслие в публичном пространстве, где его невозможно игнорировать. От символических акций до флешмобов — активисты используют тело как медиум, чтобы нарушить привычный порядок и пробудить коллективное воображение. В соларпанк-мире перформанс празднует жизнь, оплакивает утраченное и репетирует будущее, которое мы строим вместе.'
     }
   },
   {
@@ -60,7 +60,7 @@ window._TOOLS_B = [
     year: '01978',
     explainMore: {
       en: 'Documentary photography has shaped public consciousness around labor exploitation, environmental destruction, and state violence, making injustice impossible to deny. From Dorothea Lange\'s Depression-era farmworkers to contemporary photojournalism from frontline communities, images build solidarity across distance and time. A solarpunk practice of photography turns the lens toward what is being built — the gardens, the collective kitchens, the faces of those creating another world.',
-      ru: 'Документальная фотография формировала общественное сознание вокруг эксплуатации труда, разрушения окружающей среды и государственного насилия, делая несправедливость невозможной для отрицания. От портретов сельскохозяйственных рабочих времён Великой депрессии Доротеи Ланж до современной фотожурналистики с передовых сообществ — снимки создают солидарность через расстояния и время. Солярпанк-практика фотографии направляет объектив на то, что строится: сады, общественные кухни, лица тех, кто создаёт другой мир.'
+      ru: 'Документальная фотография формировала общественное сознание вокруг эксплуатации труда, разрушения окружающей среды и государственного насилия, делая несправедливость невозможной для отрицания. От портретов сельскохозяйственных рабочих времён Великой депрессии Доротеи Ланж до современной фотожурналистики с передовых сообществ — снимки создают солидарность через расстояния и время. соларпанк-практика фотографии направляет объектив на то, что строится: сады, общественные кухни, лица тех, кто создаёт другой мир.'
     }
   },
   {
@@ -76,7 +76,7 @@ window._TOOLS_B = [
     year: '01984',
     explainMore: {
       en: 'Pirate radio stations have given marginalized communities, subcultures, and political movements a voice outside the reach of corporate and state media since the 1960s. Operating outside licensing regimes, they broadcast music, news, and organizing calls that mainstream outlets suppress or ignore. In a solarpunk vision of communication, community radio — pirate or licensed — weaves local knowledge and culture into the connective tissue of a liberated public sphere.',
-      ru: 'Пиратские радиостанции давали маргинализированным сообществам, субкультурам и политическим движениям голос вне досягаемости корпоративных и государственных СМИ с 1960-х годов. Действуя за пределами лицензионных режимов, они транслируют музыку, новости и призывы к организации, которые мейнстримные каналы подавляют или игнорируют. В солярпанк-видении коммуникации общественное радио — пиратское или лицензированное — вплетает местные знания и культуру в ткань освобождённой публичной сферы.'
+      ru: 'Пиратские радиостанции давали маргинализированным сообществам, субкультурам и политическим движениям голос вне досягаемости корпоративных и государственных СМИ с 1960-х годов. Действуя за пределами лицензионных режимов, они транслируют музыку, новости и призывы к организации, которые мейнстримные каналы подавляют или игнорируют. В соларпанк-видении коммуникации общественное радио — пиратское или лицензированное — вплетает местные знания и культуру в ткань освобождённой публичной сферы.'
     }
   },
   {
@@ -92,7 +92,7 @@ window._TOOLS_B = [
     year: '01979',
     explainMore: {
       en: 'Robust public transit is a cornerstone of equitable, low-carbon cities, enabling people to move freely without individual car ownership and its enormous resource costs. Movements for free and expanded public transit challenge the privatization of mobility and reclaim streets as shared commons. For solarpunk, radically expanded public transport — electric, accessible, and free at the point of use — is infrastructure for community life rather than individual consumption.',
-      ru: 'Развитый общественный транспорт — краеугольный камень справедливых городов с низким углеродным следом, позволяющий людям свободно передвигаться без личного автомобиля с его огромными ресурсными затратами. Движения за бесплатный и расширенный общественный транспорт бросают вызов приватизации мобильности и возвращают улицы как общее достояние. Для солярпанка радикально расширенный общественный транспорт — электрический, доступный и бесплатный в точке использования — это инфраструктура общественной жизни, а не индивидуального потребления.'
+      ru: 'Развитый общественный транспорт — краеугольный камень справедливых городов с низким углеродным следом, позволяющий людям свободно передвигаться без личного автомобиля с его огромными ресурсными затратами. Движения за бесплатный и расширенный общественный транспорт бросают вызов приватизации мобильности и возвращают улицы как общее достояние. Для соларпанка радикально расширенный общественный транспорт — электрический, доступный и бесплатный в точке использования — это инфраструктура общественной жизни, а не индивидуального потребления.'
     }
   },
   {
@@ -108,7 +108,7 @@ window._TOOLS_B = [
     year: '01961',
     explainMore: {
       en: 'Reparations address the material and moral debts owed to communities harmed by slavery, colonialism, and ongoing racial and economic dispossession. Beyond cash transfers, reparations frameworks include land return, community investment, and the dismantling of systems that perpetuate harm. A solarpunk future demands that the transition to ecological sustainability also be a transition toward repairing historical injustice — no green future is just if built on unacknowledged foundations of theft.',
-      ru: 'Репарации касаются материального и морального долга перед сообществами, пострадавшими от рабства, колониализма и продолжающегося расового и экономического вытеснения. Помимо денежных выплат, концепции репараций включают возврат земель, инвестиции в сообщества и демонтаж систем, воспроизводящих вред. Солярпанк-будущее требует, чтобы переход к экологической устойчивости был также переходом к исправлению исторической несправедливости — никакое зелёное будущее не является справедливым, если построено на непризнанном фундаменте присвоения.'
+      ru: 'Репарации касаются материального и морального долга перед сообществами, пострадавшими от рабства, колониализма и продолжающегося расового и экономического вытеснения. Помимо денежных выплат, концепции репараций включают возврат земель, инвестиции в сообщества и демонтаж систем, воспроизводящих вред. соларпанк-будущее требует, чтобы переход к экологической устойчивости был также переходом к исправлению исторической несправедливости — никакое зелёное будущее не является справедливым, если построено на непризнанном фундаменте присвоения.'
     }
   },
   {
@@ -124,7 +124,7 @@ window._TOOLS_B = [
     year: '02020',
     explainMore: {
       en: 'Labor unions remain one of the most powerful tools workers have for collective bargaining, winning better wages, safer conditions, and a structural voice against capital. From industrial unions to teachers\' strikes to care worker organizing, the union form adapts to new sectors while holding the basic principle that workers\' solidarity is stronger than individual negotiation. In a solarpunk economy, unions evolve into foundations of democratic workplace governance and community ownership.',
-      ru: 'Профсоюзы остаются одним из самых мощных инструментов коллективных переговоров для трудящихся, добивающихся лучшей оплаты, безопасных условий и структурного голоса против капитала. От промышленных профсоюзов до забастовок учителей и организации работников сферы ухода — профсоюзная форма адаптируется к новым секторам, сохраняя базовый принцип: солидарность работников сильнее индивидуальных переговоров. В солярпанк-экономике профсоюзы превращаются в основу демократического управления рабочим местом и коллективной собственности.'
+      ru: 'Профсоюзы остаются одним из самых мощных инструментов коллективных переговоров для трудящихся, добивающихся лучшей оплаты, безопасных условий и структурного голоса против капитала. От промышленных профсоюзов до забастовок учителей и организации работников сферы ухода — профсоюзная форма адаптируется к новым секторам, сохраняя базовый принцип: солидарность работников сильнее индивидуальных переговоров. В соларпанк-экономике профсоюзы превращаются в основу демократического управления рабочим местом и коллективной собственности.'
     }
   },
   {
@@ -140,7 +140,7 @@ window._TOOLS_B = [
     year: '01922',
     explainMore: {
       en: 'Satire has always been a weapon of the powerless against those who take themselves too seriously, using laughter to expose hypocrisy, deflate authority, and make critique accessible. From pamphlets to political cartoons to satirical news shows, it makes radical ideas digestible for audiences alienated by earnest agitprop. In a solarpunk culture, satire keeps communities honest, punctures emerging hierarchies, and makes the work of transformation joyful rather than merely grim.',
-      ru: 'Сатира всегда была оружием бесправных против тех, кто принимает себя слишком всерьёз, используя смех для разоблачения лицемерия, развенчания авторитетов и придания критике доступности. От памфлетов до политических карикатур и сатирических новостных шоу — она делает радикальные идеи усвояемыми для аудитории, отчуждённой серьёзной агитпропагандой. В солярпанк-культуре сатира поддерживает честность сообществ, прокалывает нарождающиеся иерархии и делает работу трансформации радостной, а не только мрачной.'
+      ru: 'Сатира всегда была оружием бесправных против тех, кто принимает себя слишком всерьёз, используя смех для разоблачения лицемерия, развенчания авторитетов и придания критике доступности. От памфлетов до политических карикатур и сатирических новостных шоу — она делает радикальные идеи усвояемыми для аудитории, отчуждённой серьёзной агитпропагандой. В соларпанк-культуре сатира поддерживает честность сообществ, прокалывает нарождающиеся иерархии и делает работу трансформации радостной, а не только мрачной.'
     }
   },
   {
@@ -156,7 +156,7 @@ window._TOOLS_B = [
     year: '02003',
     explainMore: {
       en: 'Upcycling transforms waste materials into objects of higher value, refusing the logic of disposability and demonstrating that creativity can substitute for extraction. From turning discarded fabric into fashion to repurposing industrial scraps into furniture, upcycling practices embody material care and ingenuity. In a solarpunk world, upcycling is not a niche hobby but a fundamental ethic woven into manufacturing, education, and everyday life.',
-      ru: 'Апсайклинг превращает отходы в предметы более высокой ценности, отвергая логику одноразовости и демонстрируя, что творчество может заменить добычу ресурсов. От превращения выброшенной ткани в модную одежду до переработки промышленных отходов в мебель — практики апсайклинга воплощают бережное отношение к материалу и изобретательность. В солярпанк-мире апсайклинг — не нишевое хобби, а фундаментальная этика, вплетённая в производство, образование и повседневную жизнь.'
+      ru: 'Апсайклинг превращает отходы в предметы более высокой ценности, отвергая логику одноразовости и демонстрируя, что творчество может заменить добычу ресурсов. От превращения выброшенной ткани в модную одежду до переработки промышленных отходов в мебель — практики апсайклинга воплощают бережное отношение к материалу и изобретательность. В соларпанк-мире апсайклинг — не нишевое хобби, а фундаментальная этика, вплетённая в производство, образование и повседневную жизнь.'
     }
   },
   {
@@ -172,7 +172,7 @@ window._TOOLS_B = [
     year: '02016',
     explainMore: {
       en: 'Vertical farms stack growing layers indoors, dramatically reducing land and water use while enabling food production in dense urban environments cut off from rural supply chains. Community-controlled vertical farms in food deserts can reclaim nutritional sovereignty for neighborhoods historically denied access to fresh produce. For solarpunk, vertical farming is one piece of a diversified food commons that makes cities active participants in feeding themselves rather than passive consumers.',
-      ru: 'Вертикальные фермы располагают уровни посадок внутри помещений, резко сокращая потребление земли и воды и одновременно обеспечивая производство продовольствия в плотных городских районах, оторванных от сельских цепочек поставок. Вертикальные фермы под управлением сообществ в продовольственных пустынях могут вернуть питательный суверенитет кварталам, которым исторически отказывали в доступе к свежим продуктам. Для солярпанка вертикальные фермы — элемент диверсифицированного продовольственного общего достояния, превращающего города из пассивных потребителей в активных участников собственного пропитания.'
+      ru: 'Вертикальные фермы располагают уровни посадок внутри помещений, резко сокращая потребление земли и воды и одновременно обеспечивая производство продовольствия в плотных городских районах, оторванных от сельских цепочек поставок. Вертикальные фермы под управлением сообществ в продовольственных пустынях могут вернуть питательный суверенитет кварталам, которым исторически отказывали в доступе к свежим продуктам. Для соларпанка вертикальные фермы — элемент диверсифицированного продовольственного общего достояния, превращающего города из пассивных потребителей в активных участников собственного пропитания.'
     }
   },
   {
@@ -188,7 +188,7 @@ window._TOOLS_B = [
     year: '02014',
     explainMore: {
       en: 'Visionary fiction imagines worlds beyond the present order — solarpunk stories, afrofuturist novels, indigenous futurisms — giving readers and organizers alike a lived sense of what liberation could feel like. Unlike dystopia, which warns, visionary fiction invites: it creates desire for futures worth fighting toward rather than futures to be feared. In social movements, shared imaginative visions function as blueprints, sustaining commitment through the long work of transformation.',
-      ru: 'Визионерская фантастика воображает миры за пределами нынешнего порядка — солярпанк-истории, афрофутуристические романы, коренные футуризмы — давая читателям и организаторам живое ощущение того, как могло бы ощущаться освобождение. В отличие от антиутопии, которая предупреждает, визионерская фантастика приглашает: она создаёт желание будущего, ради которого стоит бороться, а не будущего, которого стоит бояться. В социальных движениях общие воображаемые видения служат чертежами, поддерживая приверженность в долгой работе трансформации.'
+      ru: 'Визионерская фантастика воображает миры за пределами нынешнего порядка — соларпанк-истории, афрофутуристические романы, коренные футуризмы — давая читателям и организаторам живое ощущение того, как могло бы ощущаться освобождение. В отличие от антиутопии, которая предупреждает, визионерская фантастика приглашает: она создаёт желание будущего, ради которого стоит бороться, а не будущего, которого стоит бояться. В социальных движениях общие воображаемые видения служат чертежами, поддерживая приверженность в долгой работе трансформации.'
     }
   },
   {
@@ -204,7 +204,7 @@ window._TOOLS_B = [
     year: '02008',
     explainMore: {
       en: 'Carpentry and construction skills give communities the ability to build and repair their own shelter, furniture, and infrastructure without dependency on the market or professional intermediaries. Skill-sharing in woodworking democratizes the built environment, enabling collective self-housing projects, community centers, and the physical renovation of neglected spaces. In a solarpunk future, the craft of building is understood as a political act — every structure built collectively is a piece of a world made by its inhabitants.',
-      ru: 'Плотницкое дело и строительные навыки дают сообществам возможность самостоятельно строить и чинить жильё, мебель и инфраструктуру без зависимости от рынка или профессиональных посредников. Обмен навыками в деревообработке демократизирует застроенную среду, делая возможными коллективные проекты самостроя, общественные центры и физическое обновление заброшенных пространств. В солярпанк-будущем строительное ремесло воспринимается как политический акт — каждое совместно возведённое здание есть частица мира, созданного его обитателями.'
+      ru: 'Плотницкое дело и строительные навыки дают сообществам возможность самостоятельно строить и чинить жильё, мебель и инфраструктуру без зависимости от рынка или профессиональных посредников. Обмен навыками в деревообработке демократизирует застроенную среду, делая возможными коллективные проекты самостроя, общественные центры и физическое обновление заброшенных пространств. В соларпанк-будущем строительное ремесло воспринимается как политический акт — каждое совместно возведённое здание есть частица мира, созданного его обитателями.'
     }
   },
   {
@@ -220,7 +220,7 @@ window._TOOLS_B = [
     year: '02020',
     explainMore: {
       en: 'Community-led disaster relief, from mutual aid networks to volunteer kitchens, demonstrates that ordinary people are the first and most effective responders to crisis — not waiting for state authorization to care for one another. Hurricane Katrina, the COVID pandemic, and climate disasters have repeatedly shown that grassroots networks activate faster and reach further than bureaucratic agencies. For solarpunk, disaster relief is not emergency exception but practiced readiness — communities that already know how to feed and shelter each other are resilient by design.',
-      ru: 'Организованная сообществами помощь при катастрофах — от сетей взаимопомощи до волонтёрских кухонь — показывает, что обычные люди являются первыми и наиболее эффективными респондентами в кризисе, не дожидаясь государственного разрешения заботиться друг о друге. Ураган Катрина, пандемия COVID и климатические катастрофы раз за разом показывали, что низовые сети активируются быстрее и охватывают больше, чем бюрократические ведомства. Для солярпанка помощь при катастрофах — не чрезвычайное исключение, а отработанная готовность: сообщества, которые уже умеют кормить и укрывать друг друга, устойчивы по своей природе.'
+      ru: 'Организованная сообществами помощь при катастрофах — от сетей взаимопомощи до волонтёрских кухонь — показывает, что обычные люди являются первыми и наиболее эффективными респондентами в кризисе, не дожидаясь государственного разрешения заботиться друг о друге. Ураган Катрина, пандемия COVID и климатические катастрофы раз за разом показывали, что низовые сети активируются быстрее и охватывают больше, чем бюрократические ведомства. Для соларпанка помощь при катастрофах — не чрезвычайное исключение, а отработанная готовность: сообщества, которые уже умеют кормить и укрывать друг друга, устойчивы по своей природе.'
     }
   },
   {
@@ -236,7 +236,7 @@ window._TOOLS_B = [
     year: '02018',
     explainMore: {
       en: 'Community meals — from Black Panther free breakfast programs to anarchist infoshop potlucks — are simultaneously acts of care, political organizing, and prefigurative community building. Sharing food across difference builds the trust and relationships that sustain movements through hardship, turning the act of eating together into radical hospitality. A solarpunk culture centers communal eating as the everyday infrastructure of solidarity, not a special occasion.',
-      ru: 'Общественные трапезы — от программ бесплатных завтраков «Чёрных пантер» до потлаков анархистских инфошопов — одновременно являются актами заботы, политической организации и созидания сообщества в духе префигурации. Совместная еда через различия строит доверие и отношения, которые поддерживают движения в трудные времена, превращая совместный приём пищи в радикальное гостеприимство. Солярпанк-культура ставит коллективную трапезу в центр повседневной инфраструктуры солидарности, а не особого случая.'
+      ru: 'Общественные трапезы — от программ бесплатных завтраков «Чёрных пантер» до потлаков анархистских инфошопов — одновременно являются актами заботы, политической организации и созидания сообщества в духе префигурации. Совместная еда через различия строит доверие и отношения, которые поддерживают движения в трудные времена, превращая совместный приём пищи в радикальное гостеприимство. соларпанк-культура ставит коллективную трапезу в центр повседневной инфраструктуры солидарности, а не особого случая.'
     }
   },
   {
@@ -252,7 +252,7 @@ window._TOOLS_B = [
     year: '01923',
     explainMore: {
       en: 'Documentation — filming, recording, archiving, and publishing movement activities — creates accountability for state violence, preserves organizational memory, and amplifies actions beyond the moment they occur. Activist documentation traditions range from union archives to legal observer networks to social media streams from protests. In a solarpunk future, documentation becomes community memory-making: capturing how we built alternatives so future generations inherit not just our gains but our methods.',
-      ru: 'Документация — съёмка, запись, архивирование и публикация деятельности движений — создаёт подотчётность для государственного насилия, сохраняет организационную память и усиливает действия за пределами момента их совершения. Традиции активистской документации охватывают профсоюзные архивы, сети юридических наблюдателей и потоки из социальных сетей с протестов. В солярпанк-будущем документация становится созданием памяти сообщества: фиксацией того, как мы строили альтернативы, чтобы будущие поколения унаследовали не только наши завоевания, но и наши методы.'
+      ru: 'Документация — съёмка, запись, архивирование и публикация деятельности движений — создаёт подотчётность для государственного насилия, сохраняет организационную память и усиливает действия за пределами момента их совершения. Традиции активистской документации охватывают профсоюзные архивы, сети юридических наблюдателей и потоки из социальных сетей с протестов. В соларпанк-будущем документация становится созданием памяти сообщества: фиксацией того, как мы строили альтернативы, чтобы будущие поколения унаследовали не только наши завоевания, но и наши методы.'
     }
   },
   {
@@ -268,7 +268,7 @@ window._TOOLS_B = [
     year: '02007',
     explainMore: {
       en: 'Free stores, give-away shops, and really-really-free markets create spaces where goods circulate by need rather than purchasing power, modeling post-scarcity exchange within the present economy. They challenge the commodity form directly — by taking price and profit out of the transaction, they demonstrate that abundance already exists when distribution is organized around use rather than profit. For solarpunk, the free store is a node in a gift economy, practicing the logic of enough.',
-      ru: 'Бесплатные магазины, шопы раздачи и по-настоящему бесплатные рынки создают пространства, где товары циркулируют по потребности, а не по покупательной способности, моделируя постдефицитный обмен в рамках нынешней экономики. Они напрямую бросают вызов товарной форме — убирая цену и прибыль из сделки, они демонстрируют, что изобилие уже существует, когда распределение организовано вокруг использования, а не прибыли. Для солярпанка бесплатный магазин — узел экономики дара, практикующей логику достаточности.'
+      ru: 'Бесплатные магазины, шопы раздачи и по-настоящему бесплатные рынки создают пространства, где товары циркулируют по потребности, а не по покупательной способности, моделируя постдефицитный обмен в рамках нынешней экономики. Они напрямую бросают вызов товарной форме — убирая цену и прибыль из сделки, они демонстрируют, что изобилие уже существует, когда распределение организовано вокруг использования, а не прибыли. Для соларпанка бесплатный магазин — узел экономики дара, практикующей логику достаточности.'
     }
   },
   {
@@ -284,7 +284,7 @@ window._TOOLS_B = [
     year: '02014',
     explainMore: {
       en: 'Parks and public green spaces are commons — land held against privatization and enclosed development for the use and benefit of all, especially in cities where nature is scarce. Community-led park creation, guerrilla gardening, and the defense of existing parks against real estate development are acts of commoning that prefigure a different relationship to land. In a solarpunk city, parks expand into living ecosystems managed by their communities, blurring the line between urban and wild.',
-      ru: 'Парки и общественные зелёные пространства — это общее достояние: земля, удерживаемая против приватизации и застройки для пользования всеми, особенно в городах, где природы мало. Создание парков силами сообщества, партизанское садоводство и защита существующих парков от застройщиков — это акты коммонинга, предвосхищающие иное отношение к земле. В солярпанк-городе парки расширяются в живые экосистемы, управляемые своими сообществами, стирая границу между городским и диким.'
+      ru: 'Парки и общественные зелёные пространства — это общее достояние: земля, удерживаемая против приватизации и застройки для пользования всеми, особенно в городах, где природы мало. Создание парков силами сообщества, партизанское садоводство и защита существующих парков от застройщиков — это акты коммонинга, предвосхищающие иное отношение к земле. В соларпанк-городе парки расширяются в живые экосистемы, управляемые своими сообществами, стирая границу между городским и диким.'
     }
   },
   {
@@ -300,7 +300,7 @@ window._TOOLS_B = [
     year: '02010',
     explainMore: {
       en: 'Worker-owned and cooperative print shops have been essential infrastructure for movements, producing zines, posters, pamphlets, and newspapers outside commercial and state-controlled channels. The printing press democratized information in the 15th century; movement print shops continue that tradition by keeping material communication in the hands of those who need it most. In a solarpunk world, the print shop is a hub of local publishing culture — producing the manifestos, field guides, and community histories that bind a place together.',
-      ru: 'Рабочие кооперативные типографии были важнейшей инфраструктурой для движений, производя зины, плакаты, памфлеты и газеты за пределами коммерческих и государственных каналов. Печатный станок демократизировал информацию в XV веке; движенческие типографии продолжают эту традицию, сохраняя материальную коммуникацию в руках тех, кому она нужна больше всего. В солярпанк-мире типография — центр местной издательской культуры, производящий манифесты, полевые руководства и истории сообществ, скрепляющие место воедино.'
+      ru: 'Рабочие кооперативные типографии были важнейшей инфраструктурой для движений, производя зины, плакаты, памфлеты и газеты за пределами коммерческих и государственных каналов. Печатный станок демократизировал информацию в XV веке; движенческие типографии продолжают эту традицию, сохраняя материальную коммуникацию в руках тех, кому она нужна больше всего. В соларпанк-мире типография — центр местной издательской культуры, производящий манифесты, полевые руководства и истории сообществ, скрепляющие место воедино.'
     }
   },
   {
@@ -316,7 +316,7 @@ window._TOOLS_B = [
     year: '01968',
     explainMore: {
       en: 'Community self-defense — from Deacons for Defense protecting civil rights marchers to present-day community patrol networks — asserts that oppressed people have the right and responsibility to protect themselves and each other. Self-defense training builds confidence, cohesion, and practical safety in communities facing state violence or fascist aggression. In a solarpunk vision, self-defense is not militarism but the embodied practice of mutual protection that allows communities to exist and grow on their own terms.',
-      ru: 'Общественная самооборона — от «Дьяконов защиты», охранявших участников марша за гражданские права, до современных районных патрульных сетей — утверждает право и ответственность угнетённых людей защищать себя и друг друга. Обучение самообороне строит уверенность, сплочённость и практическую безопасность в сообществах, сталкивающихся с государственным насилием или фашистской агрессией. В солярпанк-видении самооборона — не милитаризм, а воплощённая практика взаимной защиты, позволяющая сообществам существовать и развиваться на собственных условиях.'
+      ru: 'Общественная самооборона — от «Дьяконов защиты», охранявших участников марша за гражданские права, до современных районных патрульных сетей — утверждает право и ответственность угнетённых людей защищать себя и друг друга. Обучение самообороне строит уверенность, сплочённость и практическую безопасность в сообществах, сталкивающихся с государственным насилием или фашистской агрессией. В соларпанк-видении самооборона — не милитаризм, а воплощённая практика взаимной защиты, позволяющая сообществам существовать и развиваться на собственных условиях.'
     }
   },
   {
@@ -332,7 +332,7 @@ window._TOOLS_B = [
     year: '400 BCE',
     explainMore: {
       en: 'Sabotage — from the wooden sabot thrown into machinery to contemporary pipeline valve turns — has been a tactic of workers and ecological defenders to stop harm when other avenues are closed. As a tactic it forces material costs onto those causing destruction, raising the price of continued exploitation. In a solarpunk framework, sabotage is understood within a diversity of tactics: sometimes the most ecological act is to stop a machine that should never have been built.',
-      ru: 'Саботаж — от деревянного сабо, брошенного в механизм, до современных перекрытий трубопроводных вентилей — был тактикой рабочих и экологических защитников для прекращения вреда, когда другие пути закрыты. Как тактика он возлагает материальные издержки на тех, кто причиняет разрушения, повышая цену продолжающейся эксплуатации. В рамках солярпанка саботаж осмысляется в контексте разнообразия тактик: иногда самый экологичный поступок — остановить машину, которую никогда не следовало строить.'
+      ru: 'Саботаж — от деревянного сабо, брошенного в механизм, до современных перекрытий трубопроводных вентилей — был тактикой рабочих и экологических защитников для прекращения вреда, когда другие пути закрыты. Как тактика он возлагает материальные издержки на тех, кто причиняет разрушения, повышая цену продолжающейся эксплуатации. В рамках соларпанка саботаж осмысляется в контексте разнообразия тактик: иногда самый экологичный поступок — остановить машину, которую никогда не следовало строить.'
     }
   },
   {
@@ -348,7 +348,7 @@ window._TOOLS_B = [
     year: '02020',
     explainMore: {
       en: 'Solidarity clinics and free health centers provide healthcare outside the profit motive, rooted in the understanding that health is a commons, not a commodity to be bought and sold. From Zapatista health promoters to Greek solidarity clinics during austerity to Black Panther sickle cell testing, these spaces model what medicine looks like when it centers human dignity over billing codes. A solarpunk healthcare system is built from these seeds — decentralized, community-governed, and oriented toward healing rather than management.',
-      ru: 'Клиники солидарности и бесплатные медицинские центры предоставляют медицинскую помощь вне мотива прибыли, исходя из понимания того, что здоровье — это общее достояние, а не товар для купли-продажи. От медицинских координаторов-сапатистов до греческих клиник солидарности в период жёсткой экономии и тестирования на серповидноклеточную анемию «Чёрными пантерами» — эти пространства моделируют, как выглядит медицина, когда в её центре стоит человеческое достоинство, а не коды выставления счетов. Солярпанк-система здравоохранения строится из этих семян — децентрализованная, управляемая сообществами, ориентированная на исцеление, а не на управление.'
+      ru: 'Клиники солидарности и бесплатные медицинские центры предоставляют медицинскую помощь вне мотива прибыли, исходя из понимания того, что здоровье — это общее достояние, а не товар для купли-продажи. От медицинских координаторов-сапатистов до греческих клиник солидарности в период жёсткой экономии и тестирования на серповидноклеточную анемию «Чёрными пантерами» — эти пространства моделируют, как выглядит медицина, когда в её центре стоит человеческое достоинство, а не коды выставления счетов. соларпанк-система здравоохранения строится из этих семян — децентрализованная, управляемая сообществами, ориентированная на исцеление, а не на управление.'
     }
   },
   {
@@ -364,7 +364,7 @@ window._TOOLS_B = [
     year: '02020',
     explainMore: {
       en: 'Transformative justice responds to harm by addressing its root causes and repairing relationships rather than relying on punishment and caging, which reproduce violence without healing. Developed by prison abolitionists and community organizers, it offers concrete practices — accountability processes, community response teams, conflict mediation — that movements can use to handle harm internally and model alternatives to policing. For solarpunk, transformative justice is not utopian idealism but a daily practice: the way a community learns to be accountable to itself as it builds a different world.',
-      ru: 'Трансформативное правосудие реагирует на причинение вреда, устраняя его коренные причины и восстанавливая отношения, вместо того чтобы опираться на наказание и заключение, которые воспроизводят насилие без исцеления. Разработанное аболиционистами тюремной системы и общественными организаторами, оно предлагает конкретные практики — процессы привлечения к ответственности, командные ответы сообщества, посредничество в конфликтах — которые движения могут использовать для внутреннего разрешения вреда и моделирования альтернатив полицейской системе. Для солярпанка трансформативное правосудие — не утопический идеализм, а ежедневная практика: способ, которым сообщество учится быть ответственным перед собой, строя другой мир.'
+      ru: 'Трансформативное правосудие реагирует на причинение вреда, устраняя его коренные причины и восстанавливая отношения, вместо того чтобы опираться на наказание и заключение, которые воспроизводят насилие без исцеления. Разработанное аболиционистами тюремной системы и общественными организаторами, оно предлагает конкретные практики — процессы привлечения к ответственности, командные ответы сообщества, посредничество в конфликтах — которые движения могут использовать для внутреннего разрешения вреда и моделирования альтернатив полицейской системе. Для соларпанка трансформативное правосудие — не утопический идеализм, а ежедневная практика: способ, которым сообщество учится быть ответственным перед собой, строя другой мир.'
     }
   }
 ];

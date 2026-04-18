@@ -24,16 +24,16 @@ window.Cards = (function() {
 
     div.innerHTML =
       '<div class="card-inner">' +
-        '<div class="card-face-back">' +
+        '<div class="card-back">' +
           '<div class="card-back-pattern"></div>' +
-          '<div class="card-back-label">Solarpunk Futures</div>' +
+          '<div class="card-back-wordmark">Solarpunk Futures</div>' +
         '</div>' +
-        '<div class="card-face-front">' +
-          '<div class="card-type-stamp">' + card.type.toUpperCase() + '</div>' +
+        '<div class="card-front">' +
+          '<div class="card-type-stamp">' + (window.i18n ? window.i18n.t('deck_label_' + card.type) : card.type).toUpperCase() + '</div>' +
           '<div class="card-emojis">' + emojis.join(' ') + '</div>' +
           '<div class="card-name">' + _escapeHtml(name) + '</div>' +
           '<div class="card-body">' + _escapeHtml(bodyText) + '</div>' +
-          '<button class="card-explain-toggle" type="button">Explain more \u25BE</button>' +
+          '<button class="card-explain-toggle" type="button">' + (window.i18n ? window.i18n.t('explain_more') : 'Explain more \u25BE') + '</button>' +
         '</div>' +
       '</div>';
 
@@ -65,6 +65,11 @@ window.Cards = (function() {
           });
         }
 
+        // Wire up card click → redraw selection (only when card is in a hand container)
+        el.addEventListener('click', function() {
+          if (el.closest('[id^="hand-"]') && window.Cards) window.Cards.toggleRedraw(el);
+        });
+
         setTimeout(function() {
           el.classList.remove('animating-in');
           flip(el, resolve);
@@ -85,7 +90,7 @@ window.Cards = (function() {
       setTimeout(function() {
         var shimmer = document.createElement('div');
         shimmer.className = 'card-shimmer';
-        var front = cardEl.querySelector('.card-face-front');
+        var front = cardEl.querySelector('.card-front');
         if (front) front.appendChild(shimmer);
 
         if (window.UI) window.UI.parseEmojis(cardEl);
@@ -138,10 +143,37 @@ window.Cards = (function() {
     containerEl.appendChild(label);
   }
 
+  // render — alias for createCardEl (used by game.js challenge draw)
+  function render(card) { return createCardEl(card); }
+
+  // renderInHand — animate a card into a hand container
+  function renderInHand(card, handEl, type) {
+    if (!handEl) return;
+    deal(card, null, handEl, 0);
+  }
+
+  // replaceInHand — swap a card of the same type in the hand
+  function replaceInHand(newCard, handEl, type) {
+    if (!handEl) return;
+    var oldEl = handEl.querySelector('[data-type="' + newCard.type + '"]');
+    if (oldEl) {
+      oldEl.classList.remove('flipped', 'selected-for-redraw');
+      setTimeout(function() {
+        oldEl.remove();
+        deal(newCard, null, handEl, 100);
+      }, 400);
+    } else {
+      deal(newCard, null, handEl, 0);
+    }
+  }
+
   return {
     createCardEl: createCardEl,
     deal: deal,
     flip: flip,
+    render: render,
+    renderInHand: renderInHand,
+    replaceInHand: replaceInHand,
     toggleRedraw: toggleRedraw,
     getRedrawSelection: getRedrawSelection,
     animateRedraw: animateRedraw,

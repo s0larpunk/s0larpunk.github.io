@@ -12,7 +12,7 @@ window._TOOLS_A = [
     year: '02017',
     explainMore: {
       en: 'Broadcast infrastructure — from community radio to decentralized streaming — lets movements reach people across geographic and social distances, bypassing corporate gatekeepers. In a solarpunk future, community-owned broadcast networks share local knowledge, coordinate mutual aid, and celebrate culture without advertising pressure. Broadcasts turn passive audiences into informed participants.',
-      ru: 'Вещательная инфраструктура — от общественного радио до децентрализованных стримов — позволяет движениям охватывать людей через географические и социальные барьеры, минуя корпоративных привратников. В солярпанк-будущем сети вещания, принадлежащие сообществам, делятся местными знаниями, координируют взаимопомощь и праздную культуру без рекламного давления. Трансляции превращают пассивных зрителей в информированных участников.'
+      ru: 'Вещательная инфраструктура — от общественного радио до децентрализованных стримов — позволяет движениям охватывать людей через географические и социальные барьеры, минуя корпоративных привратников. В соларпанк-будущем сети вещания, принадлежащие сообществам, делятся местными знаниями, координируют взаимопомощь и праздную культуру без рекламного давления. Трансляции превращают пассивных зрителей в информированных участников.'
     }
   },
   {
@@ -28,7 +28,7 @@ window._TOOLS_A = [
     year: '01930',
     explainMore: {
       en: 'When AI tools are open-source, community-governed, and oriented toward ecological intelligence, they can help movements model complex systems, translate across languages, and allocate resources fairly. Solarpunk AI serves the commons rather than extracting from it — assisting with crop planning, energy grids, and collective decision-making. The key is who controls the technology and toward what ends.',
-      ru: 'Когда инструменты ИИ с открытым исходным кодом, управляются сообществами и ориентированы на экологический интеллект, они могут помочь движениям моделировать сложные системы, переводить на разные языки и справедливо распределять ресурсы. Солярпанк-ИИ служит общему благу, а не извлекает из него — помогает с планированием посевов, энергосетями и коллективным принятием решений. Ключевой вопрос — кто контролирует технологию и ради каких целей.'
+      ru: 'Когда инструменты ИИ с открытым исходным кодом, управляются сообществами и ориентированы на экологический интеллект, они могут помочь движениям моделировать сложные системы, переводить на разные языки и справедливо распределять ресурсы. соларпанк-ИИ служит общему благу, а не извлекает из него — помогает с планированием посевов, энергосетями и коллективным принятием решений. Ключевой вопрос — кто контролирует технологию и ради каких целей.'
     }
   },
   {
@@ -44,7 +44,7 @@ window._TOOLS_A = [
     year: '01919',
     explainMore: {
       en: 'Civic and cooperative banks redirect capital away from speculation and toward community needs — funding cooperative enterprises, green infrastructure, and affordable housing. Unlike commercial banks, civic banks are accountable to depositors and communities rather than shareholders. In a solarpunk future, they become essential plumbing for the solidarity economy, making finance a tool of transformation rather than extraction.',
-      ru: 'Гражданские и кооперативные банки перенаправляют капитал от спекуляций к нуждам общества — финансируя кооперативные предприятия, зелёную инфраструктуру и доступное жильё. В отличие от коммерческих банков, гражданские банки подотчётны вкладчикам и сообществам, а не акционерам. В солярпанк-будущем они становятся основой экономики солидарности, превращая финансы в инструмент преобразования, а не извлечения прибыли.'
+      ru: 'Гражданские и кооперативные банки перенаправляют капитал от спекуляций к нуждам общества — финансируя кооперативные предприятия, зелёную инфраструктуру и доступное жильё. В отличие от коммерческих банков, гражданские банки подотчётны вкладчикам и сообществам, а не акционерам. В соларпанк-будущем они становятся основой экономики солидарности, превращая финансы в инструмент преобразования, а не извлечения прибыли.'
     }
   },
   {
@@ -60,7 +60,7 @@ window._TOOLS_A = [
     year: '02017',
     explainMore: {
       en: 'Clothing design in a solarpunk context moves beyond fast fashion toward garments grown from mycelium, dyed with natural pigments, and repaired rather than discarded. Community clothing design circles share patterns, mend collectively, and create adaptive textiles that respond to their wearers\' bodies and environments. Clothing becomes an expression of ecological relationship and collective care rather than corporate identity.',
-      ru: 'Дизайн одежды в солярпанк-контексте выходит за рамки быстрой моды — к одежде, выращенной из мицелия, окрашенной природными пигментами и ремонтируемой, а не выбрасываемой. Сообщества по дизайну одежды обмениваются выкройками, чинят вместе и создают адаптивные ткани, реагирующие на тела и среды носителей. Одежда становится выражением экологических отношений и коллективной заботы, а не корпоративной идентичности.'
+      ru: 'Дизайн одежды в соларпанк-контексте выходит за рамки быстрой моды — к одежде, выращенной из мицелия, окрашенной природными пигментами и ремонтируемой, а не выбрасываемой. Сообщества по дизайну одежды обмениваются выкройками, чинят вместе и создают адаптивные ткани, реагирующие на тела и среды носителей. Одежда становится выражением экологических отношений и коллективной заботы, а не корпоративной идентичности.'
     }
   },
   {
@@ -76,7 +76,7 @@ window._TOOLS_A = [
     year: '02011',
     explainMore: {
       en: 'Community land trusts and indigenous land rights remove land from speculative markets, ensuring it remains available for housing, food growing, and ecological restoration in perpetuity. Land rights struggles have always been central to liberation movements — from the Diggers to land reforms across the Global South. A solarpunk future is impossible without democratizing access to land, the foundation of all material life.',
-      ru: 'Земельные фонды сообществ и права коренных народов на землю выводят землю со спекулятивных рынков, гарантируя её постоянную доступность для жилья, выращивания продовольствия и экологического восстановления. Борьба за земельные права всегда была центральной для освободительных движений — от диггеров до земельных реформ на Глобальном Юге. Солярпанк-будущее невозможно без демократизации доступа к земле — основе всей материальной жизни.'
+      ru: 'Земельные фонды сообществ и права коренных народов на землю выводят землю со спекулятивных рынков, гарантируя её постоянную доступность для жилья, выращивания продовольствия и экологического восстановления. Борьба за земельные права всегда была центральной для освободительных движений — от диггеров до земельных реформ на Глобальном Юге. соларпанк-будущее невозможно без демократизации доступа к земле — основе всей материальной жизни.'
     }
   },
   {
@@ -92,7 +92,7 @@ window._TOOLS_A = [
     year: '01966',
     explainMore: {
       en: 'Worker and community cooperatives place ownership and decision-making in the hands of those who do the work and live with the consequences. From the Mondragon federation to food co-ops to platform cooperatives, this model demonstrates that democratic economy is already possible. In a solarpunk future, cooperatives are the dominant form of enterprise — weaving together ecological responsibility, worker dignity, and community wealth.',
-      ru: 'Рабочие и общественные кооперативы передают собственность и принятие решений в руки тех, кто работает и живёт с последствиями. От федерации Мондрагон до продовольственных кооперативов и платформенных кооперативов — эта модель доказывает, что демократическая экономика уже возможна. В солярпанк-будущем кооперативы являются преобладающей формой предприятия, сплетая вместе экологическую ответственность, достоинство работников и общественное богатство.'
+      ru: 'Рабочие и общественные кооперативы передают собственность и принятие решений в руки тех, кто работает и живёт с последствиями. От федерации Мондрагон до продовольственных кооперативов и платформенных кооперативов — эта модель доказывает, что демократическая экономика уже возможна. В соларпанк-будущем кооперативы являются преобладающей формой предприятия, сплетая вместе экологическую ответственность, достоинство работников и общественное богатство.'
     }
   },
   {
@@ -108,7 +108,7 @@ window._TOOLS_A = [
     year: '01870',
     explainMore: {
       en: 'Direct democracy replaces delegation and representation with structures that allow everyone affected by a decision to participate in making it — through assemblies, referenda, consensus processes, and sortition. Social movements have long practiced direct democracy in their internal organization, prefiguring the societies they seek to build. A solarpunk future requires governance structures where communities genuinely self-determine their collective lives.',
-      ru: 'Прямая демократия заменяет делегирование и представительство структурами, позволяющими всем, кого затрагивает решение, участвовать в его принятии — через ассамблеи, референдумы, консенсусные процессы и жеребьёвку. Социальные движения давно практикуют прямую демократию в своей внутренней организации, предвосхищая общества, которые они стремятся построить. Солярпанк-будущее требует структур управления, где сообщества подлинно самостоятельно определяют свою коллективную жизнь.'
+      ru: 'Прямая демократия заменяет делегирование и представительство структурами, позволяющими всем, кого затрагивает решение, участвовать в его принятии — через ассамблеи, референдумы, консенсусные процессы и жеребьёвку. Социальные движения давно практикуют прямую демократию в своей внутренней организации, предвосхищая общества, которые они стремятся построить. соларпанк-будущее требует структур управления, где сообщества подлинно самостоятельно определяют свою коллективную жизнь.'
     }
   },
   {
@@ -124,7 +124,7 @@ window._TOOLS_A = [
     year: '01982',
     explainMore: {
       en: 'Direct action means intervening in the world directly to create change — blocking pipelines, occupying buildings, striking, or building alternative institutions — without relying on intermediaries or institutional permission. It demonstrates collective power, disrupts harmful systems, and opens space for new possibilities. In the solarpunk tradition, direct action is both a tactic of resistance and a rehearsal for self-governing communities.',
-      ru: 'Прямое действие означает непосредственное вмешательство в мир для создания перемен — блокирование трубопроводов, захват зданий, забастовки или строительство альтернативных институтов — без опоры на посредников или институциональное разрешение. Оно демонстрирует коллективную силу, нарушает вредоносные системы и открывает пространство для новых возможностей. В традиции солярпанка прямое действие — это одновременно тактика сопротивления и репетиция самоуправляемых сообществ.'
+      ru: 'Прямое действие означает непосредственное вмешательство в мир для создания перемен — блокирование трубопроводов, захват зданий, забастовки или строительство альтернативных институтов — без опоры на посредников или институциональное разрешение. Оно демонстрирует коллективную силу, нарушает вредоносные системы и открывает пространство для новых возможностей. В традиции соларпанка прямое действие — это одновременно тактика сопротивления и репетиция самоуправляемых сообществ.'
     }
   },
   {
@@ -140,7 +140,7 @@ window._TOOLS_A = [
     year: '01990',
     explainMore: {
       en: 'Liberation pedagogy — from Paulo Freire\'s literacy circles to free schools to popular education — understands learning as a collective practice of critical consciousness and mutual growth. Education that builds people\'s capacity to understand and transform their conditions is one of the most powerful tools in any movement\'s arsenal. A solarpunk future requires educational forms that are community-rooted, ecologically embedded, and oriented toward collective flourishing rather than individual credentialing.',
-      ru: 'Педагогика освобождения — от кружков грамотности Паулу Фрейре до свободных школ и народного образования — понимает обучение как коллективную практику критического сознания и взаимного роста. Образование, развивающее способность людей понимать и преобразовывать свои условия, — один из самых мощных инструментов в арсенале любого движения. Солярпанк-будущее требует образовательных форм, укоренённых в сообществе, экологически встроенных и ориентированных на коллективное процветание, а не на индивидуальные дипломы.'
+      ru: 'Педагогика освобождения — от кружков грамотности Паулу Фрейре до свободных школ и народного образования — понимает обучение как коллективную практику критического сознания и взаимного роста. Образование, развивающее способность людей понимать и преобразовывать свои условия, — один из самых мощных инструментов в арсенале любого движения. соларпанк-будущее требует образовательных форм, укоренённых в сообществе, экологически встроенных и ориентированных на коллективное процветание, а не на индивидуальные дипломы.'
     }
   },
   {
@@ -156,7 +156,7 @@ window._TOOLS_A = [
     year: '01904/01910',
     explainMore: {
       en: 'Electoral campaigns, when driven by movements rather than donors, can shift the terrain of the possible — winning municipal power, changing laws, and legitimizing radical ideas for broader audiences. The solarpunk tradition treats electoral politics as one tool among many, never a substitute for grassroots organizing but sometimes a crucial amplifier of it. Campaigns also build organizational capacity, train organizers, and connect people across communities.',
-      ru: 'Избирательные кампании, когда они движутся движениями, а не донорами, могут изменить поле возможного — завоевать муниципальную власть, изменить законы и легитимизировать радикальные идеи для более широкой аудитории. Традиция солярпанка рассматривает электоральную политику как один из многих инструментов, но никогда не как замену низовой организации, хотя иногда она является её важным усилителем. Кампании также развивают организационные возможности, готовят организаторов и соединяют людей из разных сообществ.'
+      ru: 'Избирательные кампании, когда они движутся движениями, а не донорами, могут изменить поле возможного — завоевать муниципальную власть, изменить законы и легитимизировать радикальные идеи для более широкой аудитории. Традиция соларпанка рассматривает электоральную политику как один из многих инструментов, но никогда не как замену низовой организации, хотя иногда она является её важным усилителем. Кампании также развивают организационные возможности, готовят организаторов и соединяют людей из разных сообществ.'
     }
   },
   {
@@ -172,7 +172,7 @@ window._TOOLS_A = [
     year: '02019',
     explainMore: {
       en: 'The wisdom passed down through families and extended kinship networks carries ecological knowledge, craft skills, healing practices, and survival strategies that formal institutions often erase. Oral traditions, recipe knowledge, land stewardship practices, and the deep knowledge of place embedded in family histories are irreplaceable resources for resilient communities. A solarpunk future actively preserves and shares this intergenerational knowledge while questioning which family traditions to carry forward and which to transform.',
-      ru: 'Мудрость, передаваемая через семьи и расширенные родственные сети, несёт в себе экологические знания, ремесленные навыки, целительские практики и стратегии выживания, которые формальные институты часто стирают. Устные традиции, кулинарные знания, практики управления землёй и глубокое знание места, встроенное в семейные истории, — незаменимые ресурсы для устойчивых сообществ. Солярпанк-будущее активно сохраняет и распространяет эти межпоколенческие знания, одновременно задавая вопрос: какие семейные традиции нести дальше, а какие — трансформировать.'
+      ru: 'Мудрость, передаваемая через семьи и расширенные родственные сети, несёт в себе экологические знания, ремесленные навыки, целительские практики и стратегии выживания, которые формальные институты часто стирают. Устные традиции, кулинарные знания, практики управления землёй и глубокое знание места, встроенное в семейные истории, — незаменимые ресурсы для устойчивых сообществ. соларпанк-будущее активно сохраняет и распространяет эти межпоколенческие знания, одновременно задавая вопрос: какие семейные традиции нести дальше, а какие — трансформировать.'
     }
   },
   {
@@ -188,7 +188,7 @@ window._TOOLS_A = [
     year: '02016',
     explainMore: {
       en: 'Equipment libraries — lending tools, bikes, sewing machines, camping gear, and specialized instruments to community members — demonstrate that shared access is more efficient and equitable than private ownership. Rather than every household owning rarely-used items, communities pool resources and reduce both consumption and cost. In a solarpunk future, equipment libraries are neighbourhood institutions as natural as the public park, weaving together resource sharing, skill exchange, and community trust.',
-      ru: 'Библиотеки оборудования — выдающие инструменты, велосипеды, швейные машины, туристическое снаряжение и специализированные приборы членам сообщества — демонстрируют, что совместный доступ эффективнее и справедливее частной собственности. Вместо того чтобы каждое домохозяйство владело редко используемыми вещами, сообщества объединяют ресурсы и снижают как потребление, так и затраты. В солярпанк-будущем библиотеки оборудования — это районные институты, столь же естественные, как общественный парк, сплетающие воедино совместное использование ресурсов, обмен навыками и общественное доверие.'
+      ru: 'Библиотеки оборудования — выдающие инструменты, велосипеды, швейные машины, туристическое снаряжение и специализированные приборы членам сообщества — демонстрируют, что совместный доступ эффективнее и справедливее частной собственности. Вместо того чтобы каждое домохозяйство владело редко используемыми вещами, сообщества объединяют ресурсы и снижают как потребление, так и затраты. В соларпанк-будущем библиотеки оборудования — это районные институты, столь же естественные, как общественный парк, сплетающие воедино совместное использование ресурсов, обмен навыками и общественное доверие.'
     }
   },
   {
@@ -204,7 +204,7 @@ window._TOOLS_A = [
     year: '01911',
     explainMore: {
       en: 'The general strike is among the most powerful tools available to working people — a coordinated withdrawal of labour that can bring entire economies to a halt and force structural change. From the Seattle General Strike of 1919 to the women\'s strikes of recent decades, collective work stoppages have won fundamental rights and reshaped power. In solarpunk organizing, the strike is both a weapon against exploitation and a demonstration that workers, not capital, are the true source of all value.',
-      ru: 'Всеобщая забастовка — один из самых мощных инструментов, доступных рабочим людям: скоординированное прекращение труда, способное остановить целые экономики и вынудить к структурным изменениям. От Сиэтлской всеобщей забастовки 1919 года до женских забастовок последних десятилетий — коллективные остановки работы завоевали фундаментальные права и изменили расстановку сил. В организации солярпанка забастовка — это одновременно оружие против эксплуатации и демонстрация того, что именно работники, а не капитал, являются истинным источником всей ценности.'
+      ru: 'Всеобщая забастовка — один из самых мощных инструментов, доступных рабочим людям: скоординированное прекращение труда, способное остановить целые экономики и вынудить к структурным изменениям. От Сиэтлской всеобщей забастовки 1919 года до женских забастовок последних десятилетий — коллективные остановки работы завоевали фундаментальные права и изменили расстановку сил. В организации соларпанка забастовка — это одновременно оружие против эксплуатации и демонстрация того, что именно работники, а не капитал, являются истинным источником всей ценности.'
     }
   },
   {
@@ -220,7 +220,7 @@ window._TOOLS_A = [
     year: '02003',
     explainMore: {
       en: 'The ability to identify local plants, fungi, insects, and animals is foundational to ecological literacy and food sovereignty — knowing what grows where, what is edible, what is medicinal, and what relationships bind ecosystems together. This knowledge, long held by indigenous communities and gradually being recovered by urban and rural foragers, connects people to place and reduces dependence on industrial supply chains. In a solarpunk future, species identification is a basic community skill, taught in schools and shared through citizen science networks.',
-      ru: 'Умение определять местные растения, грибы, насекомых и животных является основой экологической грамотности и продовольственного суверенитета — знание того, что где растёт, что съедобно, что лечебно и какие отношения связывают экосистемы. Эти знания, долго хранимые коренными общинами и постепенно возрождаемые городскими и сельскими собирателями, соединяют людей с местом и снижают зависимость от промышленных цепочек поставок. В солярпанк-будущем определение видов — базовый навык сообщества, преподаваемый в школах и распространяемый через сети гражданской науки.'
+      ru: 'Умение определять местные растения, грибы, насекомых и животных является основой экологической грамотности и продовольственного суверенитета — знание того, что где растёт, что съедобно, что лечебно и какие отношения связывают экосистемы. Эти знания, долго хранимые коренными общинами и постепенно возрождаемые городскими и сельскими собирателями, соединяют людей с местом и снижают зависимость от промышленных цепочек поставок. В соларпанк-будущем определение видов — базовый навык сообщества, преподаваемый в школах и распространяемый через сети гражданской науки.'
     }
   },
   {
@@ -236,7 +236,7 @@ window._TOOLS_A = [
     year: '01913',
     explainMore: {
       en: 'Graffiti and street art reclaim public space as a canvas for counter-narratives, refusing the monopoly of corporate advertising and state propaganda over the visual environment. From Paris 1968 to Banksy\'s walls to the murals of liberation movements worldwide, unauthorized art has always marked the presence of those who refuse to be silenced. In a solarpunk future, community murals and public art transform urban environments into living expressions of collective imagination and ecological vision.',
-      ru: 'Граффити и уличное искусство возвращают общественное пространство как холст для контрнарративов, отказывая корпоративной рекламе и государственной пропаганде в монополии на визуальную среду. От Парижа 1968 года до стен Бэнкси и фресок освободительных движений по всему миру — несанкционированное искусство всегда отмечало присутствие тех, кто отказывается молчать. В солярпанк-будущем общественные фрески и публичное искусство превращают городскую среду в живое выражение коллективного воображения и экологического видения.'
+      ru: 'Граффити и уличное искусство возвращают общественное пространство как холст для контрнарративов, отказывая корпоративной рекламе и государственной пропаганде в монополии на визуальную среду. От Парижа 1968 года до стен Бэнкси и фресок освободительных движений по всему миру — несанкционированное искусство всегда отмечало присутствие тех, кто отказывается молчать. В соларпанк-будущем общественные фрески и публичное искусство превращают городскую среду в живое выражение коллективного воображения и экологического видения.'
     }
   },
   {
@@ -252,7 +252,7 @@ window._TOOLS_A = [
     year: '02015',
     explainMore: {
       en: 'Guerilla gardening reclaims neglected urban land by planting food, flowers, and native species without permission — turning grey infrastructure into living ecosystems. It is simultaneously an act of environmental care, civil disobedience, and community building, demonstrating that ecological transformation can begin anywhere, with anyone, right now. In a solarpunk world, guerilla gardening evolves from protest into community stewardship as more land is collectively reclaimed for food sovereignty and biodiversity.',
-      ru: 'Партизанское садоводство возвращает заброшенные городские земли, высаживая еду, цветы и местные виды без разрешения — превращая серую инфраструктуру в живые экосистемы. Это одновременно акт экологической заботы, гражданского неповиновения и строительства сообщества, демонстрирующий, что экологическая трансформация может начаться где угодно, с любым человеком, прямо сейчас. В солярпанк-мире партизанское садоводство эволюционирует от протеста к общественному попечительству по мере того, как всё больше земель коллективно возвращается для продовольственного суверенитета и биоразнообразия.'
+      ru: 'Партизанское садоводство возвращает заброшенные городские земли, высаживая еду, цветы и местные виды без разрешения — превращая серую инфраструктуру в живые экосистемы. Это одновременно акт экологической заботы, гражданского неповиновения и строительства сообщества, демонстрирующий, что экологическая трансформация может начаться где угодно, с любым человеком, прямо сейчас. В соларпанк-мире партизанское садоводство эволюционирует от протеста к общественному попечительству по мере того, как всё больше земель коллективно возвращается для продовольственного суверенитета и биоразнообразия.'
     }
   },
   {
@@ -268,7 +268,7 @@ window._TOOLS_A = [
     year: '01859',
     explainMore: {
       en: 'The healing arts — encompassing herbalism, bodywork, community health workers, traditional medicine, and integrative care — offer visions of health rooted in relationship, environment, and community rather than commodified clinical intervention. Movements have always maintained their own healing practices, understanding that the health of organizers and communities is itself a political question. A solarpunk future invests in preventive, community-based, ecologically grounded healing that addresses the social and environmental roots of ill health.',
-      ru: 'Целительные искусства — включающие траволечение, телесные практики, общественных медработников, традиционную медицину и интегративный уход — предлагают видение здоровья, укоренённое в отношениях, среде и сообществе, а не в товаризированном клиническом вмешательстве. Движения всегда поддерживали собственные исцеляющие практики, понимая, что здоровье организаторов и сообществ само по себе является политическим вопросом. Солярпанк-будущее инвестирует в превентивное, основанное на сообществе, экологически укоренённое исцеление, устраняющее социальные и экологические корни болезней.'
+      ru: 'Целительные искусства — включающие траволечение, телесные практики, общественных медработников, традиционную медицину и интегративный уход — предлагают видение здоровья, укоренённое в отношениях, среде и сообществе, а не в товаризированном клиническом вмешательстве. Движения всегда поддерживали собственные исцеляющие практики, понимая, что здоровье организаторов и сообществ само по себе является политическим вопросом. соларпанк-будущее инвестирует в превентивное, основанное на сообществе, экологически укоренённое исцеление, устраняющее социальные и экологические корни болезней.'
     }
   },
   {
@@ -284,7 +284,7 @@ window._TOOLS_A = [
     year: '00375 BCE',
     explainMore: {
       en: 'Independent, community, and investigative journalism exposes wrongdoing, amplifies marginalized voices, and builds the shared understanding that collective action requires. Movements depend on journalism both to reach beyond their base and to document their own histories for future generations. In a solarpunk future, journalism is a public good — supported by communities rather than advertisers, accountable to readers rather than owners, and committed to ecological and social justice storytelling.',
-      ru: 'Независимая, общественная и расследовательская журналистика разоблачает злоупотребления, усиливает голоса маргинализированных и строит общее понимание, необходимое для коллективных действий. Движения опираются на журналистику как для охвата аудитории за пределами своей базы, так и для документирования собственной истории для будущих поколений. В солярпанк-будущем журналистика — это общественное благо, поддерживаемое сообществами, а не рекламодателями, подотчётное читателям, а не владельцам, и приверженное рассказу историй о экологической и социальной справедливости.'
+      ru: 'Независимая, общественная и расследовательская журналистика разоблачает злоупотребления, усиливает голоса маргинализированных и строит общее понимание, необходимое для коллективных действий. Движения опираются на журналистику как для охвата аудитории за пределами своей базы, так и для документирования собственной истории для будущих поколений. В соларпанк-будущем журналистика — это общественное благо, поддерживаемое сообществами, а не рекламодателями, подотчётное читателям, а не владельцам, и приверженное рассказу историй о экологической и социальной справедливости.'
     }
   },
   {
@@ -300,7 +300,7 @@ window._TOOLS_A = [
     year: '46 BCE',
     explainMore: {
       en: 'Libraries are among the oldest forms of the commons — spaces of free, open access to knowledge, culture, and community belonging regardless of wealth or status. They have sheltered radical ideas, provided resources to organizing communities, and offered sanctuary to people with nowhere else to go. A solarpunk future expands the library concept into seed libraries, tool libraries, skill-sharing archives, and community gathering spaces that sustain the full breadth of collective knowledge and life.',
-      ru: 'Библиотеки — одна из древнейших форм общего достояния: пространства свободного открытого доступа к знаниям, культуре и принадлежности к сообществу вне зависимости от богатства или статуса. Они укрывали радикальные идеи, предоставляли ресурсы организующимся сообществам и давали убежище людям, которым больше некуда было идти. Солярпанк-будущее расширяет концепцию библиотеки до семенных библиотек, библиотек инструментов, архивов обмена навыками и общественных пространств собраний, поддерживающих всю широту коллективных знаний и жизни.'
+      ru: 'Библиотеки — одна из древнейших форм общего достояния: пространства свободного открытого доступа к знаниям, культуре и принадлежности к сообществу вне зависимости от богатства или статуса. Они укрывали радикальные идеи, предоставляли ресурсы организующимся сообществам и давали убежище людям, которым больше некуда было идти. соларпанк-будущее расширяет концепцию библиотеки до семенных библиотек, библиотек инструментов, архивов обмена навыками и общественных пространств собраний, поддерживающих всю широту коллективных знаний и жизни.'
     }
   },
   {
@@ -316,7 +316,7 @@ window._TOOLS_A = [
     year: '01818',
     explainMore: {
       en: 'Community labs, biohackerspaces, and open science facilities democratize access to the tools of discovery — letting communities investigate local pollution, develop open medicines, breed resilient crops, and experiment with ecological technologies outside corporate control. Science, returned to the commons, becomes a tool for collective problem-solving rather than proprietary profit. A solarpunk future is rich with neighbourhood laboratories where curiosity, ecological need, and collective ingenuity drive research agendas.',
-      ru: 'Общественные лаборатории, биохакерспейсы и объекты открытой науки демократизируют доступ к инструментам открытий — позволяя сообществам исследовать местное загрязнение, разрабатывать открытые лекарства, выращивать устойчивые культуры и экспериментировать с экологическими технологиями вне корпоративного контроля. Наука, возвращённая в общее достояние, становится инструментом коллективного решения проблем, а не частной прибыли. Солярпанк-будущее богато районными лабораториями, где любопытство, экологические нужды и коллективная изобретательность определяют исследовательские повестки.'
+      ru: 'Общественные лаборатории, биохакерспейсы и объекты открытой науки демократизируют доступ к инструментам открытий — позволяя сообществам исследовать местное загрязнение, разрабатывать открытые лекарства, выращивать устойчивые культуры и экспериментировать с экологическими технологиями вне корпоративного контроля. Наука, возвращённая в общее достояние, становится инструментом коллективного решения проблем, а не частной прибыли. соларпанк-будущее богато районными лабораториями, где любопытство, экологические нужды и коллективная изобретательность определяют исследовательские повестки.'
     }
   },
   {
@@ -332,7 +332,7 @@ window._TOOLS_A = [
     year: '01986',
     explainMore: {
       en: 'Mass protest makes visible the scale of dissent that power would rather ignore — putting hundreds of thousands of bodies in public space to declare that the status quo is unacceptable. From the Civil Rights marches to the climate strikes of millions of young people, mass mobilization has repeatedly forced political agendas to shift. In a solarpunk future, mass protest continues as both a tool of pressure and a moment of collective solidarity where communities recognize their own power.',
-      ru: 'Массовый протест делает видимым масштаб инакомыслия, который власть предпочла бы игнорировать — выводя сотни тысяч людей в общественное пространство, чтобы заявить: статус-кво неприемлем. От маршей за гражданские права до климатических забастовок миллионов молодых людей — массовая мобилизация неоднократно вынуждала политические повестки меняться. В солярпанк-будущем массовый протест продолжается и как инструмент давления, и как момент коллективной солидарности, в котором сообщества осознают свою собственную силу.'
+      ru: 'Массовый протест делает видимым масштаб инакомыслия, который власть предпочла бы игнорировать — выводя сотни тысяч людей в общественное пространство, чтобы заявить: статус-кво неприемлем. От маршей за гражданские права до климатических забастовок миллионов молодых людей — массовая мобилизация неоднократно вынуждала политические повестки меняться. В соларпанк-будущем массовый протест продолжается и как инструмент давления, и как момент коллективной солидарности, в котором сообщества осознают свою собственную силу.'
     }
   },
   {
@@ -348,7 +348,7 @@ window._TOOLS_A = [
     year: '02018',
     explainMore: {
       en: 'Memes are the vernacular propaganda of networked social movements — rapidly produced, endlessly remixed cultural units that spread ideas, ridicule power, and build in-group solidarity across vast distances with minimal resources. They lower the barrier to participation in cultural production, allowing anyone with a phone to contribute to the movement\'s visual language. In a solarpunk future, memes evolve beyond irony into genuine cultural seeds — spreading visions of livable futures and making prefigurative imagination contagious.',
-      ru: 'Мемы — это народная пропаганда сетевых социальных движений: быстро создаваемые, бесконечно переосмысляемые культурные единицы, распространяющие идеи, высмеивающие власть и строящие внутригрупповую солидарность на огромных расстояниях с минимальными ресурсами. Они снижают барьер для участия в культурном производстве, позволяя любому обладателю телефона вносить вклад в визуальный язык движения. В солярпанк-будущем мемы эволюционируют за пределы иронии — в подлинные культурные семена, распространяющие видения пригодного для жизни будущего и делающие префигуративное воображение заразительным.'
+      ru: 'Мемы — это народная пропаганда сетевых социальных движений: быстро создаваемые, бесконечно переосмысляемые культурные единицы, распространяющие идеи, высмеивающие власть и строящие внутригрупповую солидарность на огромных расстояниях с минимальными ресурсами. Они снижают барьер для участия в культурном производстве, позволяя любому обладателю телефона вносить вклад в визуальный язык движения. В соларпанк-будущем мемы эволюционируют за пределы иронии — в подлинные культурные семена, распространяющие видения пригодного для жизни будущего и делающие префигуративное воображение заразительным.'
     }
   },
   {
@@ -364,7 +364,7 @@ window._TOOLS_A = [
     year: '02017',
     explainMore: {
       en: 'Off-grid and community-owned energy systems — solar microgrids, wind cooperatives, biogas digesters — free communities from dependence on centralized, profit-driven energy infrastructure and the utilities that control it. Energy autonomy is a prerequisite for genuine community self-determination, especially in rural, indigenous, and low-income areas systematically underserved by the grid. In a solarpunk future, distributed renewable energy is the backbone of resilient communities, powering everything from homes to makerspaces without fossil fuel dependence.',
-      ru: 'Автономные и принадлежащие сообществам энергосистемы — солнечные микросети, ветряные кооперативы, биогазовые установки — освобождают сообщества от зависимости от централизованной, ориентированной на прибыль энергетической инфраструктуры и контролирующих её компаний. Энергетическая автономия является предпосылкой подлинного самоопределения сообщества, особенно в сельских, коренных и малообеспеченных районах, систематически обделяемых централизованной сетью. В солярпанк-будущем распределённая возобновляемая энергетика — это основа устойчивых сообществ, питающая всё от домов до мейкерспейсов без зависимости от ископаемого топлива.'
+      ru: 'Автономные и принадлежащие сообществам энергосистемы — солнечные микросети, ветряные кооперативы, биогазовые установки — освобождают сообщества от зависимости от централизованной, ориентированной на прибыль энергетической инфраструктуры и контролирующих её компаний. Энергетическая автономия является предпосылкой подлинного самоопределения сообщества, особенно в сельских, коренных и малообеспеченных районах, систематически обделяемых централизованной сетью. В соларпанк-будущем распределённая возобновляемая энергетика — это основа устойчивых сообществ, питающая всё от домов до мейкерспейсов без зависимости от ископаемого топлива.'
     }
   }
 ];

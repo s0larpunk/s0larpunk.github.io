@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -7,19 +8,22 @@
   <title>Solarpunk Futures</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
   <!-- SVG grain filter (hidden, for CSS texture) -->
   <svg class="grain-filter" aria-hidden="true" style="position:absolute;width:0;height:0">
     <defs>
       <filter id="grain">
-        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
-        <feColorMatrix type="saturate" values="0"/>
-        <feBlend in="SourceGraphic" mode="multiply" result="blend"/>
-        <feComposite in="blend" in2="SourceGraphic"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+        <feColorMatrix type="saturate" values="0" />
+        <feBlend in="SourceGraphic" mode="multiply" result="blend" />
+        <feComposite in="blend" in2="SourceGraphic" />
       </filter>
     </defs>
   </svg>
@@ -30,9 +34,19 @@
     <div id="persistent-ui">
       <button id="lang-btn" class="btn-icon" aria-label="Change language">🌐</button>
       <button id="menu-btn" class="btn-icon" aria-label="Menu">☰</button>
+      <div id="timer-mini" class="timer-mini" style="display:none">
+        <svg class="timer-mini-ring" viewBox="0 0 44 44" width="44" height="44">
+          <circle class="timer-mini-bg" cx="22" cy="22" r="17" />
+          <circle class="timer-mini-progress" cx="22" cy="22" r="17" id="timer-mini-circle" />
+        </svg>
+        <span id="timer-mini-time">--:--</span>
+      </div>
       <div id="timer-badge" class="timer-badge" role="timer" aria-live="polite">
         <span id="timer-badge-text"></span>
       </div>
+      <!-- Global continue pill — managed by ui.js, proxies to per-screen button -->
+      <button id="btn-continue-global" class="btn-primary btn-continue-global" style="display:none"
+        data-i18n="btn_continue">Continue</button>
     </div>
 
     <!-- ===================== SESSION RESUME OVERLAY ===================== -->
@@ -171,12 +185,27 @@
       </div>
       <div class="screen-body">
         <h2 data-i18n="pregame_title"></h2>
+        <!-- BUG 5: Expanded Lines & Veils section -->
         <div class="pregame-section">
           <h3 data-i18n="lines_veils_title"></h3>
           <p data-i18n="lines_veils_desc"></p>
+          <div class="lines-veils-explainer">
+            <div class="lv-block">
+              <strong data-i18n="lines_veils_title"></strong>
+              <p data-i18n="lines_veils_what_lines"></p>
+            </div>
+            <div class="lv-block">
+              <strong>Veils</strong>
+              <p data-i18n="lines_veils_what_veils"></p>
+            </div>
+            <div class="lv-block lv-why">
+              <p data-i18n="lines_veils_why"></p>
+            </div>
+          </div>
+          <!-- BUG 3: player count section removed -->
           <label class="checkbox-row">
             <input type="checkbox" id="check-lines-veils">
-            <span data-i18n="lines_veils_title"></span>
+            <span data-i18n="lines_veils_checkbox_label"></span>
           </label>
         </div>
         <div class="pregame-section">
@@ -187,14 +216,6 @@
           <div class="tip-row"><span>🔄</span><span data-i18n="tip_landscape"></span></div>
           <div class="tip-row"><span>🔇</span><span data-i18n="tip_silent"></span></div>
           <div class="tip-row"><span>🧘</span><span data-i18n="tip_focus"></span></div>
-        </div>
-        <div class="pregame-section">
-          <label for="player-count" data-i18n="players_label"></label>
-          <div class="stepper-row">
-            <button class="stepper-btn" id="btn-players-minus">−</button>
-            <span id="player-count-display">3</span>
-            <button class="stepper-btn" id="btn-players-plus">+</button>
-          </div>
         </div>
         <button id="btn-begin-game" class="btn-primary btn-full" data-i18n="begin_btn"></button>
       </div>
@@ -317,6 +338,7 @@
     </div>
 
     <!-- ===================== SCREEN: PHASE 1 DRAW ===================== -->
+    <!-- draws all 5 cards (1 ancestor + 2 values + 2 tools) -->
     <div class="screen" id="screen-phase1-draw" style="display:none">
       <div class="phase-indicator" id="phase-indicator-1">
         <span class="phase-num">1</span>
@@ -329,30 +351,38 @@
       <div class="card-draw-layout">
         <div class="deck-area" id="deck-area-p1">
           <div class="deck-stack" id="ancestor-deck" data-type="ancestor">
-            <div class="deck-label">ANCESTOR</div>
+            <div class="deck-label" data-i18n="deck_label_ancestor"></div>
           </div>
           <div class="deck-stack" id="value-deck" data-type="value">
-            <div class="deck-label">VALUE</div>
+            <div class="deck-label" data-i18n="deck_label_value"></div>
+          </div>
+          <div class="deck-stack" id="tool-deck-p1" data-type="tool">
+            <div class="deck-label" data-i18n="deck_label_tool"></div>
           </div>
         </div>
         <div class="hand-area" id="hand-phase1"></div>
         <div class="info-panel">
-          <p class="draw-instruction" data-i18n="draw_instruction_p1"></p>
+          <p class="draw-instruction" id="draw-step-instruction" data-i18n="draw_step_ancestor"></p>
           <div class="draw-progress" id="draw-progress-p1">
-            <span class="progress-dot" data-for="ancestor"></span>
-            <span class="progress-dot" data-for="value"></span>
+            <span class="progress-dot" data-for="ancestor" title="Ancestor"></span>
+            <span class="progress-dot" data-for="value1" title="Value 1"></span>
+            <span class="progress-dot" data-for="value2" title="Value 2"></span>
+            <span class="progress-dot" data-for="tool1" title="Tool 1"></span>
+            <span class="progress-dot" data-for="tool2" title="Tool 2"></span>
           </div>
+          <p data-i18n="redraw_prompt"></p>
           <div id="redraw-panel" style="display:none">
-            <p data-i18n="redraw_prompt"></p>
             <button id="btn-do-redraw" class="btn-secondary" data-i18n="btn_redraw_selected"></button>
           </div>
-          <button id="btn-p1-continue" class="btn-primary" style="display:none" data-i18n="btn_continue"></button>
         </div>
       </div>
     </div>
 
     <!-- ===================== SCREEN: PHASE 1 NOTEPAD ===================== -->
     <div class="screen" id="screen-phase1-notepad" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="phase2-challenge" data-i18n="btn_back"></button>
+      </div>
       <div class="phase-indicator">1 <span data-i18n="phase_ancestors"></span></div>
       <div class="ref-cards-strip" id="ref-cards-p1"></div>
       <form class="notepad-form" id="form-p1">
@@ -365,15 +395,20 @@
           <textarea id="p1-background" name="p1_background" class="notepad-field" rows="3"></textarea>
         </div>
         <div class="notepad-field-group">
-          <label for="p1-value" id="label-p1-value" data-i18n="p1_value_label" data-i18n-vars='{"value":""}'></label>
+          <!-- BUG 13: updated vars to value1/value2 -->
+          <label for="p1-value" id="label-p1-value" data-i18n="p1_value_label"
+            data-i18n-vars='{"value1":"","value2":""}'></label>
           <textarea id="p1-value" name="p1_value_connection" class="notepad-field" rows="3"></textarea>
         </div>
       </form>
-      <button id="btn-p1n-continue" class="btn-primary btn-full" data-i18n="btn_continue"></button>
+      <button id="btn-p1n-continue" style="display:none" data-i18n="btn_continue"></button>
     </div>
 
     <!-- ===================== SCREEN: PHASE 2 CHALLENGE ===================== -->
     <div class="screen" id="screen-phase2-challenge" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="phase1-draw" data-i18n="btn_back"></button>
+      </div>
       <div class="phase-indicator">2 <span data-i18n="phase_challenge"></span></div>
       <div class="screen-body">
         <h2 data-i18n="challenge_title"></h2>
@@ -386,7 +421,8 @@
         <div id="challenge-display" style="display:none">
           <p data-i18n="challenge_selected"></p>
           <div id="challenge-card-area"></div>
-          <button id="btn-challenge-confirm" class="btn-primary btn-full" data-i18n="btn_continue"></button>
+          <button id="btn-challenge-confirm" style="display:none" disabled
+            data-i18n="btn_continue"></button>
         </div>
         <div id="challenge-grid" class="card-grid" style="display:none"></div>
       </div>
@@ -394,15 +430,19 @@
 
     <!-- ===================== SCREEN: PHASE 2 NOTEPAD ===================== -->
     <div class="screen" id="screen-phase2-notepad" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="phase1-notepad" data-i18n="btn_back"></button>
+      </div>
       <div class="phase-indicator">2 <span data-i18n="phase_challenge"></span></div>
       <div class="ref-cards-strip" id="ref-cards-p2"></div>
       <form class="notepad-form" id="form-p2">
         <div class="notepad-field-group">
-          <label for="p2-conflict" id="label-p2-conflict" data-i18n="p2_conflict_label" data-i18n-vars='{"challenge":""}'></label>
+          <label for="p2-conflict" id="label-p2-conflict" data-i18n="p2_conflict_label"
+            data-i18n-vars='{"challenge":""}'></label>
           <textarea id="p2-conflict" name="p2_conflict" class="notepad-field" rows="5"></textarea>
         </div>
       </form>
-      <button id="btn-p2n-continue" class="btn-primary btn-full" data-i18n="btn_continue"></button>
+      <button id="btn-p2n-continue" style="display:none" data-i18n="btn_continue"></button>
     </div>
 
     <!-- ===================== SCREEN: PHASE 3 DRAW ===================== -->
@@ -414,10 +454,10 @@
       <div class="card-draw-layout">
         <div class="deck-area" id="deck-area-p3">
           <div class="deck-stack" id="tool-deck" data-type="tool">
-            <div class="deck-label">TOOLS</div>
+            <div class="deck-label" data-i18n="deck_label_tool"></div>
           </div>
           <div class="deck-stack deck-stack-2" id="tool-deck-2" data-type="tool">
-            <div class="deck-label">TOOL 2</div>
+            <div class="deck-label" data-i18n="deck_label_tool"></div>
           </div>
         </div>
         <div class="hand-area" id="hand-phase3"></div>
@@ -438,11 +478,16 @@
 
     <!-- ===================== SCREEN: PHASE 3 NOTEPAD ===================== -->
     <div class="screen" id="screen-phase3-notepad" style="display:none">
+      <!-- BUG 11: back button -->
+      <div class="screen-header">
+        <button class="btn-back" data-target="phase2-notepad" data-i18n="btn_back"></button>
+      </div>
       <div class="phase-indicator">3 <span data-i18n="phase_building"></span></div>
       <div class="ref-cards-strip" id="ref-cards-p3"></div>
       <form class="notepad-form" id="form-p3">
         <div class="notepad-field-group">
-          <label for="p3-approach" id="label-p3-approach" data-i18n="p3_approach_label" data-i18n-vars='{"tool1":"","tool2":""}'></label>
+          <label for="p3-approach" id="label-p3-approach" data-i18n="p3_approach_label"
+            data-i18n-vars='{"tool1":"","tool2":""}'></label>
           <textarea id="p3-approach" name="p3_approach" class="notepad-field" rows="4"></textarea>
         </div>
         <div class="notepad-field-group">
@@ -462,11 +507,15 @@
           <textarea id="p3-remaining" name="p3_remaining" class="notepad-field" rows="3"></textarea>
         </div>
       </form>
-      <button id="btn-p3n-continue" class="btn-primary btn-full" data-i18n="btn_continue"></button>
+      <button id="btn-p3n-continue" style="display:none" data-i18n="btn_continue"></button>
     </div>
 
     <!-- ===================== SCREEN: PHASE 4 ===================== -->
     <div class="screen" id="screen-phase4" style="display:none">
+      <!-- BUG 11: back button -->
+      <div class="screen-header">
+        <button class="btn-back" data-target="phase3-notepad" data-i18n="btn_back"></button>
+      </div>
       <div class="phase-indicator">4 <span data-i18n="phase_remembrance"></span></div>
       <div class="ref-cards-strip" id="ref-cards-p4"></div>
       <div class="phase4-intro">
@@ -490,7 +539,7 @@
           <textarea id="p4-overcome" name="p4_overcome" class="notepad-field" rows="3"></textarea>
         </div>
       </form>
-      <button id="btn-complete-session" class="btn-primary btn-full" data-i18n="complete_session_btn"></button>
+      <button id="btn-complete-session" style="display:none" data-i18n="complete_session_btn"></button>
     </div>
 
     <!-- ===================== SCREEN: EXPORT ===================== -->
@@ -502,15 +551,18 @@
         <!-- populated by UI.renderExport() -->
       </div>
       <div class="export-actions">
-        <button id="btn-export-txt" class="btn-secondary btn-full">
+        <button id="btn-export-txt" class="btn-secondary">
+          <span>📄</span>
           <span data-i18n="export_txt_btn"></span>
           <small data-i18n="export_txt_desc"></small>
         </button>
-        <button id="btn-export-pdf" class="btn-secondary btn-full">
+        <button id="btn-export-pdf" class="btn-secondary">
+          <span>📋</span>
           <span data-i18n="export_pdf_btn"></span>
           <small data-i18n="export_pdf_desc"></small>
         </button>
-        <button id="btn-export-jpeg" class="btn-secondary btn-full">
+        <button id="btn-export-jpeg" class="btn-secondary">
+          <span>🖼️</span>
           <span data-i18n="export_jpeg_btn"></span>
           <small data-i18n="export_jpeg_desc"></small>
         </button>
@@ -528,8 +580,8 @@
         <div class="timer-modal-content">
           <div class="timer-ring-container">
             <svg class="timer-ring" viewBox="0 0 120 120">
-              <circle class="timer-ring-bg" cx="60" cy="60" r="54"/>
-              <circle class="timer-ring-progress" cx="60" cy="60" r="54" id="timer-ring-circle"/>
+              <circle class="timer-ring-bg" cx="60" cy="60" r="54" />
+              <circle class="timer-ring-progress" cx="60" cy="60" r="54" id="timer-ring-circle" />
             </svg>
             <div class="timer-ring-text">
               <span id="timer-display">00:00</span>
@@ -539,6 +591,10 @@
           <div id="timer-phase-list" class="timer-phase-list"><!-- populated by JS --></div>
           <div class="timer-controls">
             <button id="btn-timer-toggle" class="btn-primary" data-i18n="btn_start_timer"></button>
+            <button id="btn-timer-reset" class="btn-secondary btn-full">Reset to — min</button>
+            <!-- BUG 10: Next Phase navigation from timer modal -->
+            <button id="btn-next-phase" class="btn-secondary btn-full" data-i18n="btn_next_phase"
+              style="display:none"></button>
           </div>
         </div>
         <button class="modal-close" id="btn-close-timer">×</button>
@@ -573,10 +629,9 @@
     </div>
 
     <!-- ===================== MODAL: CARD EXPLAIN ===================== -->
-    <div id="modal-card-explain" class="modal" style="display:none">
+    <div id="modal-card-explain" class="modal modal-center" style="display:none">
       <div class="modal-backdrop"></div>
-      <div class="modal-sheet">
-        <div class="modal-handle"></div>
+      <div class="modal-centered" style="max-width: 480px; max-height: 80dvh; overflow-y: auto; text-align: left;">
         <div id="card-explain-content" class="card-explain-content">
           <div class="card-explain-header">
             <span id="explain-card-emojis"></span>
@@ -606,7 +661,7 @@
 
   </div><!-- /#app -->
 
-  <script src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/twemoji.min.js" crossorigin="anonymous"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/twemoji.min.js" crossorigin="anonymous"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="js/data_challenges.js"></script>
@@ -622,4 +677,5 @@
   <script src="js/timer.js"></script>
   <script src="js/export.js"></script>
 </body>
+
 </html>

@@ -108,6 +108,9 @@ window.Timer = (function() {
     var remaining = getRemaining();
     var isOverrun = remaining < 0;
     if (window.UI) window.UI.updateTimerBadge(label, isOverrun);
+    // Apply sharing mode class
+    var app = document.getElementById('app');
+    if (app) app.classList.toggle('mode-sharing', state.mode === 'sharing');
   }
 
   function _show2MinNudge(phase, mode) {
@@ -163,7 +166,12 @@ window.Timer = (function() {
       dismissBtn.onclick = function() { alert.classList.remove('active'); };
     }
 
-    alert.classList.add('active');
+    if (window.UI && window.UI.showModal) {
+      window.UI.showModal('phase-alert');
+    } else {
+      alert.classList.add('active');
+      alert.style.display = 'flex';
+    }
   }
 
   function _label(phase, mode) {
@@ -172,11 +180,20 @@ window.Timer = (function() {
     return tFn('phase_' + phase + '_of_4', { phase: phase }) + ' \u00B7 ' + modeName;
   }
 
+  function getDisplay() {
+    var state = _getState();
+    if (!state) return '';
+    return _label(state.phase, state.mode);
+  }
+
   function restore() {
     var state = _getState();
-    if (state && state.active && state.startedAt) {
+    if (!state) return;
+    // Always refresh the badge so remaining time shows correctly after reload
+    _updateBadge();
+    if (state.active && state.startedAt) {
+      // Timer was running — resume the tick interval
       _interval = setInterval(_tick, 1000);
-      _updateBadge();
     }
   }
 
@@ -187,6 +204,7 @@ window.Timer = (function() {
     reset: reset,
     getElapsed: getElapsed,
     getRemaining: getRemaining,
+    getDisplay: getDisplay,
     restore: restore,
     _label: _label,
     _updateBadge: _updateBadge

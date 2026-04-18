@@ -10,14 +10,77 @@ window.UI = (function() {
 
   function t(key, vars) { return window.i18n ? window.i18n.t(key, vars) : key; }
 
+  // BUG 4: game screens where timer badge should be visible
+  var GAME_SCREENS = [
+    'phase1-draw', 'phase1-notepad',
+    'phase2-challenge', 'phase2-notepad',
+    'phase3-notepad',
+    'phase4', 'export'
+  ];
+
+  // Map each screen to its per-screen continue button ID
+  var _continueBtnMap = {
+    'phase1-draw':      'btn-p1-continue',
+    'phase1-notepad':   'btn-p1n-continue',
+    'phase2-challenge': 'btn-challenge-confirm',
+    'phase2-notepad':   'btn-p2n-continue',
+    'phase3-notepad':   'btn-p3n-continue',
+    'phase4':           'btn-complete-session',
+  };
+
+  // Wire the single global continue pill in #persistent-ui to the
+  // current screen's local continue button.  Also called whenever the
+  // local button's disabled state changes (draw progress, challenge pick).
+  function _syncGlobalContinue(screenName) {
+    var globalBtn = document.getElementById('btn-continue-global');
+    if (!globalBtn) return;
+    var localId = _continueBtnMap[screenName];
+    if (!localId) { globalBtn.style.display = 'none'; return; }
+    var localBtn = document.getElementById(localId);
+    if (!localBtn) { globalBtn.style.display = 'none'; return; }
+
+    globalBtn.style.display = '';
+    globalBtn.disabled = localBtn.disabled;
+    // Replace onclick so there's only ever one handler
+    globalBtn.onclick = function() {
+      if (!globalBtn.disabled) localBtn.click();
+    };
+  }
+
   function showScreen(name) {
     document.querySelectorAll('.screen').forEach(function(s) {
       s.classList.remove('active', 'entering');
+      s.style.display = 'none'; // ensure inline style never fights CSS
     });
     var target = document.getElementById('screen-' + name);
     if (!target) return;
     target.classList.add('active');
+    target.style.display = 'flex'; // override any baked-in inline style
     requestAnimationFrame(function() { target.classList.add('entering'); });
+
+    // BUG 4: show/hide timer badge based on screen type
+    var timerBadge = document.getElementById('timer-badge');
+    if (timerBadge) {
+      if (GAME_SCREENS.indexOf(name) !== -1) {
+        timerBadge.classList.remove('timer-badge-hidden');
+      } else {
+        timerBadge.classList.add('timer-badge-hidden');
+      }
+    }
+
+    // Show/hide mini timer ring alongside badge
+    var timerMini = document.getElementById('timer-mini');
+    if (timerMini) {
+      timerMini.style.display = (GAME_SCREENS.indexOf(name) !== -1) ? 'flex' : 'none';
+    }
+
+    // Toggle dark-screen-active on #app for contrast overrides
+    var app = document.getElementById('app');
+    if (app) {
+      var darkScreens = ['phase1-draw', 'phase2-challenge'];
+      app.classList.toggle('dark-screen-active', darkScreens.indexOf(name) !== -1);
+    }
+
     var renders = {
       'welcome': renderWelcome,
       'familiarity': renderFamiliarity,
@@ -29,30 +92,43 @@ window.UI = (function() {
       'phase1-notepad': function() { renderNotepad(1); },
       'phase2-challenge': renderChallenge,
       'phase2-notepad': function() { renderNotepad(2); },
-      'phase3-draw': function() { renderCardDraw(3); },
+      // phase3-draw removed from active flow (BUG 6)
       'phase3-notepad': function() { renderNotepad(3); },
       'phase4': renderPhase4,
       'export': renderExport
     };
+    _syncGlobalContinue(name);   // wire continue pill before render so disabled syncs correctly
     if (renders[name]) renders[name]();
     parseEmojis(target);
   }
 
   function showModal(name) {
-    document.querySelectorAll('.modal').forEach(function(m) { m.classList.remove('active'); });
+    document.querySelectorAll('.modal').forEach(function(m) {
+      m.classList.remove('active');
+      m.style.display = 'none';
+    });
     var m = document.getElementById('modal-' + name);
-    if (m) m.classList.add('active');
+    if (m) {
+      m.classList.add('active');
+      m.style.display = 'flex';
+    }
     if (name === 'timer') updateTimerModal();
     if (m) parseEmojis(m);
   }
 
   function hideModal(name) {
     var m = document.getElementById('modal-' + name);
-    if (m) m.classList.remove('active');
+    if (m) {
+      m.classList.remove('active');
+      m.style.display = 'none';
+    }
   }
 
   function hideAllModals() {
-    document.querySelectorAll('.modal').forEach(function(m) { m.classList.remove('active'); });
+    document.querySelectorAll('.modal').forEach(function(m) {
+      m.classList.remove('active');
+      m.style.display = 'none';
+    });
   }
 
   function refreshI18n() {
@@ -66,7 +142,17 @@ window.UI = (function() {
           var parsed = JSON.parse(varsStr);
           var dc = (state.drawnCards) || {};
           var lang = window.i18n ? window.i18n.getLang() : 'en';
-          if (parsed.value !== undefined && dc.value) parsed.value = dc.value.name[lang] || dc.value.name.en;
+          // BUG 13: populate value1 and value2 from dc.values array
+          if (parsed.value1 !== undefined) {
+            parsed.value1 = (dc.values && dc.values[0]) ? (dc.values[0].name[lang] || dc.values[0].name.en) : '';
+          }
+          if (parsed.value2 !== undefined) {
+            parsed.value2 = (dc.values && dc.values[1]) ? (dc.values[1].name[lang] || dc.values[1].name.en) : '';
+          }
+          // Legacy single value support (kept for any stray references)
+          if (parsed.value !== undefined && dc.values && dc.values[0]) {
+            parsed.value = dc.values[0].name[lang] || dc.values[0].name.en;
+          }
           if (parsed.challenge !== undefined && dc.challenge) parsed.challenge = dc.challenge.name[lang] || dc.challenge.name.en;
           if (parsed.tool1 !== undefined && dc.tools && dc.tools[0]) parsed.tool1 = dc.tools[0].name[lang] || dc.tools[0].name.en;
           if (parsed.tool2 !== undefined && dc.tools && dc.tools[1]) parsed.tool2 = dc.tools[1].name[lang] || dc.tools[1].name.en;
@@ -108,26 +194,26 @@ window.UI = (function() {
         '<p>' + t('solarpunk_explainer') + '</p>' +
         '</div>' +
         '<div class="intro-section">' +
-        '<h3>\uD83C\uDFC4 The 4 Phases</h3>' +
+        '<h3>\uD83C\uDFC4 ' + t('intro_4phases_title') + '</h3>' +
         '<p>' + t('game_phases_explainer') + '</p>' +
         '<ol class="phase-list">' +
-        '<li><strong>The Ancestors</strong> \u2014 Draw your Ancestor + Value cards, introduce your character</li>' +
-        '<li><strong>The Challenge</strong> \u2014 Face a collective challenge that confronts your values</li>' +
-        '<li><strong>Building the World</strong> \u2014 Draw Tool cards and write your ancestor\u2019s story</li>' +
-        '<li><strong>Remembrance</strong> \u2014 Weave all stories together into a collective utopia</li>' +
+        '<li>' + t('intro_phase1_item') + '</li>' +
+        '<li>' + t('intro_phase2_item') + '</li>' +
+        '<li>' + t('intro_phase3_item') + '</li>' +
+        '<li>' + t('intro_phase4_item') + '</li>' +
         '</ol>' +
         '</div>' +
         '<div class="intro-section">' +
-        '<h3>\uD83C\uDCCF Card Types</h3>' +
+        '<h3>\uD83C\uDCCF ' + t('intro_card_types_title') + '</h3>' +
         '<div class="card-type-explainers">' +
-        '<div class="ctype"><span class="ct-badge ancestor">ANCESTOR</span> Your character archetype \u2014 Builder, Hacker, Elder...</div>' +
-        '<div class="ctype"><span class="ct-badge value">VALUE</span> The guiding principle your ancestor lived by</div>' +
-        '<div class="ctype"><span class="ct-badge tool">TOOL</span> The strategies and practices they used</div>' +
-        '<div class="ctype"><span class="ct-badge challenge">CHALLENGE</span> The systemic problem they worked to overcome</div>' +
+        '<div class="ctype"><span class="ct-badge ancestor">' + t('deck_label_ancestor').toUpperCase() + '</span> ' + t('intro_ancestor_type_desc') + '</div>' +
+        '<div class="ctype"><span class="ct-badge value">' + t('deck_label_value').toUpperCase() + '</span> ' + t('intro_value_type_desc') + '</div>' +
+        '<div class="ctype"><span class="ct-badge tool">' + t('deck_label_tool').toUpperCase() + '</span> ' + t('intro_tool_type_desc') + '</div>' +
+        '<div class="ctype"><span class="ct-badge challenge">' + t('deck_label_challenge').toUpperCase() + '</span> ' + t('intro_challenge_type_desc') + '</div>' +
         '</div>' +
         '</div>' +
         '<div class="intro-section consent-reminder">' +
-        '<h3>\uD83E\uDD1D Before you begin</h3>' +
+        '<h3>\uD83E\uDD1D ' + t('intro_before_title') + '</h3>' +
         '<p>' + t('lines_veils_reminder') + '</p>' +
         '</div>';
     } else {
@@ -148,10 +234,8 @@ window.UI = (function() {
 
   function renderTechnique() { refreshI18n(); }
 
+  // BUG 3: removed playerCount reference
   function renderPreGame() {
-    var state = window.Game ? window.Game.getState() : {};
-    var el = document.getElementById('player-count-display');
-    if (el) el.textContent = state.playerCount || '';
     refreshI18n();
   }
 
@@ -173,25 +257,107 @@ window.UI = (function() {
     refreshI18n();
   }
 
+  // FIX 9: deck visibility gating (called on screen show and after each draw)
+  function _updateDeckVisibility(dc) {
+    var aDeck = document.getElementById('ancestor-deck');
+    var vDeck = document.getElementById('value-deck');
+    var tDeck = document.getElementById('tool-deck-p1');
+    var continueBtn = document.getElementById('btn-p1-continue');
+
+    var allFiveDrawn = dc.ancestor &&
+      (dc.values || []).length >= 2 &&
+      (dc.tools || []).length >= 2;
+
+    // Continue pill: disabled until all 5 drawn; also update global pill
+    if (continueBtn) continueBtn.disabled = !allFiveDrawn;
+    var globalBtn = document.getElementById('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = !allFiveDrawn;
+
+    if (allFiveDrawn) {
+      if (aDeck) aDeck.style.display = 'none';
+      if (vDeck) vDeck.style.display = 'none';
+      if (tDeck) tDeck.style.display = 'none';
+    } else if (dc.ancestor && (dc.values || []).length < 2) {
+      if (aDeck) aDeck.style.display = 'none';
+      if (vDeck) vDeck.style.display = '';
+      if (tDeck) tDeck.style.display = 'none';
+    } else if ((dc.values || []).length >= 2 && (dc.tools || []).length < 2) {
+      if (aDeck) aDeck.style.display = 'none';
+      if (vDeck) vDeck.style.display = 'none';
+      if (tDeck) tDeck.style.display = '';
+    } else {
+      // No ancestor yet: show ancestor deck only
+      if (aDeck) aDeck.style.display = '';
+      if (vDeck) vDeck.style.display = 'none';
+      if (tDeck) tDeck.style.display = 'none';
+    }
+  }
+
+  // FIX 9: update draw step instruction text
+  function _updateDrawStepInstruction(dc) {
+    var el = document.getElementById('draw-step-instruction');
+    if (!el) return;
+    var allFiveDrawn = dc.ancestor &&
+      (dc.values || []).length >= 2 &&
+      (dc.tools || []).length >= 2;
+    if (allFiveDrawn) {
+      el.textContent = t('draw_step_done');
+    } else if (!dc.ancestor) {
+      el.textContent = t('draw_step_ancestor');
+    } else if ((dc.values || []).length === 0) {
+      el.textContent = t('draw_step_value1');
+    } else if ((dc.values || []).length === 1) {
+      el.textContent = t('draw_step_value2');
+    } else if ((dc.tools || []).length === 0) {
+      el.textContent = t('draw_step_tool1');
+    } else if ((dc.tools || []).length === 1) {
+      el.textContent = t('draw_step_tool2');
+    }
+  }
+
+  // always clear hand containers; phase 1 draws all 5 cards
   function renderCardDraw(phase) {
     var state = window.Game ? window.Game.getState() : {};
     updatePhaseIndicator(phase);
     var dc = state.drawnCards || {};
+
     if (phase === 1) {
+      // always clear hand container before re-rendering
+      var handEl = document.getElementById('hand-phase1');
+      if (handEl) handEl.innerHTML = '';
+
+      // Mark decks as dealt if already maxed
       var aDeck = document.getElementById('ancestor-deck');
       var vDeck = document.getElementById('value-deck');
-      if (aDeck && !dc.ancestor) aDeck.classList.add('ready-to-draw');
-      if (vDeck && !dc.value) vDeck.classList.add('ready-to-draw');
-      var p1Cards = [dc.ancestor, dc.value].filter(Boolean);
-      if (p1Cards.length > 0) renderHand(p1Cards, 'hand-phase1');
-    } else if (phase === 3) {
-      var tDeck = document.getElementById('tool-deck');
-      var tools = dc.tools || [];
-      if (tDeck && tools.length < 2) tDeck.classList.add('ready-to-draw');
-      if (tools.length > 0) renderHand(tools, 'hand-phase3');
+      var tDeck = document.getElementById('tool-deck-p1');
+
+      if (aDeck) {
+        aDeck.classList.toggle('dealt', !!dc.ancestor);
+        aDeck.classList.toggle('ready-to-draw', !dc.ancestor);
+      }
+      if (vDeck) {
+        var valCount = (dc.values || []).length;
+        vDeck.classList.toggle('dealt', valCount >= 2);
+        vDeck.classList.toggle('ready-to-draw', valCount < 2);
+      }
+      if (tDeck) {
+        var toolCount = (dc.tools || []).length;
+        tDeck.classList.toggle('dealt', toolCount >= 2);
+        tDeck.classList.toggle('ready-to-draw', toolCount < 2);
+      }
+
+      // Re-render any already-drawn cards
+      var p1Cards = [dc.ancestor].concat(dc.values || []).concat(dc.tools || []).filter(Boolean);
+      if (p1Cards.length > 0 && handEl) renderHand(p1Cards, 'hand-phase1');
+
+      // FIX 9: update deck visibility and instruction on screen show/restore
+      _updateDeckVisibility(dc);
+      _updateDrawStepInstruction(dc);
     }
+    // Phase 3 draw screen removed from flow
   }
 
+  // BUG 7: always show ALL drawn cards on every notepad screen
   function renderNotepad(phase) {
     var state = window.Game ? window.Game.getState() : {};
     var dc = state.drawnCards || {};
@@ -201,15 +367,24 @@ window.UI = (function() {
     var strip = document.getElementById(stripId);
     if (strip) {
       strip.innerHTML = '';
+      // BUG 7: always show all drawn cards from phase 1 onward
       var refCards = [];
       if (dc.ancestor) refCards.push(dc.ancestor);
-      if (dc.value) refCards.push(dc.value);
-      if (phase >= 2 && dc.challenge) refCards.push(dc.challenge);
-      if (phase >= 3 && dc.tools) dc.tools.forEach(function(c) { refCards.push(c); });
+      (dc.values || []).forEach(function(v) { if (v) refCards.push(v); });
+      (dc.tools || []).forEach(function(t) { if (t) refCards.push(t); });
+      if (dc.challenge) refCards.push(dc.challenge);
       refCards.forEach(function(card) {
         var mini = window.Cards ? window.Cards.createCardEl(card, true) : document.createElement('div');
         strip.appendChild(mini);
         if (window.Cards) window.Cards.flip(mini);
+        // FIX 12: attach explain listener to mini card button
+        var explainBtn = mini.querySelector('.card-explain-toggle');
+        if (explainBtn) {
+          explainBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            renderExplainMore(card);
+          });
+        }
       });
       parseEmojis(strip);
     }
@@ -256,6 +431,11 @@ window.UI = (function() {
     refreshI18n();
     var state = window.Game ? window.Game.getState() : {};
     var dc = state.drawnCards || {};
+    // keep confirm pill disabled until a challenge is actually selected
+    var confirmBtn = document.getElementById('btn-challenge-confirm');
+    if (confirmBtn) confirmBtn.disabled = !dc.challenge;
+    var globalBtn = document.getElementById('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = !dc.challenge;
     if (dc.challenge) {
       renderChallengeCard(dc.challenge);
     }
@@ -273,6 +453,7 @@ window.UI = (function() {
     cards.filter(Boolean).forEach(function(card, i) {
       var el = window.Cards ? window.Cards.createCardEl(card) : document.createElement('div');
       el.classList.add('card-in-hand');
+      el.classList.add('flipped'); // already drawn cards show face-up
       var rots = [-3, -1, 1, 3, 0, -2, 2];
       el.style.setProperty('--card-rot', (rots[i % rots.length] || 0) + 'deg');
       container.appendChild(el);
@@ -307,6 +488,14 @@ window.UI = (function() {
     if (display) display.style.display = 'block';
     var modeSelector = document.querySelector('.challenge-mode-selector');
     if (modeSelector) modeSelector.style.display = 'none';
+    // scroll challenge screen to top so user sees the card
+    var challengeScreen = document.getElementById('screen-phase2-challenge');
+    if (challengeScreen) challengeScreen.scrollTop = 0;
+    // enable the confirm pill now that a card is selected
+    var confirmBtn = document.getElementById('btn-challenge-confirm');
+    if (confirmBtn) confirmBtn.disabled = false;
+    var globalContinue = document.getElementById('btn-continue-global');
+    if (globalContinue) globalContinue.disabled = false;
     requestAnimationFrame(function() {
       if (window.Cards) window.Cards.flip(el);
     });
@@ -385,13 +574,17 @@ window.UI = (function() {
       return card ? (card.name[lang] || card.name.en) : '\u2014';
     }
 
+    // BUG 13: use values array for export
+    var val1Name = getName(dc.values && dc.values[0]);
+    var val2Name = getName(dc.values && dc.values[1]);
+
     summary.innerHTML = '<div class="export-section" id="export-card-section">' +
       '<h3>' + t('export_section_ancestor') + '</h3>' +
       '<div class="export-cards-row" id="export-cards-row"></div>' +
       '<div class="export-notepad">' +
       '<p><strong>' + t('p1_name_label') + ':</strong> ' + (np.p1_name || '\u2014') + '</p>' +
       '<p><strong>' + t('p1_background_label') + ':</strong> ' + (np.p1_background || '\u2014') + '</p>' +
-      '<p><strong>' + t('p1_value_label', { value: getName(dc.value) }) + ':</strong> ' + (np.p1_value_connection || '\u2014') + '</p>' +
+      '<p><strong>' + t('p1_value_label', { value1: val1Name, value2: val2Name }) + ':</strong> ' + (np.p1_value_connection || '\u2014') + '</p>' +
       '</div>' +
       '</div>' +
       '<div class="export-section">' +
@@ -422,15 +615,40 @@ window.UI = (function() {
 
     var cardsRow = document.getElementById('export-cards-row');
     if (cardsRow && window.Cards) {
-      var allCards = [dc.ancestor, dc.value, dc.challenge].concat(dc.tools || []).filter(Boolean);
+      // BUG 7/13: use values array
+      var allCards = [dc.ancestor]
+        .concat(dc.values || [])
+        .concat([dc.challenge])
+        .concat(dc.tools || [])
+        .filter(Boolean);
       allCards.forEach(function(card) {
         var el = window.Cards.createCardEl(card);
         el.classList.add('flipped');
+        var explainBtn = el.querySelector('.card-explain-toggle');
+        if (explainBtn) {
+          explainBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            renderExplainMore(card);
+          });
+        }
         cardsRow.appendChild(el);
       });
     }
 
     parseEmojis(summary);
+  }
+
+  function renderRefCards(cards, el) {
+    if (!el) return;
+    el.innerHTML = '';
+    (cards || []).filter(Boolean).forEach(function(card) {
+      var mini = window.Cards ? window.Cards.createCardEl(card, true) : document.createElement('div');
+      el.appendChild(mini);
+      if (window.Cards) {
+        setTimeout(function() { window.Cards.flip(mini); }, 200);
+      }
+    });
+    parseEmojis(el);
   }
 
   function updatePhaseIndicator(phase) {
@@ -445,6 +663,33 @@ window.UI = (function() {
     if (!badge || !textEl) return;
     textEl.textContent = text;
     badge.classList.toggle('overrun', !!isOverrun);
+
+    // Update data-mode attribute for CSS mode indicator
+    var timerSt = window.Game ? window.Game.getState().timer : null;
+    badge.setAttribute('data-mode', timerSt ? timerSt.mode : 'writing');
+
+    // Update mini timer ring
+    var mini = document.getElementById('timer-mini');
+    var miniCircle = document.getElementById('timer-mini-circle');
+    var miniTime = document.getElementById('timer-mini-time');
+    if (mini && window.Timer) {
+      var remaining = window.Timer.getRemaining();
+      if (timerSt) {
+        var dur = timerSt.durations ? (timerSt.durations['p' + timerSt.phase + (timerSt.mode === 'writing' ? 'w' : 's')] || 300) : 300;
+        var secs = Math.abs(remaining);
+        var mm = String(Math.floor(secs / 60)).padStart(2, '0');
+        var ss = String(secs % 60).padStart(2, '0');
+        if (miniTime) miniTime.textContent = (remaining < 0 ? '-' : '') + mm + ':' + ss;
+        if (miniCircle) {
+          var circ = 106.8;
+          var elapsed = dur - remaining;
+          var progress = Math.min(1, Math.max(0, elapsed / dur));
+          miniCircle.style.strokeDasharray = circ;
+          miniCircle.style.strokeDashoffset = circ * (1 - progress);
+        }
+        mini.classList.toggle('overrun', !!isOverrun);
+      }
+    }
   }
 
   function _getDuration(phase, mode) {
@@ -481,6 +726,18 @@ window.UI = (function() {
     var label = document.getElementById('timer-phase-label');
     if (label && window.Timer) label.textContent = window.Timer._label(timerState.phase, timerState.mode);
 
+    // Reset button — shows "Reset to XX min" for the current phase/mode
+    var resetBtn = document.getElementById('btn-timer-reset');
+    if (resetBtn) {
+      var resetMins = Math.round(_getDuration(timerState.phase, timerState.mode) / 60);
+      resetBtn.textContent = 'Reset to ' + resetMins + ' min';
+      resetBtn.onclick = function() {
+        if (window.Timer) window.Timer.pause();
+        if (window.Game) window.Game.setState({ timer: { elapsed: 0, startedAt: null, active: false } });
+        updateTimerModal();
+      };
+    }
+
     var list = document.getElementById('timer-phase-list');
     if (list && window.Timer) {
       var phases = [
@@ -493,14 +750,64 @@ window.UI = (function() {
         { p: 4, m: 'writing', key: 'p4w' },
         { p: 4, m: 'sharing', key: 'p4s' }
       ];
-      list.innerHTML = phases.map(function(ph) {
+      var screenMap = {
+        '1writing': 'phase1-notepad',
+        '1sharing': 'phase1-notepad',
+        '2writing': 'phase2-notepad',
+        '2sharing': 'phase2-notepad',
+        '3writing': 'phase3-notepad',
+        '3sharing': 'phase3-notepad',
+        '4writing': 'phase4',
+        '4sharing': 'phase4'
+      };
+      var phaseNames = { 1: 'Ancestors', 2: 'Challenge', 3: 'Building', 4: 'Remembrance' };
+      list.innerHTML = '';
+      phases.forEach(function(ph) {
         var active = ph.p === timerState.phase && ph.m === timerState.mode;
         var mins = Math.round(((timerState.durations && timerState.durations[ph.key]) || 300) / 60);
-        return '<div class="timer-phase-item ' + (active ? 'active' : '') + '">' +
-          '<span>' + window.Timer._label(ph.p, ph.m) + '</span>' +
-          '<span>' + mins + ' min</span>' +
-          '</div>';
-      }).join('');
+        var targetScreen = screenMap[ph.p + '' + ph.m] || '';
+        var phaseTitle = 'Phase ' + ph.p + (phaseNames[ph.p] ? ' \u2014 ' + phaseNames[ph.p] : '');
+        var phaseName = phaseTitle + ' \u00B7 ' + (ph.m === 'writing' ? 'Writing' : 'Sharing');
+
+        var item = document.createElement('div');
+        item.className = 'timer-phase-item' + (active ? ' active' : '');
+
+        var info = document.createElement('div');
+        info.className = 'timer-phase-info';
+        var nameSpan = document.createElement('span');
+        nameSpan.className = 'timer-phase-name';
+        nameSpan.textContent = phaseName;
+        var modeSpan = document.createElement('span');
+        modeSpan.className = 'timer-phase-mode';
+        modeSpan.textContent = mins + ' min';
+        info.appendChild(nameSpan);
+        info.appendChild(modeSpan);
+        item.appendChild(info);
+
+        if (targetScreen) {
+          item.style.cursor = 'pointer';
+          var arrow = document.createElement('span');
+          arrow.className = 'timer-phase-goto';
+          arrow.textContent = '\u2192';
+          item.appendChild(arrow);
+          // capture phase, mode and screen in closure — fixes sharing navigation
+          item.addEventListener('click', (function(tp, tm, ts) {
+            return function() {
+              if (window.Timer) window.Timer.pause();
+              // switch timer to the clicked phase/mode and reset elapsed
+              if (window.Game) window.Game.setState({ timer: { phase: tp, mode: tm, elapsed: 0, startedAt: null, active: false } });
+              var modal = document.getElementById('modal-timer');
+              if (modal) modal.style.display = 'none';
+              if (window.Game) window.Game.goTo(ts);
+              // auto-start the timer for the newly selected phase
+              setTimeout(function() {
+                if (window.Timer) window.Timer.resume();
+              }, 80);
+            };
+          })(ph.p, ph.m, targetScreen));
+        }
+        list.appendChild(item);
+      });
     }
 
     var btn = document.getElementById('btn-timer-toggle');
@@ -514,6 +821,20 @@ window.UI = (function() {
         }
         updateTimerModal();
       };
+    }
+
+    // show/hide next-phase button based on current screen
+    var nextPhaseBtn = document.getElementById('btn-next-phase');
+    if (nextPhaseBtn) {
+      var gameState = window.Game.getState();
+      var nextScreenMap = {
+        'phase1-notepad':   'phase2-notepad',
+        'phase2-notepad':   'phase3-notepad',
+        'phase3-notepad':   'phase4',
+        'phase4':           'export'
+      };
+      var hasNext = !!nextScreenMap[gameState.screen];
+      nextPhaseBtn.style.display = hasNext ? '' : 'none';
     }
   }
 
@@ -549,12 +870,16 @@ window.UI = (function() {
     renderPhase4: renderPhase4,
     renderExport: renderExport,
     renderHand: renderHand,
+    renderRefCards: renderRefCards,
     renderChallengeCard: renderChallengeCard,
     renderChallengeGrid: renderChallengeGrid,
     renderExplainMore: renderExplainMore,
     updatePhaseIndicator: updatePhaseIndicator,
     updateTimerBadge: updateTimerBadge,
     updateTimerModal: updateTimerModal,
-    bindNotepadFields: bindNotepadFields
+    bindNotepadFields: bindNotepadFields,
+    updateDeckVisibility: _updateDeckVisibility,
+    updateDrawStepInstruction: _updateDrawStepInstruction,
+    syncContinueBtn: _syncGlobalContinue
   };
 })();
