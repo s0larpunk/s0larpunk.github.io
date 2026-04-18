@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Solarpunk Futures</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- SVG grain filter (hidden, for CSS texture) -->
+  <svg class="grain-filter" aria-hidden="true" style="position:absolute;width:0;height:0">
+    <defs>
+      <filter id="grain">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+        <feColorMatrix type="saturate" values="0"/>
+        <feBlend in="SourceGraphic" mode="multiply" result="blend"/>
+        <feComposite in="blend" in2="SourceGraphic"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <div id="app">
+
+    <!-- ===================== PERSISTENT UI ===================== -->
+    <div id="persistent-ui">
+      <button id="lang-btn" class="btn-icon" aria-label="Change language">🌐</button>
+      <button id="menu-btn" class="btn-icon" aria-label="Menu">☰</button>
+      <div id="timer-badge" class="timer-badge" role="timer" aria-live="polite">
+        <span id="timer-badge-text"></span>
+      </div>
+    </div>
+
+    <!-- ===================== SESSION RESUME OVERLAY ===================== -->
+    <div id="overlay-resume" class="phase-overlay" style="display:none">
+      <h2 data-i18n="resume_title"></h2>
+      <p data-i18n="resume_msg"></p>
+      <button id="btn-resume" class="btn-primary" data-i18n="resume_btn"></button>
+      <button id="btn-fresh" class="btn-secondary" data-i18n="fresh_start_btn"></button>
+    </div>
+
+    <!-- ===================== SCREEN: WELCOME ===================== -->
+    <div class="screen" id="screen-welcome">
+      <div class="welcome-content">
+        <div class="welcome-logo">
+          <div class="logo-mark">☀️</div>
+          <h1 data-i18n="welcome_title">Solarpunk Futures</h1>
+          <p class="welcome-subtitle" data-i18n="welcome_subtitle"></p>
+        </div>
+        <div class="lang-selector" id="lang-selector-welcome">
+          <button class="lang-chip active" data-lang="en">EN</button>
+          <button class="lang-chip" data-lang="ru">RU</button>
+          <button class="lang-chip disabled" data-lang="kaa" title="">KAA</button>
+        </div>
+        <div class="welcome-actions">
+          <button id="btn-begin" class="btn-primary btn-full" data-i18n="btn_begin"></button>
+          <button id="btn-skip-all" class="btn-ghost btn-full" data-i18n="btn_skip_all"></button>
+        </div>
+        <div class="welcome-credit">
+          <small>Solarpunk Futures by Solarpunk Surf Club · CC BY-NC-SA 4.0</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SCREEN: FAMILIARITY ===================== -->
+    <div class="screen" id="screen-familiarity" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="welcome" data-i18n="btn_back"></button>
+        <div class="progress-dots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="familiarity_title"></h2>
+        <p data-i18n="familiarity_subtitle"></p>
+        <div class="option-grid" id="familiarity-options">
+          <button class="option-card" data-level="new">
+            <span class="option-icon">🌱</span>
+            <span class="option-label" data-i18n="level_new_label"></span>
+            <span class="option-desc" data-i18n="level_new_desc"></span>
+          </button>
+          <button class="option-card" data-level="curious">
+            <span class="option-icon">🌿</span>
+            <span class="option-label" data-i18n="level_curious_label"></span>
+            <span class="option-desc" data-i18n="level_curious_desc"></span>
+          </button>
+          <button class="option-card" data-level="familiar">
+            <span class="option-icon">🌳</span>
+            <span class="option-label" data-i18n="level_familiar_label"></span>
+            <span class="option-desc" data-i18n="level_familiar_desc"></span>
+          </button>
+          <button class="option-card" data-level="deep">
+            <span class="option-icon">🌲</span>
+            <span class="option-label" data-i18n="level_deep_label"></span>
+            <span class="option-desc" data-i18n="level_deep_desc"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SCREEN: GAME INTRO ===================== -->
+    <div class="screen" id="screen-game-intro" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="familiarity" data-i18n="btn_back"></button>
+        <div class="progress-dots">
+          <span class="dot done"></span>
+          <span class="dot active"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="intro_title"></h2>
+        <div class="intro-options">
+          <button id="btn-intro-full" class="btn-secondary btn-full" data-i18n="intro_full_btn"></button>
+          <button id="btn-intro-brief" class="btn-secondary btn-full" data-i18n="intro_brief_btn"></button>
+          <button id="btn-intro-skip" class="btn-ghost btn-full" data-i18n="intro_skip_btn"></button>
+        </div>
+        <div id="intro-content" class="intro-content" style="display:none">
+          <!-- populated by UI.renderGameIntro() -->
+        </div>
+        <button id="btn-intro-continue" class="btn-primary btn-full" style="display:none" data-i18n="btn_next"></button>
+      </div>
+    </div>
+
+    <!-- ===================== SCREEN: TECHNIQUE ===================== -->
+    <div class="screen" id="screen-technique" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="game-intro" data-i18n="btn_back"></button>
+        <div class="progress-dots">
+          <span class="dot done"></span>
+          <span class="dot done"></span>
+          <span class="dot active"></span>
+        </div>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="technique_title"></h2>
+        <p data-i18n="technique_subtitle"></p>
+        <div class="technique-cards">
+          <button class="technique-card active" data-technique="001">
+            <div class="technique-number">001</div>
+            <div class="technique-name" data-i18n="t001_name"></div>
+            <div class="technique-desc" data-i18n="t001_desc"></div>
+            <div class="technique-mood" data-i18n="t001_mood"></div>
+          </button>
+          <div class="technique-card coming-soon">
+            <div class="badge" data-i18n="coming_soon"></div>
+            <div class="technique-number">354</div>
+            <div class="technique-name" data-i18n="t354_name"></div>
+            <div class="technique-desc" data-i18n="t354_coming"></div>
+          </div>
+          <div class="technique-card coming-soon">
+            <div class="badge" data-i18n="coming_soon"></div>
+            <div class="technique-number">759</div>
+            <div class="technique-name" data-i18n="t759_name"></div>
+            <div class="technique-desc" data-i18n="t759_coming"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SCREEN: PREGAME ===================== -->
+    <div class="screen" id="screen-pregame" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="technique" data-i18n="btn_back"></button>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="pregame_title"></h2>
+        <div class="pregame-section">
+          <h3 data-i18n="lines_veils_title"></h3>
+          <p data-i18n="lines_veils_desc"></p>
+          <label class="checkbox-row">
+            <input type="checkbox" id="check-lines-veils">
+            <span data-i18n="lines_veils_title"></span>
+          </label>
+        </div>
+        <div class="pregame-section">
+          <h3 data-i18n="consensus_title"></h3>
+          <p data-i18n="consensus_desc"></p>
+        </div>
+        <div class="pregame-section phone-tips">
+          <div class="tip-row"><span>🔄</span><span data-i18n="tip_landscape"></span></div>
+          <div class="tip-row"><span>🔇</span><span data-i18n="tip_silent"></span></div>
+          <div class="tip-row"><span>🧘</span><span data-i18n="tip_focus"></span></div>
+        </div>
+        <div class="pregame-section">
+          <label for="player-count" data-i18n="players_label"></label>
+          <div class="stepper-row">
+            <button class="stepper-btn" id="btn-players-minus">−</button>
+            <span id="player-count-display">3</span>
+            <button class="stepper-btn" id="btn-players-plus">+</button>
+          </div>
+        </div>
+        <button id="btn-begin-game" class="btn-primary btn-full" data-i18n="begin_btn"></button>
+      </div>
+    </div>
+
+    <!-- ===================== SCREEN: TIMER SETUP ===================== -->
+    <div class="screen" id="screen-timer-setup" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="pregame" data-i18n="btn_back"></button>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="timer_setup_title"></h2>
+        <p data-i18n="timer_setup_subtitle"></p>
+        <div class="timer-table">
+
+          <!-- Phase 1 Writing -->
+          <div class="timer-row" data-phase="1" data-mode="writing">
+            <span class="timer-phase-label" data-i18n="phase_ancestors"></span>
+            <span class="timer-mode-label" data-i18n="writing_label"></span>
+            <div class="stepper-row compact">
+              <button class="stepper-btn timer-stepper" data-phase="1" data-mode="writing" data-dir="-1">−</button>
+              <span class="timer-val" data-phase="1" data-mode="writing">5</span>
+              <span data-i18n="minutes_label"></span>
+              <button class="stepper-btn timer-stepper" data-phase="1" data-mode="writing" data-dir="1">+</button>
+            </div>
+          </div>
+
+          <!-- Phase 1 Sharing -->
+          <div class="timer-row" data-phase="1" data-mode="sharing">
+            <span class="timer-phase-label" data-i18n="phase_ancestors"></span>
+            <span class="timer-mode-label" data-i18n="sharing_label"></span>
+            <div class="stepper-row compact">
+              <button class="stepper-btn timer-stepper" data-phase="1" data-mode="sharing" data-dir="-1">−</button>
+              <span class="timer-val" data-phase="1" data-mode="sharing">10</span>
+              <span data-i18n="minutes_label"></span>
+              <button class="stepper-btn timer-stepper" data-phase="1" data-mode="sharing" data-dir="1">+</button>
+            </div>
+          </div>
+
+          <!-- Phase 2 Writing -->
+          <div class="timer-row" data-phase="2" data-mode="writing">
+            <span class="timer-phase-label" data-i18n="phase_challenge"></span>
+            <span class="timer-mode-label" data-i18n="writing_label"></span>
+            <div class="stepper-row compact">
+              <button class="stepper-btn timer-stepper" data-phase="2" data-mode="writing" data-dir="-1">−</button>
+              <span class="timer-val" data-phase="2" data-mode="writing">5</span>
+              <span data-i18n="minutes_label"></span>
+              <button class="stepper-btn timer-stepper" data-phase="2" data-mode="writing" data-dir="1">+</button>
+            </div>
+          </div>
+
+          <!-- Phase 2 Sharing -->
+          <div class="timer-row" data-phase="2" data-mode="sharing">
+            <span class="timer-phase-label" data-i18n="phase_challenge"></span>
+            <span class="timer-mode-label" data-i18n="sharing_label"></span>
+            <div class="stepper-row compact">
+              <button class="stepper-btn timer-stepper" data-phase="2" data-mode="sharing" data-dir="-1">−</button>
+              <span class="timer-val" data-phase="2" data-mode="sharing">15</span>
+              <span data-i18n="minutes_label"></span>
+              <button class="stepper-btn timer-stepper" data-phase="2" data-mode="sharing" data-dir="1">+</button>
+            </div>
+          </div>
+
+          <!-- Phase 3 Writing -->
+          <div class="timer-row" data-phase="3" data-mode="writing">
+            <span class="timer-phase-label" data-i18n="phase_building"></span>
+            <span class="timer-mode-label" data-i18n="writing_label"></span>
+            <div class="stepper-row compact">
+              <button class="stepper-btn timer-stepper" data-phase="3" data-mode="writing" data-dir="-1">−</button>
+              <span class="timer-val" data-phase="3" data-mode="writing">7</span>
+              <span data-i18n="minutes_label"></span>
+              <button class="stepper-btn timer-stepper" data-phase="3" data-mode="writing" data-dir="1">+</button>
+            </div>
+          </div>
+
+          <!-- Phase 3 Sharing -->
+          <div class="timer-row" data-phase="3" data-mode="sharing">
+            <span class="timer-phase-label" data-i18n="phase_building"></span>
+            <span class="timer-mode-label" data-i18n="sharing_label"></span>
+            <div class="stepper-row compact">
+              <button class="stepper-btn timer-stepper" data-phase="3" data-mode="sharing" data-dir="-1">−</button>
+              <span class="timer-val" data-phase="3" data-mode="sharing">13</span>
+              <span data-i18n="minutes_label"></span>
+              <button class="stepper-btn timer-stepper" data-phase="3" data-mode="sharing" data-dir="1">+</button>
+            </div>
+          </div>
+
+          <!-- Phase 4 Writing -->
+          <div class="timer-row" data-phase="4" data-mode="writing">
+            <span class="timer-phase-label" data-i18n="phase_remembrance"></span>
+            <span class="timer-mode-label" data-i18n="writing_label"></span>
+            <div class="stepper-row compact">
+              <button class="stepper-btn timer-stepper" data-phase="4" data-mode="writing" data-dir="-1">−</button>
+              <span class="timer-val" data-phase="4" data-mode="writing">7</span>
+              <span data-i18n="minutes_label"></span>
+              <button class="stepper-btn timer-stepper" data-phase="4" data-mode="writing" data-dir="1">+</button>
+            </div>
+          </div>
+
+          <!-- Phase 4 Sharing -->
+          <div class="timer-row" data-phase="4" data-mode="sharing">
+            <span class="timer-phase-label" data-i18n="phase_remembrance"></span>
+            <span class="timer-mode-label" data-i18n="sharing_label"></span>
+            <div class="stepper-row compact">
+              <button class="stepper-btn timer-stepper" data-phase="4" data-mode="sharing" data-dir="-1">−</button>
+              <span class="timer-val" data-phase="4" data-mode="sharing">13</span>
+              <span data-i18n="minutes_label"></span>
+              <button class="stepper-btn timer-stepper" data-phase="4" data-mode="sharing" data-dir="1">+</button>
+            </div>
+          </div>
+
+        </div><!-- /.timer-table -->
+
+        <div class="sync-block">
+          <p class="sync-instruction" data-i18n="sync_instruction"></p>
+          <blockquote class="sync-text" data-i18n="sync_text"></blockquote>
+        </div>
+        <button id="btn-all-start" class="btn-primary btn-full" data-i18n="all_start_btn"></button>
+      </div>
+    </div>
+
+    <!-- ===================== SCREEN: PHASE 1 DRAW ===================== -->
+    <div class="screen" id="screen-phase1-draw" style="display:none">
+      <div class="phase-indicator" id="phase-indicator-1">
+        <span class="phase-num">1</span>
+        <span class="phase-name" data-i18n="phase_ancestors"></span>
+      </div>
+      <div class="orientation-prompt" aria-hidden="true">
+        <div class="rotate-icon">📱</div>
+        <p data-i18n="tip_landscape"></p>
+      </div>
+      <div class="card-draw-layout">
+        <div class="deck-area" id="deck-area-p1">
+          <div class="deck-stack" id="ancestor-deck" data-type="ancestor">
+            <div class="deck-label">ANCESTOR</div>
+          </div>
+          <div class="deck-stack" id="value-deck" data-type="value">
+            <div class="deck-label">VALUE</div>
+          </div>
+        </div>
+        <div class="hand-area" id="hand-phase1"></div>
+        <div class="info-panel">
+          <p class="draw-instruction" data-i18n="draw_instruction_p1"></p>
+          <div class="draw-progress" id="draw-progress-p1">
+            <span class="progress-dot" data-for="ancestor"></span>
+            <span class="progress-dot" data-for="value"></span>
+          </div>
+          <div id="redraw-panel" style="display:none">
+            <p data-i18n="redraw_prompt"></p>
+            <button id="btn-do-redraw" class="btn-secondary" data-i18n="btn_redraw_selected"></button>
+          </div>
+          <button id="btn-p1-continue" class="btn-primary" style="display:none" data-i18n="btn_continue"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SCREEN: PHASE 1 NOTEPAD ===================== -->
+    <div class="screen" id="screen-phase1-notepad" style="display:none">
+      <div class="phase-indicator">1 <span data-i18n="phase_ancestors"></span></div>
+      <div class="ref-cards-strip" id="ref-cards-p1"></div>
+      <form class="notepad-form" id="form-p1">
+        <div class="notepad-field-group">
+          <label for="p1-name" data-i18n="p1_name_label"></label>
+          <textarea id="p1-name" name="p1_name" class="notepad-field" rows="2" placeholder="..."></textarea>
+        </div>
+        <div class="notepad-field-group">
+          <label for="p1-background" data-i18n="p1_background_label"></label>
+          <textarea id="p1-background" name="p1_background" class="notepad-field" rows="3"></textarea>
+        </div>
+        <div class="notepad-field-group">
+          <label for="p1-value" id="label-p1-value" data-i18n="p1_value_label" data-i18n-vars='{"value":""}'></label>
+          <textarea id="p1-value" name="p1_value_connection" class="notepad-field" rows="3"></textarea>
+        </div>
+      </form>
+      <button id="btn-p1n-continue" class="btn-primary btn-full" data-i18n="btn_continue"></button>
+    </div>
+
+    <!-- ===================== SCREEN: PHASE 2 CHALLENGE ===================== -->
+    <div class="screen" id="screen-phase2-challenge" style="display:none">
+      <div class="phase-indicator">2 <span data-i18n="phase_challenge"></span></div>
+      <div class="screen-body">
+        <h2 data-i18n="challenge_title"></h2>
+        <p data-i18n="challenge_intro"></p>
+        <div class="challenge-mode-selector">
+          <button id="btn-challenge-random" class="btn-secondary btn-full" data-i18n="challenge_random_btn"></button>
+          <p class="challenge-note" data-i18n="challenge_random_note"></p>
+          <button id="btn-challenge-preselect" class="btn-ghost btn-full" data-i18n="challenge_preselect_btn"></button>
+        </div>
+        <div id="challenge-display" style="display:none">
+          <p data-i18n="challenge_selected"></p>
+          <div id="challenge-card-area"></div>
+          <button id="btn-challenge-confirm" class="btn-primary btn-full" data-i18n="btn_continue"></button>
+        </div>
+        <div id="challenge-grid" class="card-grid" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- ===================== SCREEN: PHASE 2 NOTEPAD ===================== -->
+    <div class="screen" id="screen-phase2-notepad" style="display:none">
+      <div class="phase-indicator">2 <span data-i18n="phase_challenge"></span></div>
+      <div class="ref-cards-strip" id="ref-cards-p2"></div>
+      <form class="notepad-form" id="form-p2">
+        <div class="notepad-field-group">
+          <label for="p2-conflict" id="label-p2-conflict" data-i18n="p2_conflict_label" data-i18n-vars='{"challenge":""}'></label>
+          <textarea id="p2-conflict" name="p2_conflict" class="notepad-field" rows="5"></textarea>
+        </div>
+      </form>
+      <button id="btn-p2n-continue" class="btn-primary btn-full" data-i18n="btn_continue"></button>
+    </div>
+
+    <!-- ===================== SCREEN: PHASE 3 DRAW ===================== -->
+    <div class="screen" id="screen-phase3-draw" style="display:none">
+      <div class="phase-indicator">3 <span data-i18n="phase_building"></span></div>
+      <div class="orientation-prompt" aria-hidden="true">
+        <p data-i18n="tip_landscape"></p>
+      </div>
+      <div class="card-draw-layout">
+        <div class="deck-area" id="deck-area-p3">
+          <div class="deck-stack" id="tool-deck" data-type="tool">
+            <div class="deck-label">TOOLS</div>
+          </div>
+          <div class="deck-stack deck-stack-2" id="tool-deck-2" data-type="tool">
+            <div class="deck-label">TOOL 2</div>
+          </div>
+        </div>
+        <div class="hand-area" id="hand-phase3"></div>
+        <div class="info-panel">
+          <p class="draw-instruction" data-i18n="draw_instruction_p3"></p>
+          <div class="draw-progress" id="draw-progress-p3">
+            <span class="progress-dot" data-for="tool1"></span>
+            <span class="progress-dot" data-for="tool2"></span>
+          </div>
+          <div id="redraw-panel-p3" style="display:none">
+            <p data-i18n="redraw_prompt"></p>
+            <button id="btn-do-redraw-p3" class="btn-secondary" data-i18n="btn_redraw_selected"></button>
+          </div>
+          <button id="btn-p3-continue" class="btn-primary" style="display:none" data-i18n="btn_continue"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SCREEN: PHASE 3 NOTEPAD ===================== -->
+    <div class="screen" id="screen-phase3-notepad" style="display:none">
+      <div class="phase-indicator">3 <span data-i18n="phase_building"></span></div>
+      <div class="ref-cards-strip" id="ref-cards-p3"></div>
+      <form class="notepad-form" id="form-p3">
+        <div class="notepad-field-group">
+          <label for="p3-approach" id="label-p3-approach" data-i18n="p3_approach_label" data-i18n-vars='{"tool1":"","tool2":""}'></label>
+          <textarea id="p3-approach" name="p3_approach" class="notepad-field" rows="4"></textarea>
+        </div>
+        <div class="notepad-field-group">
+          <label for="p3-opposition" data-i18n="p3_opposition_label" data-i18n-vars='{"opposition":""}'></label>
+          <textarea id="p3-opposition" name="p3_opposition" class="notepad-field" rows="3"></textarea>
+        </div>
+        <div class="notepad-field-group">
+          <label for="p3-risk" data-i18n="p3_risk_label"></label>
+          <textarea id="p3-risk" name="p3_risk" class="notepad-field" rows="3"></textarea>
+        </div>
+        <div class="notepad-field-group">
+          <label for="p3-success" data-i18n="p3_success_label"></label>
+          <textarea id="p3-success" name="p3_success" class="notepad-field" rows="3"></textarea>
+        </div>
+        <div class="notepad-field-group">
+          <label for="p3-remaining" data-i18n="p3_remaining_label"></label>
+          <textarea id="p3-remaining" name="p3_remaining" class="notepad-field" rows="3"></textarea>
+        </div>
+      </form>
+      <button id="btn-p3n-continue" class="btn-primary btn-full" data-i18n="btn_continue"></button>
+    </div>
+
+    <!-- ===================== SCREEN: PHASE 4 ===================== -->
+    <div class="screen" id="screen-phase4" style="display:none">
+      <div class="phase-indicator">4 <span data-i18n="phase_remembrance"></span></div>
+      <div class="ref-cards-strip" id="ref-cards-p4"></div>
+      <div class="phase4-intro">
+        <p data-i18n="phase4_intro"></p>
+      </div>
+      <form class="notepad-form" id="form-p4">
+        <div class="notepad-field-group">
+          <label for="p4-fellow" data-i18n="p4_fellow_label"></label>
+          <textarea id="p4-fellow" name="p4_fellow" class="notepad-field" rows="2"></textarea>
+        </div>
+        <div class="notepad-field-group">
+          <label for="p4-collaboration" data-i18n="p4_collaboration_label"></label>
+          <textarea id="p4-collaboration" name="p4_collaboration" class="notepad-field" rows="4"></textarea>
+        </div>
+        <div class="notepad-field-group">
+          <label for="p4-hardship" data-i18n="p4_hardship_label"></label>
+          <textarea id="p4-hardship" name="p4_hardship" class="notepad-field" rows="3"></textarea>
+        </div>
+        <div class="notepad-field-group">
+          <label for="p4-overcome" data-i18n="p4_overcome_label"></label>
+          <textarea id="p4-overcome" name="p4_overcome" class="notepad-field" rows="3"></textarea>
+        </div>
+      </form>
+      <button id="btn-complete-session" class="btn-primary btn-full" data-i18n="complete_session_btn"></button>
+    </div>
+
+    <!-- ===================== SCREEN: EXPORT ===================== -->
+    <div class="screen" id="screen-export" style="display:none">
+      <div class="screen-header">
+        <h2 data-i18n="export_title"></h2>
+      </div>
+      <div class="export-summary" id="export-summary">
+        <!-- populated by UI.renderExport() -->
+      </div>
+      <div class="export-actions">
+        <button id="btn-export-txt" class="btn-secondary btn-full">
+          <span data-i18n="export_txt_btn"></span>
+          <small data-i18n="export_txt_desc"></small>
+        </button>
+        <button id="btn-export-pdf" class="btn-secondary btn-full">
+          <span data-i18n="export_pdf_btn"></span>
+          <small data-i18n="export_pdf_desc"></small>
+        </button>
+        <button id="btn-export-jpeg" class="btn-secondary btn-full">
+          <span data-i18n="export_jpeg_btn"></span>
+          <small data-i18n="export_jpeg_desc"></small>
+        </button>
+      </div>
+      <div class="export-footer">
+        <button id="btn-play-again" class="btn-primary" data-i18n="btn_play_again"></button>
+      </div>
+    </div>
+
+    <!-- ===================== MODAL: TIMER ===================== -->
+    <div id="modal-timer" class="modal" style="display:none">
+      <div class="modal-backdrop"></div>
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="timer-modal-content">
+          <div class="timer-ring-container">
+            <svg class="timer-ring" viewBox="0 0 120 120">
+              <circle class="timer-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="timer-ring-progress" cx="60" cy="60" r="54" id="timer-ring-circle"/>
+            </svg>
+            <div class="timer-ring-text">
+              <span id="timer-display">00:00</span>
+              <span id="timer-phase-label" class="timer-phase-label"></span>
+            </div>
+          </div>
+          <div id="timer-phase-list" class="timer-phase-list"><!-- populated by JS --></div>
+          <div class="timer-controls">
+            <button id="btn-timer-toggle" class="btn-primary" data-i18n="btn_start_timer"></button>
+          </div>
+        </div>
+        <button class="modal-close" id="btn-close-timer">×</button>
+      </div>
+    </div>
+
+    <!-- ===================== MODAL: LANGUAGE ===================== -->
+    <div id="modal-lang" class="modal" style="display:none">
+      <div class="modal-backdrop"></div>
+      <div class="modal-centered">
+        <h3 data-i18n="lang_title"></h3>
+        <div class="lang-chips">
+          <button class="lang-chip" data-lang="en" data-i18n="lang_en"></button>
+          <button class="lang-chip" data-lang="ru" data-i18n="lang_ru"></button>
+          <button class="lang-chip disabled" data-lang="kaa">
+            <span data-i18n="lang_kaa"></span>
+            <small data-i18n="lang_kaa_note"></small>
+          </button>
+        </div>
+        <button class="modal-close" id="btn-close-lang">×</button>
+      </div>
+    </div>
+
+    <!-- ===================== MODAL: PHASE ALERT ===================== -->
+    <div id="modal-phase-alert" class="modal" style="display:none">
+      <div class="phase-overlay">
+        <h2 id="alert-phase-name"></h2>
+        <p id="alert-message"></p>
+        <button id="btn-alert-dismiss" class="btn-secondary" data-i18n="btn_close"></button>
+        <button id="btn-alert-next" class="btn-primary"></button>
+      </div>
+    </div>
+
+    <!-- ===================== MODAL: CARD EXPLAIN ===================== -->
+    <div id="modal-card-explain" class="modal" style="display:none">
+      <div class="modal-backdrop"></div>
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div id="card-explain-content" class="card-explain-content">
+          <div class="card-explain-header">
+            <span id="explain-card-emojis"></span>
+            <h3 id="explain-card-name"></h3>
+          </div>
+          <p id="explain-card-body"></p>
+          <div class="explain-more-section">
+            <h4 data-i18n="explain_context_heading"></h4>
+            <p id="explain-more-text"></p>
+          </div>
+        </div>
+        <button class="modal-close" id="btn-close-explain">×</button>
+      </div>
+    </div>
+
+    <!-- ===================== MODAL: RESTART ===================== -->
+    <div id="modal-restart" class="modal" style="display:none">
+      <div class="modal-backdrop"></div>
+      <div class="modal-centered">
+        <h3 data-i18n="restart_title"></h3>
+        <p data-i18n="restart_msg"></p>
+        <button id="btn-confirm-restart" class="btn-danger" data-i18n="confirm_restart"></button>
+        <button id="btn-confirm-quit" class="btn-secondary" data-i18n="confirm_quit"></button>
+        <button id="btn-cancel-restart" class="btn-ghost" data-i18n="btn_cancel"></button>
+      </div>
+    </div>
+
+  </div><!-- /#app -->
+
+  <script src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/twemoji.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="js/data_challenges.js"></script>
+  <script src="js/data_ancestors.js"></script>
+  <script src="js/data_values.js"></script>
+  <script src="js/data_tools_a.js"></script>
+  <script src="js/data_tools_b.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/export.js"></script>
+</body>
+</html>
