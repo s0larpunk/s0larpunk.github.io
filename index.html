@@ -343,6 +343,20 @@
         <span class="phase-num">1</span>
         <span class="phase-name" data-i18n="phase_ancestors"></span>
       </div>
+      <div class="info-panel">
+        <p class="draw-instruction" id="draw-step-instruction" data-i18n="draw_step_ancestor"></p>
+        <div class="draw-progress" id="draw-progress-p1">
+          <span class="progress-dot" data-for="ancestor" title="Ancestor"></span>
+          <span class="progress-dot" data-for="value1" title="Value 1"></span>
+          <span class="progress-dot" data-for="value2" title="Value 2"></span>
+          <span class="progress-dot" data-for="tool1" title="Tool 1"></span>
+          <span class="progress-dot" data-for="tool2" title="Tool 2"></span>
+        </div>
+        <p data-i18n="redraw_prompt"></p>
+        <div id="redraw-panel" style="display:none">
+          <button id="btn-do-redraw" class="btn-secondary" data-i18n="btn_redraw_selected"></button>
+        </div>
+      </div>
       <div class="card-draw-layout">
         <div class="deck-area" id="deck-area-p1">
           <div class="deck-stack" id="ancestor-deck" data-type="ancestor">
@@ -358,20 +372,6 @@
         <div class="hand-area" id="hand-phase1"></div>
         <!-- hidden proxy target for global continue pill -->
         <button id="btn-p1-continue" style="display:none" disabled data-i18n="btn_continue"></button>
-        <div class="info-panel">
-          <p class="draw-instruction" id="draw-step-instruction" data-i18n="draw_step_ancestor"></p>
-          <div class="draw-progress" id="draw-progress-p1">
-            <span class="progress-dot" data-for="ancestor" title="Ancestor"></span>
-            <span class="progress-dot" data-for="value1" title="Value 1"></span>
-            <span class="progress-dot" data-for="value2" title="Value 2"></span>
-            <span class="progress-dot" data-for="tool1" title="Tool 1"></span>
-            <span class="progress-dot" data-for="tool2" title="Tool 2"></span>
-          </div>
-          <p data-i18n="redraw_prompt"></p>
-          <div id="redraw-panel" style="display:none">
-            <button id="btn-do-redraw" class="btn-secondary" data-i18n="btn_redraw_selected"></button>
-          </div>
-        </div>
       </div>
     </div>
 

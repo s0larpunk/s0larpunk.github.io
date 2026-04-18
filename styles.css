@@ -1829,34 +1829,6 @@ h6 {
     border-top: 1px solid rgba(244, 237, 224, 0.1);
   }
 
-  /* Move info-panel to the top so cards fill the space below */
-  .card-draw-layout .info-panel {
-    order: -1;
-    width: 100%;
-    max-width: none;
-    min-width: 0;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
-    border-bottom: 1px solid rgba(244, 237, 224, 0.15);
-    border-right: none;
-  }
-
-  /* Draw instruction fills available width */
-  .card-draw-layout .info-panel .draw-instruction {
-    flex: 1;
-    min-width: 120px;
-    margin: 0;
-    font-size: var(--text-sm);
-  }
-
-  /* Progress dots stay on the same row */
-  .card-draw-layout .info-panel .draw-progress {
-    flex-shrink: 0;
-  }
-
   /* deck-area: horizontal row of tap targets */
   .card-draw-layout .deck-area {
     flex-direction: row;
@@ -3762,13 +3734,17 @@ h6 {
 
 .info-panel {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  padding: var(--space-5);
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
   background: rgba(26, 16, 8, 0.35);
-  min-width: 180px;
-  max-width: 240px;
+  width: 100%;
+  border-bottom: 1px solid rgba(244, 237, 224, 0.15);
+  flex-shrink: 0;
 }
+
 
 .draw-instruction {
   font-family: var(--font-heading);
@@ -4817,12 +4793,6 @@ h6 {
   color: var(--ink);
 }
 
-/* --------------------------------------------------------------------------
-   DRAW SCREEN — ensure instruction text clears the persistent top-right UI
-   -------------------------------------------------------------------------- */
-#screen-phase1-draw .info-panel {
-  padding-top: calc(var(--touch-target) + var(--space-8));
-}
 
 /* --------------------------------------------------------------------------
    PERSISTENT UI — compact icon buttons to fit the slim header bar
