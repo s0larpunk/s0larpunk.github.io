@@ -761,16 +761,20 @@ window.UI = (function() {
         '4sharing': 'phase4'
       };
       var phaseNames = { 1: 'Ancestors', 2: 'Challenge', 3: 'Building', 4: 'Remembrance' };
+      // Gate: phases 2+ require the challenge to have been selected
+      var gameState2 = window.Game ? window.Game.getState() : {};
+      var challengeReady = !!(gameState2.drawnCards && gameState2.drawnCards.challenge);
       list.innerHTML = '';
       phases.forEach(function(ph) {
         var active = ph.p === timerState.phase && ph.m === timerState.mode;
         var mins = Math.round(((timerState.durations && timerState.durations[ph.key]) || 300) / 60);
-        var targetScreen = screenMap[ph.p + '' + ph.m] || '';
+        var accessible = ph.p === 1 || challengeReady;
+        var targetScreen = accessible ? (screenMap[ph.p + '' + ph.m] || '') : '';
         var phaseTitle = 'Phase ' + ph.p + (phaseNames[ph.p] ? ' \u2014 ' + phaseNames[ph.p] : '');
         var phaseName = phaseTitle + ' \u00B7 ' + (ph.m === 'writing' ? 'Writing' : 'Sharing');
 
         var item = document.createElement('div');
-        item.className = 'timer-phase-item' + (active ? ' active' : '');
+        item.className = 'timer-phase-item' + (active ? ' active' : '') + (!accessible ? ' locked' : '');
 
         var info = document.createElement('div');
         info.className = 'timer-phase-info';

@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Solarpunk Futures</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -213,7 +213,6 @@
           <p data-i18n="consensus_desc"></p>
         </div>
         <div class="pregame-section phone-tips">
-          <div class="tip-row"><span>🔄</span><span data-i18n="tip_landscape"></span></div>
           <div class="tip-row"><span>🔇</span><span data-i18n="tip_silent"></span></div>
           <div class="tip-row"><span>🧘</span><span data-i18n="tip_focus"></span></div>
         </div>
@@ -344,10 +343,6 @@
         <span class="phase-num">1</span>
         <span class="phase-name" data-i18n="phase_ancestors"></span>
       </div>
-      <div class="orientation-prompt" aria-hidden="true">
-        <div class="rotate-icon">📱</div>
-        <p data-i18n="tip_landscape"></p>
-      </div>
       <div class="card-draw-layout">
         <div class="deck-area" id="deck-area-p1">
           <div class="deck-stack" id="ancestor-deck" data-type="ancestor">
@@ -361,6 +356,8 @@
           </div>
         </div>
         <div class="hand-area" id="hand-phase1"></div>
+        <!-- hidden proxy target for global continue pill -->
+        <button id="btn-p1-continue" style="display:none" disabled data-i18n="btn_continue"></button>
         <div class="info-panel">
           <p class="draw-instruction" id="draw-step-instruction" data-i18n="draw_step_ancestor"></p>
           <div class="draw-progress" id="draw-progress-p1">

@@ -55,7 +55,7 @@ window.Cards = (function() {
       setTimeout(function() {
         var el = createCardEl(cardData);
         el.classList.add('animating-in');
-        handEl.appendChild(el);
+        handEl.insertBefore(el, handEl.firstChild); // newest card at top
 
         var explainBtn = el.querySelector('.card-explain-toggle');
         if (explainBtn) {

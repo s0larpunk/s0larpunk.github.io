@@ -1726,8 +1726,8 @@ h6 {
 .card-draw-layout {
   display: flex;
   width: 100%;
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100dvh;
+  overflow: visible;
 }
 
 /* Left: deck panel */
@@ -1846,6 +1846,7 @@ h6 {
 
 .notepad-content {
   padding: var(--space-4);
+  padding-bottom: 6rem; /* clear fixed timer badge + continue pill on mobile */
   max-width: 640px;
   margin: 0 auto;
   width: 100%;
@@ -3700,12 +3701,15 @@ h6 {
 .hand-area {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  justify-content: flex-start;
   gap: var(--space-3);
   padding: var(--space-4);
-  min-height: 200px;
+  padding-bottom: 5rem; /* clear fixed continue pill */
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .deck-label {
@@ -3943,6 +3947,7 @@ h6 {
 
 .export-footer {
   padding: var(--space-4);
+  padding-bottom: 6rem; /* clear fixed badges on mobile */
   text-align: center;
   border-top: 1px solid var(--mist);
 }
@@ -4819,6 +4824,17 @@ h6 {
 #app.mode-sharing .screen-header {
   background: #e8d18a;
   border-bottom-color: rgba(196, 92, 43, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   TIMER PHASE LIST — locked phases (challenge not yet selected)
+   -------------------------------------------------------------------------- */
+.timer-phase-item.locked {
+  opacity: 0.35;
+  pointer-events: none;
+}
+.timer-phase-item.locked .timer-phase-goto {
+  display: none;
 }
 
 /* --------------------------------------------------------------------------
