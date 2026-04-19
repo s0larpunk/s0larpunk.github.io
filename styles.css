@@ -1259,7 +1259,9 @@ h6 {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   transition: transform 0.6s var(--ease-card);
+  -webkit-transition: -webkit-transform 0.6s var(--ease-card);
   will-change: transform;
 }
 
@@ -1855,7 +1857,8 @@ h6 {
 
 .notepad-content {
   padding: var(--space-4);
-  padding-bottom: 6rem; /* clear fixed timer badge + continue pill on mobile */
+  padding-bottom: 6rem;
+  /* clear fixed timer badge + continue pill on mobile */
   max-width: 640px;
   margin: 0 auto;
   width: 100%;
@@ -2018,9 +2021,10 @@ h6 {
 
 .challenge-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
+  grid-template-columns: repeat(2, 1fr);
+  align-items: start;
   gap: var(--space-3);
-  max-height: 320px;
+  max-height: 55vh;
   overflow-y: auto;
   padding: var(--space-3);
   background: var(--cream);
@@ -3715,7 +3719,8 @@ h6 {
   justify-content: flex-start;
   gap: var(--space-3);
   padding: var(--space-4);
-  padding-bottom: 5rem; /* clear fixed continue pill */
+  padding-bottom: 5rem;
+  /* clear fixed continue pill */
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -3785,6 +3790,7 @@ h6 {
   padding: var(--space-4);
   max-width: 640px;
   margin: 0 auto;
+  margin-bottom: 200px;
   width: 100%;
   flex: 1;
 }
@@ -3960,9 +3966,11 @@ h6 {
 
 .export-footer {
   padding: var(--space-4);
-  padding-bottom: 6rem; /* clear fixed badges on mobile */
+  padding-bottom: 6rem;
+  /* clear fixed badges on mobile */
   text-align: center;
   border-top: 1px solid var(--mist);
+  margin-bottom: 200px;
 }
 
 
@@ -4840,6 +4848,7 @@ h6 {
   opacity: 0.35;
   pointer-events: none;
 }
+
 .timer-phase-item.locked .timer-phase-goto {
   display: none;
 }

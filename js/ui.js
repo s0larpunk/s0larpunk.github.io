@@ -45,6 +45,23 @@ window.UI = (function() {
     globalBtn.onclick = function() {
       if (!globalBtn.disabled) localBtn.click();
     };
+    // Update label based on timer mode
+    _updateContinueBtnLabel(globalBtn);
+  }
+
+  // Update the global continue button label to reflect current timer mode
+  function _updateContinueBtnLabel(btn) {
+    if (!btn) return;
+    var t = window.i18n ? window.i18n.t.bind(window.i18n) : function(k, fb) { return fb || k; };
+    var timerSt = window.Game ? window.Game.getState().timer : null;
+    var timerUsed = timerSt && (timerSt.active || timerSt.elapsed > 0 || timerSt.startedAt !== null);
+    if (timerUsed && timerSt.mode === 'writing') {
+      btn.textContent = t('btn_start_sharing', 'Start Sharing →');
+    } else if (timerUsed && timerSt.mode === 'sharing') {
+      btn.textContent = t('btn_continue', 'Continue →');
+    } else {
+      btn.textContent = t('btn_continue', 'Continue →');
+    }
   }
 
   function showScreen(name) {
@@ -690,6 +707,9 @@ window.UI = (function() {
         mini.classList.toggle('overrun', !!isOverrun);
       }
     }
+    // Sync continue button label with current timer mode
+    var globalBtn = document.getElementById('btn-continue-global');
+    if (globalBtn && globalBtn.style.display !== 'none') _updateContinueBtnLabel(globalBtn);
   }
 
   function _getDuration(phase, mode) {
@@ -800,13 +820,20 @@ window.UI = (function() {
               if (window.Timer) window.Timer.pause();
               // switch timer to the clicked phase/mode and reset elapsed
               if (window.Game) window.Game.setState({ timer: { phase: tp, mode: tm, elapsed: 0, startedAt: null, active: false } });
-              var modal = document.getElementById('modal-timer');
-              if (modal) modal.style.display = 'none';
-              if (window.Game) window.Game.goTo(ts);
+              // close modal
+              hideModal('timer');
+              // only navigate if target screen differs from current screen
+              var currentScreen = window.Game ? window.Game.getState().screen : '';
+              if (ts && ts !== currentScreen) {
+                if (window.Game) window.Game.goTo(ts);
+              } else {
+                // same screen — just refresh badge and mode class
+                if (window.Timer && window.Timer._updateBadge) window.Timer._updateBadge();
+              }
               // auto-start the timer for the newly selected phase
               setTimeout(function() {
                 if (window.Timer) window.Timer.resume();
-              }, 80);
+              }, 60);
             };
           })(ph.p, ph.m, targetScreen));
         }

@@ -256,6 +256,25 @@ document.addEventListener('DOMContentLoaded', function () {
   function $(id) { return document.getElementById(id); }
   function showEl(el) { if (el) el.style.display = ''; }
   function hideEl(el) { if (el) el.style.display = 'none'; }
+
+  // advancePhase: if timer was started and mode is 'writing', switch to sharing (stay on screen).
+  // If not using timer, or already in sharing mode, navigate to nextScreen.
+  function advancePhase(nextScreen) {
+    var st = window.Game ? window.Game.getState() : null;
+    if (!st) { if (nextScreen && window.Game) window.Game.goTo(nextScreen); return; }
+    var t = st.timer;
+    var timerUsed = t.active || t.elapsed > 0 || t.startedAt !== null;
+    if (timerUsed && t.mode === 'writing') {
+      // switch to sharing, reset elapsed, stay on current screen
+      if (window.Timer) window.Timer.pause();
+      window.Game.setState({ timer: { mode: 'sharing', elapsed: 0, startedAt: null, active: false } });
+      setTimeout(function() { if (window.Timer) window.Timer.resume(); }, 60);
+    } else {
+      // timer not in use, or already sharing — proceed to next screen
+      if (nextScreen) window.Game.goTo(nextScreen);
+    }
+  }
+
   function showModal(id) {
     var el = $(id);
     if (el) { el.style.display = 'flex'; }
@@ -621,11 +640,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Phase 3 draw screen removed from flow (BUG 6)
   });
 
-  // FIX 7: btn-p1-continue now goes to phase2-challenge (challenge drawn there)
+  // btn-p1-continue: drawing phase — writing mode → sharing mode → challenge selection
   var btnP1Continue = $('btn-p1-continue');
   if (btnP1Continue) {
     btnP1Continue.addEventListener('click', function () {
-      window.Game.goTo('phase2-challenge');
+      advancePhase('phase2-challenge');
     });
   }
 
@@ -671,11 +690,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ── 15. Phase 1 Notepad screen ────────────────────────────
-  // FIX 7: challenge already drawn before phase1-notepad, so continue to phase2-notepad
   var btnP1nContinue = $('btn-p1n-continue');
   if (btnP1nContinue) {
     btnP1nContinue.addEventListener('click', function () {
-      window.Game.goTo('phase2-notepad');
+      advancePhase('phase2-notepad');
     });
   }
 
@@ -732,8 +750,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var btnP2nContinue = $('btn-p2n-continue');
   if (btnP2nContinue) {
     btnP2nContinue.addEventListener('click', function () {
-      // BUG 6/constraint: skip phase3-draw, go directly to phase3-notepad
-      window.Game.goTo('phase3-notepad');
+      advancePhase('phase3-notepad');
     });
   }
 
@@ -745,7 +762,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var btnP3nContinue = $('btn-p3n-continue');
   if (btnP3nContinue) {
     btnP3nContinue.addEventListener('click', function () {
-      window.Game.goTo('phase4');
+      advancePhase('phase4');
     });
   }
 
@@ -753,9 +770,20 @@ document.addEventListener('DOMContentLoaded', function () {
   var btnCompleteSession = $('btn-complete-session');
   if (btnCompleteSession) {
     btnCompleteSession.addEventListener('click', function () {
-      window.Game.setState({ completed: true });
-      window.Game.goTo('export');
-      if (window.UI && window.UI.renderExport) window.UI.renderExport(window.Game.getState());
+      var st = window.Game ? window.Game.getState() : null;
+      var t = st ? st.timer : null;
+      var timerUsed = t && (t.active || t.elapsed > 0 || t.startedAt !== null);
+      if (timerUsed && t.mode === 'writing') {
+        // switch to sharing mode, stay on phase4
+        if (window.Timer) window.Timer.pause();
+        window.Game.setState({ timer: { mode: 'sharing', elapsed: 0, startedAt: null, active: false } });
+        setTimeout(function() { if (window.Timer) window.Timer.resume(); }, 60);
+      } else {
+        // sharing done — export
+        window.Game.setState({ completed: true });
+        window.Game.goTo('export');
+        if (window.UI && window.UI.renderExport) window.UI.renderExport(window.Game.getState());
+      }
     });
   }
 

@@ -69,8 +69,8 @@ window._TOOLS_B = [
     name: { en: 'Pirate Radio', ru: 'Пиратское радио' },
     emojis: ['📻', '🏴‍☠️', '📡'],
     quote: {
-      en: 'The miniaturization of transmitters...put together by amateurs, \'encounters\' a collective aspiration for some new means of expression.',
-      ru: 'Миниатюризация передатчиков...собранных любителями, «встречается» с коллективным стремлением к новым средствам выражения.'
+      en: 'The miniaturization of transmitters.. .put together by amateurs, \'encounters\' a collective aspiration for some new means of expression.',
+      ru: 'Миниатюризация передатчиков... собранных любителями, «встречается» с коллективным стремлением к новым средствам выражения.'
     },
     author: 'Felix Guattari',
     year: '01984',
