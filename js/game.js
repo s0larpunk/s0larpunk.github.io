@@ -44,10 +44,10 @@ window.Game = (function () {
         p1s: 600,  // 10 min
         p2w: 300,  // 5 min
         p2s: 900,  // 15 min
-        p3w: 420,  // 7 min
-        p3s: 780,  // 13 min
-        p4w: 420,  // 7 min
-        p4s: 780   // 13 min
+        p3w: 900,  // 15 min
+        p3s: 900,  // 15 min
+        p4w: 600,  // 10 min
+        p4s: 900   // 15 min
       },
       active: false,
       phase: 1,
@@ -151,7 +151,7 @@ window.Game = (function () {
     resetState: function () {
       _state = JSON.parse(JSON.stringify(DEFAULT_STATE));
       _drawnIds.clear();
-      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) { }
       this.emit('stateChange', _state);
     },
 
@@ -196,12 +196,12 @@ window.Game = (function () {
 
       // Map screen to timer phase number (mode is managed by timer itself)
       var screenPhaseMap = {
-        'phase1-draw':      1,
-        'phase1-notepad':   1,
+        'phase1-draw': 1,
+        'phase1-notepad': 1,
         'phase2-challenge': 2,
-        'phase2-notepad':   2,
-        'phase3-notepad':   3,
-        'phase4':           4
+        'phase2-notepad': 2,
+        'phase3-notepad': 3,
+        'phase4': 4
       };
       if (screenPhaseMap[screen] !== undefined) {
         var newPhase = screenPhaseMap[screen];
@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // switch to sharing, reset elapsed, stay on current screen
       if (window.Timer) window.Timer.pause();
       window.Game.setState({ timer: { mode: 'sharing', elapsed: 0, startedAt: null, active: false } });
-      setTimeout(function() { if (window.Timer) window.Timer.resume(); }, 60);
+      setTimeout(function () { if (window.Timer) window.Timer.resume(); }, 60);
     } else {
       // timer not in use, or already sharing — proceed to next screen
       if (nextScreen) window.Game.goTo(nextScreen);
@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function () {
     btnConfirmRestart.addEventListener('click', function () {
       window.Game.resetState();
       // FIX 2: clear all notepad textarea values in DOM
-      document.querySelectorAll('.notepad-field').forEach(function(ta) { ta.value = ''; });
+      document.querySelectorAll('.notepad-field').forEach(function (ta) { ta.value = ''; });
       hideModal('modal-restart');
       window.Game.goTo('welcome');
     });
@@ -379,8 +379,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ── 7. Modal close buttons & backdrop clicks ───────────────
   var modalCloseIds = [
-    { close: 'btn-close-timer',   modal: 'modal-timer' },
-    { close: 'btn-close-lang',    modal: 'modal-lang' },
+    { close: 'btn-close-timer', modal: 'modal-timer' },
+    { close: 'btn-close-lang', modal: 'modal-lang' },
     { close: 'btn-close-explain', modal: 'modal-card-explain' },
     { close: 'btn-alert-dismiss', modal: 'modal-phase-alert' }
   ];
@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.Game.goTo('game-intro');
         // auto-render appropriate intro after short delay (screen transition needs to complete)
         // level 'new' or 'curious' → full intro; level 'familiar' → brief intro
-        setTimeout(function() {
+        setTimeout(function () {
           var mode = (level === 'familiar') ? 'brief' : 'full';
           if (window.UI && window.UI.renderGameIntro) window.UI.renderGameIntro(mode);
         }, 80);
@@ -777,7 +777,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // switch to sharing mode, stay on phase4
         if (window.Timer) window.Timer.pause();
         window.Game.setState({ timer: { mode: 'sharing', elapsed: 0, startedAt: null, active: false } });
-        setTimeout(function() { if (window.Timer) window.Timer.resume(); }, 60);
+        setTimeout(function () { if (window.Timer) window.Timer.resume(); }, 60);
       } else {
         // sharing done — export
         window.Game.setState({ completed: true });
@@ -877,10 +877,10 @@ document.addEventListener('DOMContentLoaded', function () {
     btnNextPhase.addEventListener('click', function () {
       var st = window.Game.getState();
       var nextScreenMap = {
-        'phase1-notepad':   'phase2-notepad',
-        'phase2-notepad':   'phase3-notepad',
-        'phase3-notepad':   'phase4',
-        'phase4':           'export'
+        'phase1-notepad': 'phase2-notepad',
+        'phase2-notepad': 'phase3-notepad',
+        'phase3-notepad': 'phase4',
+        'phase4': 'export'
       };
       var nextScreen = nextScreenMap[st.screen];
       if (nextScreen) {
