@@ -186,6 +186,22 @@ window.Game = (function () {
       this.emit('stateChange', _state);
     },
 
+    // Clear only game-progress fields (drawn cards, notepad, timer, technique-specific state).
+    // Preserves language, solarpunk familiarity level, lines & veils flag.
+    // Use when switching techniques mid-flow so decks aren't depleted across modes.
+    clearGameProgress: function () {
+      var fresh = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      _state.drawnCards = fresh.drawnCards;
+      _state.notepad = fresh.notepad;
+      _state.timer = fresh.timer;
+      _state.t354 = fresh.t354;
+      _state.t759 = fresh.t759;
+      _state.completed = false;
+      _drawnIds.clear();
+      this.saveState();
+      this.emit('stateChange', _state);
+    },
+
     hasSavedSession: function () {
       try {
         var s = localStorage.getItem(STORAGE_KEY);
@@ -198,8 +214,14 @@ window.Game = (function () {
     },
 
     drawCard: function (type) {
-      if (!window.DECK || !window.DECK[type]) return null;
-      var deck = window.DECK[type];
+      // Normalize plural forms to singular DECK keys. Both 'value' and 'values'
+      // resolve to the same deck — game code uses singular for ancestor/tool/value
+      // and plural for state arrays, and this mapping forgives either form so
+      // techniques with different naming conventions can share the same API.
+      var typeAlias = { values: 'value', tools: 'tool', ancestors: 'ancestor', challenges: 'challenge' };
+      var key = typeAlias[type] || type;
+      if (!window.DECK || !window.DECK[key]) return null;
+      var deck = window.DECK[key];
       var available = deck.filter(function (c) { return !_drawnIds.has(c.id); });
       if (!available.length) return null;
       var card = available[Math.floor(Math.random() * available.length)];
@@ -511,6 +533,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!card) return;
     if (card.classList.contains('coming-soon')) return;
     var technique = card.getAttribute('data-technique');
+    var prevTechnique = window.Game.getState().technique;
+    // If user is switching to a DIFFERENT technique, clear prior game progress
+    // so drawn cards from one mode don't deplete decks for the next.
+    if (prevTechnique && prevTechnique !== technique) {
+      window.Game.clearGameProgress();
+    }
     window.Game.setState({ technique: technique });
     window.Game.goTo('pregame');
   });
