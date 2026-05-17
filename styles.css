@@ -1563,19 +1563,70 @@ h6 {
   outline-offset: 2px;
 }
 
-/* Redraw hint text (shown below hand on T354/T759) */
+/* Redraw hint text (shown above the hand area on T354/T759) */
 .redraw-hint {
   text-align: center;
   font-size: var(--text-sm);
   color: rgba(26, 16, 8, 0.55);
-  margin: var(--space-3) 0 var(--space-2);
+  margin: var(--space-2) 0;
+  font-style: italic;
 }
 
-/* Redraw panel — appears when any card is selected for redraw */
+/* Redraw panel — floats above the global continue pill when any card is
+   selected. Position fixed so it's always visible regardless of scroll. */
 .redraw-panel {
+  position: fixed;
+  bottom: calc(var(--space-6) + 56px);
+  right: var(--space-4);
+  z-index: var(--z-overlay, 50);
   display: flex;
   justify-content: center;
-  margin: var(--space-2) 0 var(--space-4);
+}
+.redraw-panel .btn-secondary {
+  background: var(--rust);
+  color: var(--paper);
+  border-radius: var(--radius-pill);
+  padding: var(--space-3) var(--space-5);
+  box-shadow: var(--shadow-lg);
+  font-weight: 700;
+  border: none;
+}
+.redraw-panel .btn-secondary:hover { background: #a84a23; }
+
+/* T354 setup — vertical 2-column grid: deck on left, drawn card on right.
+   Each of the three slots (ancestor, value, tool) gets its own row. */
+.t354-setup-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+}
+
+.t354-deck-row {
+  display: grid;
+  grid-template-columns: var(--card-w) 1fr;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.t354-slot {
+  min-height: var(--card-h);
+  padding: var(--space-2);
+  flex: 0 1 auto;
+  overflow: visible;
+  /* override the default .hand-area scroll/padding-bottom that's meant for full-screen hand */
+  padding-bottom: var(--space-2);
+}
+
+/* Empty slot placeholder so the layout doesn't collapse when no card is drawn */
+.t354-slot:empty::before {
+  content: '';
+  display: block;
+  width: var(--card-w);
+  height: var(--card-h);
+  border: 2px dashed rgba(26, 16, 8, 0.15);
+  border-radius: var(--card-radius);
+  opacity: 0.6;
 }
 
 /* Thumbnail size for reference strip */
@@ -3749,45 +3800,60 @@ h6 {
 }
 
 /* Deck-back type label — centered, prominent, sits ON the face-down card
-   so users can tell which deck they're about to draw from. */
+   so users can tell which deck they're about to draw from. Vertical layout
+   so the text isn't constrained by the card's width on phones. */
 .deck-label {
   position: absolute;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 2;
   font-family: var(--font-heading);
-  font-size: var(--text-md);
+  font-size: var(--text-lg);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--gold);
+  letter-spacing: 0.15em;
+  color: var(--paper);
   text-align: center;
-  padding: 0 var(--space-2);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  padding: var(--space-2);
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.6),
+    0 0 8px rgba(0, 0, 0, 0.4);
   pointer-events: none;
+  line-height: 1.1;
+  word-break: break-word;
 }
 
-/* Type-specific accent strip across the deck back (helps differentiate at a glance) */
-.deck-stack[data-type="ancestor"] .deck-label { color: #e0b878; }
-.deck-stack[data-type="value"]    .deck-label,
-.deck-stack[data-type="values"]   .deck-label { color: #7fd0d0; }
-.deck-stack[data-type="tool"]     .deck-label,
-.deck-stack[data-type="tools"]    .deck-label { color: #a8d49d; }
-.deck-stack[data-type="challenge"] .deck-label { color: #ffb088; }
+/* A subtle horizontal rule above and below the label, like a banner */
+.deck-label::before {
+  content: '';
+  display: block;
+  width: 60%;
+  height: 1px;
+  background: rgba(244, 237, 224, 0.35);
+  margin-bottom: var(--space-2);
+}
+
+/* Type-specific accent line color so each deck has a distinct character */
+.deck-stack[data-type="ancestor"]  .deck-label::before { background: rgba(224, 184, 120, 0.7); }
+.deck-stack[data-type="value"]     .deck-label::before,
+.deck-stack[data-type="values"]    .deck-label::before { background: rgba(127, 208, 208, 0.7); }
+.deck-stack[data-type="tool"]      .deck-label::before,
+.deck-stack[data-type="tools"]     .deck-label::before { background: rgba(212, 160, 23, 0.8); }
+.deck-stack[data-type="challenge"] .deck-label::before { background: rgba(255, 176, 136, 0.8); }
 
 /* "Drawn" overlay on depleted decks — shows a checkmark + dims the label */
 .deck-stack.empty .deck-label {
-  flex-direction: column;
   color: rgba(244, 237, 224, 0.45);
 }
 .deck-stack.empty .deck-label::after {
   content: '\2713';
   display: block;
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   color: var(--gold);
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
   opacity: 0.85;
 }
 

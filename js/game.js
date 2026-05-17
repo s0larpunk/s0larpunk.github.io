@@ -1032,20 +1032,29 @@ document.addEventListener('DOMContentLoaded', function () {
     var st = window.Game.getState();
     var t354 = JSON.parse(JSON.stringify(st.t354 || {}));
 
-    // Enforce: one card per slot
-    if (type === 'ancestor' && t354.ancestor) return;
-    if (type === 'values' && t354.value) return;
-    if (type === 'tools' && t354.tool) return;
+    // Enforce: one card per slot. Accept singular ('value') and plural ('values')
+    // type spellings since both resolve to the same deck.
+    var isAncestor = type === 'ancestor';
+    var isValue = type === 'value' || type === 'values';
+    var isTool = type === 'tool' || type === 'tools';
+    if (isAncestor && t354.ancestor) return;
+    if (isValue && t354.value) return;
+    if (isTool && t354.tool) return;
 
     var card = window.Game.drawCard(type);
     if (!card) return;
 
-    var handEl = $('hand-t354-setup');
+    // Each slot has its own hand area in the 2-column layout
+    var handId = isAncestor ? 'hand-t354-ancestor'
+               : isValue ? 'hand-t354-value'
+               : isTool ? 'hand-t354-tool'
+               : null;
+    var handEl = handId ? $(handId) : null;
     if (window.Cards && handEl) window.Cards.deal(card, stack, handEl, 0);
 
-    if (type === 'ancestor') t354.ancestor = card;
-    else if (type === 'values') t354.value = card;
-    else if (type === 'tools') t354.tool = card;
+    if (isAncestor) t354.ancestor = card;
+    else if (isValue) t354.value = card;
+    else if (isTool) t354.tool = card;
 
     // Mark this deck as drawn (depleted for this technique)
     stack.classList.add('empty');

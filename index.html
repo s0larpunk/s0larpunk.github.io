@@ -576,21 +576,27 @@
       <div class="screen-body">
         <h2 data-i18n="t354_setup_title"></h2>
         <p data-i18n="t354_setup_desc"></p>
-        <div class="card-draw-layout">
-          <div class="deck-area" id="deck-area-t354-setup">
+        <p class="redraw-hint" data-i18n="redraw_prompt"></p>
+        <div class="t354-setup-grid">
+          <div class="t354-deck-row">
             <div class="deck-stack" id="t354-ancestor-deck" data-type="ancestor" data-context="t354">
               <div class="deck-label" data-i18n="deck_label_ancestor"></div>
             </div>
-            <div class="deck-stack" id="t354-value-deck" data-type="values" data-context="t354">
+            <div class="hand-area t354-slot" id="hand-t354-ancestor"></div>
+          </div>
+          <div class="t354-deck-row">
+            <div class="deck-stack" id="t354-value-deck" data-type="value" data-context="t354">
               <div class="deck-label" data-i18n="deck_label_value"></div>
             </div>
-            <div class="deck-stack" id="t354-tool-deck" data-type="tools" data-context="t354">
+            <div class="hand-area t354-slot" id="hand-t354-value"></div>
+          </div>
+          <div class="t354-deck-row">
+            <div class="deck-stack" id="t354-tool-deck" data-type="tool" data-context="t354">
               <div class="deck-label" data-i18n="deck_label_tool"></div>
             </div>
+            <div class="hand-area t354-slot" id="hand-t354-tool"></div>
           </div>
-          <div class="hand-area" id="hand-t354-setup"></div>
         </div>
-        <p class="redraw-hint" data-i18n="redraw_prompt"></p>
         <div id="redraw-panel-t354-setup" class="redraw-panel" style="display:none">
           <button id="btn-redraw-t354" class="btn-secondary" data-i18n="btn_redraw_selected"></button>
         </div>

@@ -107,9 +107,10 @@ window.Cards = (function() {
     var anySelected = document.querySelectorAll('.card.selected-for-redraw').length > 0;
     // Show/hide every redraw panel on the page — only one is in the active screen
     // at any time, so a single visibility toggle works across all techniques.
+    // Clearing the inline style lets the CSS display rule (flex / block) apply.
     var panels = document.querySelectorAll('[id^="redraw-panel"]');
     panels.forEach(function(panel) {
-      panel.style.display = anySelected ? 'block' : 'none';
+      panel.style.display = anySelected ? '' : 'none';
     });
   }
 

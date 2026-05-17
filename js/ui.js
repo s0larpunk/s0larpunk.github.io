@@ -10,14 +10,14 @@ window.UI = (function() {
 
   function t(key, vars) { return window.i18n ? window.i18n.t(key, vars) : key; }
 
-  // BUG 4: game screens where timer badge should be visible
+  // BUG 4: game screens where timer badge should be visible.
+  // Only Technique 001 specifies timed phases in the game rules — T354 and T759
+  // are free-form, so we don't show the timer there.
   var GAME_SCREENS = [
     'phase1-draw', 'phase1-notepad',
     'phase2-challenge', 'phase2-notepad',
     'phase3-notepad',
-    'phase4', 'export',
-    't354-setup', 't354-challenges', 't354-play', 't354-complete',
-    't759-challenge', 't759-value', 't759-spark', 't759-action'
+    'phase4', 'export'
   ];
 
   // Map each screen to its per-screen continue button ID
@@ -900,31 +900,32 @@ window.UI = (function() {
     var state = window.Game ? window.Game.getState() : {};
     var t354 = state.t354 || {};
 
-    // Restore already-drawn cards into hand
-    var handEl = document.getElementById('hand-t354-setup');
-    if (handEl) handEl.innerHTML = '';
+    // Per-slot hand areas in the 2-column layout
+    var slots = [
+      { card: t354.ancestor, handId: 'hand-t354-ancestor', deckId: 't354-ancestor-deck' },
+      { card: t354.value,    handId: 'hand-t354-value',    deckId: 't354-value-deck' },
+      { card: t354.tool,     handId: 'hand-t354-tool',     deckId: 't354-tool-deck' }
+    ];
 
-    var existingCards = [];
-    if (t354.ancestor) existingCards.push(t354.ancestor);
-    if (t354.value) existingCards.push(t354.value);
-    if (t354.tool) existingCards.push(t354.tool);
-
-    existingCards.forEach(function(card) {
-      if (!handEl || !window.Cards) return;
-      var el = window.Cards.createCardEl(card);
-      el.classList.add('flipped');
-      handEl.appendChild(el);
-      var explainBtn = el.querySelector('.card-explain-toggle');
-      if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(card); });
+    slots.forEach(function (slot) {
+      var handEl = document.getElementById(slot.handId);
+      if (handEl) {
+        handEl.innerHTML = '';
+        if (slot.card && window.Cards) {
+          var el = window.Cards.createCardEl(slot.card);
+          el.classList.add('flipped');
+          handEl.appendChild(el);
+          var explainBtn = el.querySelector('.card-explain-toggle');
+          if (explainBtn) explainBtn.addEventListener('click', function (e) { e.stopPropagation(); renderExplainMore(slot.card); });
+          parseEmojis(handEl);
+        }
+      }
+      var deckEl = document.getElementById(slot.deckId);
+      if (deckEl) {
+        deckEl.classList.toggle('empty', !!slot.card);
+        deckEl.classList.toggle('ready-to-draw', !slot.card);
+      }
     });
-
-    // Mark decks empty/ready
-    var aDeck = document.getElementById('t354-ancestor-deck');
-    var vDeck = document.getElementById('t354-value-deck');
-    var tDeck = document.getElementById('t354-tool-deck');
-    if (aDeck) { aDeck.classList.toggle('empty', !!t354.ancestor); aDeck.classList.toggle('ready-to-draw', !t354.ancestor); }
-    if (vDeck) { vDeck.classList.toggle('empty', !!t354.value); vDeck.classList.toggle('ready-to-draw', !t354.value); }
-    if (tDeck) { tDeck.classList.toggle('empty', !!t354.tool); tDeck.classList.toggle('ready-to-draw', !t354.tool); }
 
     // Sync continue
     var allDrawn = t354.ancestor && t354.value && t354.tool;
@@ -932,7 +933,6 @@ window.UI = (function() {
     if (localBtn) localBtn.disabled = !allDrawn;
     var globalBtn = document.getElementById('btn-continue-global');
     if (globalBtn) globalBtn.disabled = !allDrawn;
-    if (handEl) parseEmojis(handEl);
   }
 
   function renderT354Challenges() {
