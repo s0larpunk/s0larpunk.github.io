@@ -105,9 +105,11 @@ window.Cards = (function() {
   function toggleRedraw(cardEl) {
     cardEl.classList.toggle('selected-for-redraw');
     var anySelected = document.querySelectorAll('.card.selected-for-redraw').length > 0;
-    ['redraw-panel', 'redraw-panel-p3'].forEach(function(id) {
-      var panel = document.getElementById(id);
-      if (panel) panel.style.display = anySelected ? 'block' : 'none';
+    // Show/hide every redraw panel on the page — only one is in the active screen
+    // at any time, so a single visibility toggle works across all techniques.
+    var panels = document.querySelectorAll('[id^="redraw-panel"]');
+    panels.forEach(function(panel) {
+      panel.style.display = anySelected ? 'block' : 'none';
     });
   }
 

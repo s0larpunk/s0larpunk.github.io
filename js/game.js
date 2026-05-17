@@ -1047,6 +1047,10 @@ document.addEventListener('DOMContentLoaded', function () {
     else if (type === 'values') t354.value = card;
     else if (type === 'tools') t354.tool = card;
 
+    // Mark this deck as drawn (depleted for this technique)
+    stack.classList.add('empty');
+    stack.classList.remove('ready-to-draw');
+
     window.Game.setState({ t354: t354 });
 
     // Enable continue when all 3 drawn
@@ -1091,9 +1095,10 @@ document.addEventListener('DOMContentLoaded', function () {
       if (di < t354.challenges.length) dots[di].classList.add('filled');
     }
 
-    // If deck exhausted
+    // If quota reached, mark the challenge deck as drawn/empty
     if (t354.challenges.length >= 3) {
-      stack.classList.add('dealt');
+      stack.classList.add('empty');
+      stack.classList.remove('ready-to-draw');
     }
 
     // Enable continue when 3 drawn
@@ -1129,6 +1134,67 @@ document.addEventListener('DOMContentLoaded', function () {
       if (window.Cards && handEl) window.Cards.deal(card, null, handEl, 0);
     });
   }
+
+  // Generic redraw helper for T354/T759 — finds selected cards anywhere on the
+  // active screen, releases their IDs from the dedup set, draws replacements,
+  // updates the appropriate state branch, and animates the swap.
+  function redrawSelectedT354T759() {
+    if (!window.Cards || !window.Cards.getRedrawSelection) return;
+    var selectedIds = window.Cards.getRedrawSelection();
+    if (!selectedIds.length) return;
+
+    var st = window.Game.getState();
+    var t354 = JSON.parse(JSON.stringify(st.t354 || {}));
+    var t759 = JSON.parse(JSON.stringify(st.t759 || {}));
+    var t354Dirty = false, t759Dirty = false;
+
+    selectedIds.forEach(function (cardId) {
+      var oldEl = document.querySelector('.card[data-id="' + cardId + '"]');
+      var type = oldEl ? oldEl.dataset.type : null;
+      if (!type) return;
+
+      var newCard = window.Game.reDrawCard(cardId, type);
+      if (!newCard) return;
+
+      // Locate the card in t354 or t759 state and replace it
+      if (t354.ancestor && t354.ancestor.id === cardId) { t354.ancestor = newCard; t354Dirty = true; }
+      else if (t354.value && t354.value.id === cardId) { t354.value = newCard; t354Dirty = true; }
+      else if (t354.tool && t354.tool.id === cardId) { t354.tool = newCard; t354Dirty = true; }
+      else {
+        var chIdx = (t354.challenges || []).findIndex(function (c) { return c && c.id === cardId; });
+        if (chIdx !== -1) { t354.challenges[chIdx] = newCard; t354Dirty = true; }
+        else {
+          var exIdx = (t354.extras || []).findIndex(function (c) { return c && c.id === cardId; });
+          if (exIdx !== -1) { t354.extras[exIdx] = newCard; t354Dirty = true; }
+          else if (t759.challenge && t759.challenge.id === cardId) { t759.challenge = newCard; t759Dirty = true; }
+          else if (t759.value && t759.value.id === cardId) { t759.value = newCard; t759Dirty = true; }
+          else {
+            var toolIdx = (t759.tools || []).findIndex(function (c) { return c && c.id === cardId; });
+            if (toolIdx !== -1) { t759.tools[toolIdx] = newCard; t759Dirty = true; }
+          }
+        }
+      }
+
+      if (oldEl && window.Cards.animateRedraw) {
+        window.Cards.animateRedraw(oldEl, newCard, null);
+      }
+    });
+
+    var patch = {};
+    if (t354Dirty) patch.t354 = t354;
+    if (t759Dirty) patch.t759 = t759;
+    if (Object.keys(patch).length) window.Game.setState(patch);
+
+    // Hide all redraw panels — selection is cleared by animateRedraw
+    document.querySelectorAll('[id^="redraw-panel"]').forEach(function (p) { p.style.display = 'none'; });
+  }
+
+  // Wire all T354/T759 redraw buttons to the shared handler
+  ['btn-redraw-t354', 'btn-redraw-t354-challenges', 'btn-redraw-t759-challenge',
+   'btn-redraw-t759-value', 'btn-redraw-t759-spark'].forEach(function (id) {
+    var btn = $(id);
+    if (btn) btn.addEventListener('click', redrawSelectedT354T759);
+  });
 
   // T354 response textarea autosave
   var t354ResponseArea = $('t354-response');
@@ -1194,6 +1260,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var handEl = $('hand-t759-challenge');
     if (window.Cards && handEl) window.Cards.deal(card, stack, handEl, 0);
 
+    // Mark deck as drawn
+    stack.classList.add('empty');
+    stack.classList.remove('ready-to-draw');
+
     // Clear custom textarea if present
     if (t759CustomChallenge) {
       t759CustomChallenge.value = '';
@@ -1232,6 +1302,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var handEl = $('hand-t759-value');
     if (window.Cards && handEl) window.Cards.deal(card, stack, handEl, 0);
+
+    // Mark deck as drawn
+    stack.classList.add('empty');
+    stack.classList.remove('ready-to-draw');
 
     var localBtn = $('btn-t759-value-continue');
     if (localBtn) localBtn.disabled = false;

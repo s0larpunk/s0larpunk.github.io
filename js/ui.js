@@ -918,13 +918,13 @@ window.UI = (function() {
       if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(card); });
     });
 
-    // Mark decks dealt/ready
+    // Mark decks empty/ready
     var aDeck = document.getElementById('t354-ancestor-deck');
     var vDeck = document.getElementById('t354-value-deck');
     var tDeck = document.getElementById('t354-tool-deck');
-    if (aDeck) { aDeck.classList.toggle('dealt', !!t354.ancestor); aDeck.classList.toggle('ready-to-draw', !t354.ancestor); }
-    if (vDeck) { vDeck.classList.toggle('dealt', !!t354.value); vDeck.classList.toggle('ready-to-draw', !t354.value); }
-    if (tDeck) { tDeck.classList.toggle('dealt', !!t354.tool); tDeck.classList.toggle('ready-to-draw', !t354.tool); }
+    if (aDeck) { aDeck.classList.toggle('empty', !!t354.ancestor); aDeck.classList.toggle('ready-to-draw', !t354.ancestor); }
+    if (vDeck) { vDeck.classList.toggle('empty', !!t354.value); vDeck.classList.toggle('ready-to-draw', !t354.value); }
+    if (tDeck) { tDeck.classList.toggle('empty', !!t354.tool); tDeck.classList.toggle('ready-to-draw', !t354.tool); }
 
     // Sync continue
     var allDrawn = t354.ancestor && t354.value && t354.tool;
@@ -963,9 +963,9 @@ window.UI = (function() {
       else dots[i].classList.remove('filled');
     }
 
-    // Deck state
+    // Deck state — mark empty after 3 drawn
     var deckEl = document.getElementById('t354-challenge-deck');
-    if (deckEl) { deckEl.classList.toggle('dealt', challenges.length >= 3); deckEl.classList.toggle('ready-to-draw', challenges.length < 3); }
+    if (deckEl) { deckEl.classList.toggle('empty', challenges.length >= 3); deckEl.classList.toggle('ready-to-draw', challenges.length < 3); }
 
     // Sync continue
     var localBtn = document.getElementById('btn-t354-challenges-continue');
@@ -1051,10 +1051,14 @@ window.UI = (function() {
         handEl.appendChild(el);
         var explainBtn = el.querySelector('.card-explain-toggle');
         if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(t759.challenge); });
-        var deckEl = document.getElementById('t759-challenge-deck');
-        if (deckEl) deckEl.classList.add('dealt');
         parseEmojis(handEl);
       }
+    }
+    // Deck state — empty if drawn, ready-to-draw otherwise
+    var t759ChDeck = document.getElementById('t759-challenge-deck');
+    if (t759ChDeck) {
+      t759ChDeck.classList.toggle('empty', !!t759.challenge);
+      t759ChDeck.classList.toggle('ready-to-draw', !t759.challenge);
     }
 
     // Restore custom textarea
@@ -1083,10 +1087,14 @@ window.UI = (function() {
         handEl.appendChild(el);
         var explainBtn = el.querySelector('.card-explain-toggle');
         if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(t759.value); });
-        var deckEl = document.getElementById('t759-value-deck');
-        if (deckEl) deckEl.classList.add('dealt');
         parseEmojis(handEl);
       }
+    }
+    // Deck state
+    var t759ValDeck = document.getElementById('t759-value-deck');
+    if (t759ValDeck) {
+      t759ValDeck.classList.toggle('empty', !!t759.value);
+      t759ValDeck.classList.toggle('ready-to-draw', !t759.value);
     }
 
     var localBtn = document.getElementById('btn-t759-value-continue');
