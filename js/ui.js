@@ -15,7 +15,9 @@ window.UI = (function() {
     'phase1-draw', 'phase1-notepad',
     'phase2-challenge', 'phase2-notepad',
     'phase3-notepad',
-    'phase4', 'export'
+    'phase4', 'export',
+    't354-setup', 't354-challenges', 't354-play', 't354-complete',
+    't759-challenge', 't759-value', 't759-spark', 't759-action'
   ];
 
   // Map each screen to its per-screen continue button ID
@@ -26,6 +28,13 @@ window.UI = (function() {
     'phase2-notepad':   'btn-p2n-continue',
     'phase3-notepad':   'btn-p3n-continue',
     'phase4':           'btn-complete-session',
+    't354-setup':       'btn-t354-setup-continue',
+    't354-challenges':  'btn-t354-challenges-continue',
+    't354-play':        'btn-t354-play-continue',
+    't759-challenge':   'btn-t759-challenge-continue',
+    't759-value':       'btn-t759-value-continue',
+    't759-spark':       'btn-t759-spark-continue',
+    't759-action':      'btn-t759-action-continue'
   };
 
   // Wire the single global continue pill in #persistent-ui to the
@@ -45,8 +54,15 @@ window.UI = (function() {
     globalBtn.onclick = function() {
       if (!globalBtn.disabled) localBtn.click();
     };
-    // Update label based on timer mode
-    _updateContinueBtnLabel(globalBtn);
+    // Use local button label override for special screens
+    if (screenName === 't759-spark') {
+      globalBtn.textContent = t('t759_idea_btn', 'I have an idea! →');
+    } else if (screenName === 't759-action') {
+      globalBtn.textContent = t('t759_action_commit', 'Commit to Action');
+    } else {
+      // Update label based on timer mode
+      _updateContinueBtnLabel(globalBtn);
+    }
   }
 
   // Update the global continue button label to reflect current timer mode
@@ -112,7 +128,15 @@ window.UI = (function() {
       // phase3-draw removed from active flow (BUG 6)
       'phase3-notepad': function() { renderNotepad(3); },
       'phase4': renderPhase4,
-      'export': renderExport
+      'export': renderExport,
+      't354-setup': renderT354Setup,
+      't354-challenges': renderT354Challenges,
+      't354-play': renderT354Play,
+      't354-complete': function() { refreshI18n(); },
+      't759-challenge': renderT759Challenge,
+      't759-value': renderT759Value,
+      't759-spark': renderT759Spark,
+      't759-action': renderT759Action
     };
     _syncGlobalContinue(name);   // wire continue pill before render so disabled syncs correctly
     if (renders[name]) renders[name]();
@@ -869,6 +893,306 @@ window.UI = (function() {
     }
   }
 
+  // ── Technique 354 render functions ────────────────────────
+
+  function renderT354Setup() {
+    refreshI18n();
+    var state = window.Game ? window.Game.getState() : {};
+    var t354 = state.t354 || {};
+
+    // Restore already-drawn cards into hand
+    var handEl = document.getElementById('hand-t354-setup');
+    if (handEl) handEl.innerHTML = '';
+
+    var existingCards = [];
+    if (t354.ancestor) existingCards.push(t354.ancestor);
+    if (t354.value) existingCards.push(t354.value);
+    if (t354.tool) existingCards.push(t354.tool);
+
+    existingCards.forEach(function(card) {
+      if (!handEl || !window.Cards) return;
+      var el = window.Cards.createCardEl(card);
+      el.classList.add('flipped');
+      handEl.appendChild(el);
+      var explainBtn = el.querySelector('.card-explain-toggle');
+      if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(card); });
+    });
+
+    // Mark decks dealt/ready
+    var aDeck = document.getElementById('t354-ancestor-deck');
+    var vDeck = document.getElementById('t354-value-deck');
+    var tDeck = document.getElementById('t354-tool-deck');
+    if (aDeck) { aDeck.classList.toggle('dealt', !!t354.ancestor); aDeck.classList.toggle('ready-to-draw', !t354.ancestor); }
+    if (vDeck) { vDeck.classList.toggle('dealt', !!t354.value); vDeck.classList.toggle('ready-to-draw', !t354.value); }
+    if (tDeck) { tDeck.classList.toggle('dealt', !!t354.tool); tDeck.classList.toggle('ready-to-draw', !t354.tool); }
+
+    // Sync continue
+    var allDrawn = t354.ancestor && t354.value && t354.tool;
+    var localBtn = document.getElementById('btn-t354-setup-continue');
+    if (localBtn) localBtn.disabled = !allDrawn;
+    var globalBtn = document.getElementById('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = !allDrawn;
+    if (handEl) parseEmojis(handEl);
+  }
+
+  function renderT354Challenges() {
+    refreshI18n();
+    var state = window.Game ? window.Game.getState() : {};
+    var t354 = state.t354 || {};
+    var challenges = t354.challenges || [];
+
+    // Restore drawn challenge cards
+    var handEl = document.getElementById('hand-t354-challenges');
+    if (handEl) {
+      handEl.innerHTML = '';
+      challenges.forEach(function(card) {
+        if (!window.Cards) return;
+        var el = window.Cards.createCardEl(card);
+        el.classList.add('flipped');
+        handEl.appendChild(el);
+        var explainBtn = el.querySelector('.card-explain-toggle');
+        if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(card); });
+      });
+      parseEmojis(handEl);
+    }
+
+    // Update progress dots
+    var dots = document.querySelectorAll('#draw-progress-t354 .progress-dot');
+    for (var i = 0; i < dots.length; i++) {
+      if (i < challenges.length) dots[i].classList.add('filled');
+      else dots[i].classList.remove('filled');
+    }
+
+    // Deck state
+    var deckEl = document.getElementById('t354-challenge-deck');
+    if (deckEl) { deckEl.classList.toggle('dealt', challenges.length >= 3); deckEl.classList.toggle('ready-to-draw', challenges.length < 3); }
+
+    // Sync continue
+    var localBtn = document.getElementById('btn-t354-challenges-continue');
+    if (localBtn) localBtn.disabled = challenges.length < 3;
+    var globalBtn = document.getElementById('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = challenges.length < 3;
+  }
+
+  function renderT354Play() {
+    refreshI18n();
+    var state = window.Game ? window.Game.getState() : {};
+    var t354 = state.t354 || {};
+
+    // Show hand cards (ancestor + value + tool + extras)
+    var handEl = document.getElementById('ref-cards-t354-hand');
+    if (handEl) {
+      handEl.innerHTML = '';
+      var handCards = [];
+      if (t354.ancestor) handCards.push(t354.ancestor);
+      if (t354.value) handCards.push(t354.value);
+      if (t354.tool) handCards.push(t354.tool);
+      (t354.extras || []).forEach(function(c) { if (c) handCards.push(c); });
+      handCards.forEach(function(card) {
+        if (!window.Cards) return;
+        var el = window.Cards.createCardEl(card, true);
+        el.classList.add('flipped');
+        handEl.appendChild(el);
+        var explainBtn = el.querySelector('.card-explain-toggle');
+        if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(card); });
+      });
+      parseEmojis(handEl);
+    }
+
+    // Show challenge cards
+    var challengeEl = document.getElementById('ref-cards-t354-challenges');
+    if (challengeEl) {
+      challengeEl.innerHTML = '';
+      (t354.challenges || []).forEach(function(card) {
+        if (!window.Cards) return;
+        var el = window.Cards.createCardEl(card, true);
+        el.classList.add('flipped');
+        challengeEl.appendChild(el);
+        var explainBtn = el.querySelector('.card-explain-toggle');
+        if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(card); });
+      });
+      parseEmojis(challengeEl);
+    }
+
+    // Populate textarea from state
+    var textarea = document.getElementById('t354-response');
+    if (textarea && !textarea.value) textarea.value = t354.response || '';
+
+    // Restore extras hand
+    var extrasEl = document.getElementById('hand-t354-extras');
+    if (extrasEl) {
+      extrasEl.innerHTML = '';
+      (t354.extras || []).forEach(function(card) {
+        if (!window.Cards) return;
+        var el = window.Cards.createCardEl(card);
+        el.classList.add('flipped');
+        extrasEl.appendChild(el);
+        var explainBtn = el.querySelector('.card-explain-toggle');
+        if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(card); });
+      });
+      parseEmojis(extrasEl);
+    }
+  }
+
+  // ── Technique 759 render functions ────────────────────────
+
+  function renderT759Challenge() {
+    refreshI18n();
+    var state = window.Game ? window.Game.getState() : {};
+    var t759 = state.t759 || {};
+
+    // Restore drawn challenge card
+    var handEl = document.getElementById('hand-t759-challenge');
+    if (handEl) {
+      handEl.innerHTML = '';
+      if (t759.challenge && window.Cards) {
+        var el = window.Cards.createCardEl(t759.challenge);
+        el.classList.add('flipped');
+        handEl.appendChild(el);
+        var explainBtn = el.querySelector('.card-explain-toggle');
+        if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(t759.challenge); });
+        var deckEl = document.getElementById('t759-challenge-deck');
+        if (deckEl) deckEl.classList.add('dealt');
+        parseEmojis(handEl);
+      }
+    }
+
+    // Restore custom textarea
+    var textarea = document.getElementById('t759-custom-challenge');
+    if (textarea && !textarea.value) textarea.value = t759.customChallenge || '';
+
+    // Sync continue
+    var enabled = !!(t759.challenge || (t759.customChallenge && t759.customChallenge.trim()));
+    var localBtn = document.getElementById('btn-t759-challenge-continue');
+    if (localBtn) localBtn.disabled = !enabled;
+    var globalBtn = document.getElementById('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = !enabled;
+  }
+
+  function renderT759Value() {
+    refreshI18n();
+    var state = window.Game ? window.Game.getState() : {};
+    var t759 = state.t759 || {};
+
+    var handEl = document.getElementById('hand-t759-value');
+    if (handEl) {
+      handEl.innerHTML = '';
+      if (t759.value && window.Cards) {
+        var el = window.Cards.createCardEl(t759.value);
+        el.classList.add('flipped');
+        handEl.appendChild(el);
+        var explainBtn = el.querySelector('.card-explain-toggle');
+        if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(t759.value); });
+        var deckEl = document.getElementById('t759-value-deck');
+        if (deckEl) deckEl.classList.add('dealt');
+        parseEmojis(handEl);
+      }
+    }
+
+    var localBtn = document.getElementById('btn-t759-value-continue');
+    if (localBtn) localBtn.disabled = !t759.value;
+    var globalBtn = document.getElementById('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = !t759.value;
+  }
+
+  function renderT759Spark() {
+    refreshI18n();
+    var state = window.Game ? window.Game.getState() : {};
+    var t759 = state.t759 || {};
+    var lang = window.i18n ? window.i18n.getLang() : 'en';
+
+    // Show challenge + value as mini reference cards
+    var refEl = document.getElementById('ref-cards-t759-spark');
+    if (refEl) {
+      refEl.innerHTML = '';
+      var refCards = [];
+      if (t759.challenge) refCards.push(t759.challenge);
+      if (t759.value) refCards.push(t759.value);
+      refCards.forEach(function(card) {
+        if (!window.Cards) return;
+        var el = window.Cards.createCardEl(card, true);
+        el.classList.add('flipped');
+        refEl.appendChild(el);
+        var explainBtn = el.querySelector('.card-explain-toggle');
+        if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(card); });
+      });
+      // If custom challenge, show as text
+      if (!t759.challenge && t759.customChallenge) {
+        var p = document.createElement('p');
+        p.className = 'phase-note';
+        p.textContent = t759.customChallenge;
+        refEl.appendChild(p);
+      }
+      parseEmojis(refEl);
+    }
+
+    // Restore drawn tools hand
+    var handEl = document.getElementById('hand-t759-spark');
+    if (handEl) {
+      handEl.innerHTML = '';
+      (t759.tools || []).forEach(function(card) {
+        if (!window.Cards) return;
+        var el = window.Cards.createCardEl(card);
+        el.classList.add('flipped');
+        handEl.appendChild(el);
+        var explainBtn = el.querySelector('.card-explain-toggle');
+        if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(card); });
+      });
+      parseEmojis(handEl);
+    }
+
+    // Update tool count label
+    var countEl = document.getElementById('t759-tool-count');
+    if (countEl) {
+      var count = (t759.tools || []).length;
+      var label = window.i18n ? window.i18n.t('t759_tools_drawn') : 'tools drawn';
+      countEl.textContent = count + ' ' + label;
+    }
+
+    // Spark continue always enabled
+    var localBtn = document.getElementById('btn-t759-spark-continue');
+    if (localBtn) localBtn.disabled = false;
+    var globalBtn = document.getElementById('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = false;
+  }
+
+  function renderT759Action() {
+    refreshI18n();
+    var state = window.Game ? window.Game.getState() : {};
+    var t759 = state.t759 || {};
+
+    // Show all cards in a strip
+    var refEl = document.getElementById('ref-cards-t759-action');
+    if (refEl) {
+      refEl.innerHTML = '';
+      var allCards = [];
+      if (t759.challenge) allCards.push(t759.challenge);
+      if (t759.value) allCards.push(t759.value);
+      (t759.tools || []).forEach(function(c) { if (c) allCards.push(c); });
+      allCards.forEach(function(card) {
+        if (!window.Cards) return;
+        var el = window.Cards.createCardEl(card, true);
+        el.classList.add('flipped');
+        refEl.appendChild(el);
+        var explainBtn = el.querySelector('.card-explain-toggle');
+        if (explainBtn) explainBtn.addEventListener('click', function(e) { e.stopPropagation(); renderExplainMore(card); });
+      });
+      // Custom challenge as text if used
+      if (!t759.challenge && t759.customChallenge) {
+        var p = document.createElement('p');
+        p.className = 'phase-note';
+        p.style.fontStyle = 'italic';
+        p.textContent = t759.customChallenge;
+        refEl.insertBefore(p, refEl.firstChild);
+      }
+      parseEmojis(refEl);
+    }
+
+    // Populate textarea
+    var textarea = document.getElementById('t759-action-text');
+    if (textarea && !textarea.value) textarea.value = t759.action || '';
+  }
+
   function bindNotepadFields() {
     document.querySelectorAll('.notepad-field').forEach(function(el) {
       el.addEventListener('input', function() {
@@ -911,6 +1235,13 @@ window.UI = (function() {
     bindNotepadFields: bindNotepadFields,
     updateDeckVisibility: _updateDeckVisibility,
     updateDrawStepInstruction: _updateDrawStepInstruction,
-    syncContinueBtn: _syncGlobalContinue
+    syncContinueBtn: _syncGlobalContinue,
+    renderT354Setup: renderT354Setup,
+    renderT354Challenges: renderT354Challenges,
+    renderT354Play: renderT354Play,
+    renderT759Challenge: renderT759Challenge,
+    renderT759Value: renderT759Value,
+    renderT759Spark: renderT759Spark,
+    renderT759Action: renderT759Action
   };
 })();

@@ -162,18 +162,18 @@
             <div class="technique-desc" data-i18n="t001_desc"></div>
             <div class="technique-mood" data-i18n="t001_mood"></div>
           </button>
-          <div class="technique-card coming-soon">
-            <div class="badge" data-i18n="coming_soon"></div>
+          <button class="technique-card" data-technique="354">
             <div class="technique-number">354</div>
             <div class="technique-name" data-i18n="t354_name"></div>
-            <div class="technique-desc" data-i18n="t354_coming"></div>
-          </div>
-          <div class="technique-card coming-soon">
-            <div class="badge" data-i18n="coming_soon"></div>
+            <div class="technique-desc" data-i18n="t354_desc"></div>
+            <div class="technique-mood" data-i18n="t354_mood"></div>
+          </button>
+          <button class="technique-card" data-technique="759">
             <div class="technique-number">759</div>
             <div class="technique-name" data-i18n="t759_name"></div>
-            <div class="technique-desc" data-i18n="t759_coming"></div>
-          </div>
+            <div class="technique-desc" data-i18n="t759_desc"></div>
+            <div class="technique-mood" data-i18n="t759_mood"></div>
+          </button>
         </div>
       </div>
     </div>
@@ -566,6 +566,181 @@
       <div class="export-footer">
         <button id="btn-play-again" class="btn-primary" data-i18n="btn_play_again"></button>
       </div>
+    </div>
+
+    <!-- ===================== SCREEN: T354 SETUP ===================== -->
+    <div class="screen" id="screen-t354-setup" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="technique" data-i18n="btn_back"></button>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="t354_setup_title"></h2>
+        <p data-i18n="t354_setup_desc"></p>
+        <div class="card-draw-layout">
+          <div class="deck-area" id="deck-area-t354-setup">
+            <div class="deck-stack" id="t354-ancestor-deck" data-type="ancestor" data-context="t354">
+              <div class="deck-label" data-i18n="deck_label_ancestor"></div>
+            </div>
+            <div class="deck-stack" id="t354-value-deck" data-type="values" data-context="t354">
+              <div class="deck-label" data-i18n="deck_label_value"></div>
+            </div>
+            <div class="deck-stack" id="t354-tool-deck" data-type="tools" data-context="t354">
+              <div class="deck-label" data-i18n="deck_label_tool"></div>
+            </div>
+          </div>
+          <div class="hand-area" id="hand-t354-setup"></div>
+        </div>
+      </div>
+      <button id="btn-t354-setup-continue" style="display:none" disabled data-i18n="btn_continue"></button>
+    </div>
+
+    <!-- ===================== SCREEN: T354 CHALLENGES ===================== -->
+    <div class="screen" id="screen-t354-challenges" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="t354-setup" data-i18n="btn_back"></button>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="t354_challenges_title"></h2>
+        <p data-i18n="t354_challenges_desc"></p>
+        <div class="card-draw-layout">
+          <div class="deck-area" id="deck-area-t354-challenges">
+            <div class="deck-stack" id="t354-challenge-deck" data-type="challenge" data-context="t354-challenge">
+              <div class="deck-label" data-i18n="deck_label_challenge"></div>
+            </div>
+          </div>
+          <div class="hand-area" id="hand-t354-challenges"></div>
+        </div>
+        <div class="draw-progress" id="draw-progress-t354">
+          <span class="progress-dot" data-for="c1" title="Challenge 1"></span>
+          <span class="progress-dot" data-for="c2" title="Challenge 2"></span>
+          <span class="progress-dot" data-for="c3" title="Challenge 3"></span>
+        </div>
+      </div>
+      <button id="btn-t354-challenges-continue" style="display:none" disabled data-i18n="btn_continue"></button>
+    </div>
+
+    <!-- ===================== SCREEN: T354 PLAY ===================== -->
+    <div class="screen" id="screen-t354-play" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="t354-challenges" data-i18n="btn_back"></button>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="t354_play_title"></h2>
+        <div class="info-panel">
+          <p data-i18n="t354_extra_note" class="phase-note"></p>
+        </div>
+        <div class="ref-cards-strip" id="ref-cards-t354-hand"></div>
+        <div class="ref-cards-strip" id="ref-cards-t354-challenges"></div>
+        <div class="notepad-field-group">
+          <label for="t354-response" data-i18n="t354_play_prompt"></label>
+          <textarea id="t354-response" name="t354_response" class="notepad-field" rows="6"></textarea>
+        </div>
+        <button id="btn-t354-extra" class="btn-secondary" data-i18n="t354_extra_card"></button>
+        <div class="hand-area" id="hand-t354-extras" style="min-height:0;margin-top:8px;"></div>
+      </div>
+      <button id="btn-t354-play-continue" style="display:none" data-i18n="btn_continue"></button>
+    </div>
+
+    <!-- ===================== SCREEN: T354 COMPLETE ===================== -->
+    <div class="screen" id="screen-t354-complete" style="display:none">
+      <div class="screen-body" style="text-align:center;padding-top:48px;">
+        <div class="logo-mark" style="font-size:3rem;">🌞</div>
+        <h2 data-i18n="t354_complete_title"></h2>
+        <p data-i18n="t354_complete_desc"></p>
+        <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px;align-items:center;">
+          <button id="btn-t354-play-again" class="btn-primary" data-i18n="btn_play_again"></button>
+          <button class="btn-back btn-ghost" data-target="technique" data-i18n="technique_title"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SCREEN: T759 CHALLENGE ===================== -->
+    <div class="screen" id="screen-t759-challenge" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="technique" data-i18n="btn_back"></button>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="t759_challenge_title"></h2>
+        <p data-i18n="t759_challenge_desc"></p>
+        <div class="notepad-field-group">
+          <textarea id="t759-custom-challenge" class="notepad-field" rows="4" data-i18n-placeholder="t759_challenge_custom_placeholder" placeholder="Describe a challenge your community is facing right now..."></textarea>
+        </div>
+        <p style="text-align:center;opacity:0.6;margin:8px 0;" data-i18n="t759_challenge_or"></p>
+        <div class="card-draw-layout">
+          <div class="deck-area" id="deck-area-t759-challenge">
+            <div class="deck-stack" id="t759-challenge-deck" data-type="challenge" data-context="t759-challenge">
+              <div class="deck-label" data-i18n="deck_label_challenge"></div>
+            </div>
+          </div>
+          <div class="hand-area" id="hand-t759-challenge"></div>
+        </div>
+      </div>
+      <button id="btn-t759-challenge-continue" style="display:none" disabled data-i18n="btn_continue"></button>
+    </div>
+
+    <!-- ===================== SCREEN: T759 VALUE ===================== -->
+    <div class="screen" id="screen-t759-value" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="t759-challenge" data-i18n="btn_back"></button>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="t759_value_title"></h2>
+        <p data-i18n="t759_value_desc"></p>
+        <div class="card-draw-layout">
+          <div class="deck-area" id="deck-area-t759-value">
+            <div class="deck-stack" id="t759-value-deck" data-type="values" data-context="t759-value">
+              <div class="deck-label" data-i18n="deck_label_value"></div>
+            </div>
+          </div>
+          <div class="hand-area" id="hand-t759-value"></div>
+        </div>
+      </div>
+      <button id="btn-t759-value-continue" style="display:none" disabled data-i18n="btn_continue"></button>
+    </div>
+
+    <!-- ===================== SCREEN: T759 SPARK ===================== -->
+    <div class="screen" id="screen-t759-spark" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="t759-value" data-i18n="btn_back"></button>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="t759_spark_title"></h2>
+        <p data-i18n="t759_spark_desc"></p>
+        <div class="ref-cards-strip" id="ref-cards-t759-spark"></div>
+        <div style="display:flex;align-items:center;gap:16px;margin:12px 0;">
+          <button id="btn-t759-draw-tool" class="btn-secondary" data-i18n="t759_draw_tool"></button>
+          <span id="t759-tool-count" style="opacity:0.7;">0 <span data-i18n="t759_tools_drawn"></span></span>
+        </div>
+        <div class="hand-area" id="hand-t759-spark"></div>
+      </div>
+      <!-- idea button also acts as continue proxy -->
+      <button id="btn-t759-spark-continue" style="display:none" data-i18n="t759_idea_btn"></button>
+    </div>
+
+    <!-- ===================== SCREEN: T759 ACTION ===================== -->
+    <div class="screen" id="screen-t759-action" style="display:none">
+      <div class="screen-header">
+        <button class="btn-back" data-target="t759-spark" data-i18n="btn_back"></button>
+      </div>
+      <div class="screen-body">
+        <h2 data-i18n="t759_action_title"></h2>
+        <p data-i18n="t759_action_desc"></p>
+        <div class="ref-cards-strip" id="ref-cards-t759-action"></div>
+        <div class="notepad-field-group">
+          <label for="t759-action-text" data-i18n="t759_action_prompt"></label>
+          <textarea id="t759-action-text" class="notepad-field" rows="7"></textarea>
+        </div>
+        <div id="t759-action-done" style="display:none;text-align:center;padding:24px 0;">
+          <div style="font-size:2rem;">🌱</div>
+          <h3 data-i18n="t759_complete_title"></h3>
+          <p data-i18n="t759_complete_desc"></p>
+          <div style="margin-top:24px;display:flex;flex-direction:column;gap:12px;align-items:center;">
+            <button id="btn-t759-play-again" class="btn-primary" data-i18n="btn_play_again"></button>
+            <button class="btn-back btn-ghost" data-target="technique" data-i18n="technique_title"></button>
+          </div>
+        </div>
+      </div>
+      <button id="btn-t759-action-continue" style="display:none" data-i18n="t759_action_commit"></button>
     </div>
 
     <!-- ===================== MODAL: TIMER ===================== -->

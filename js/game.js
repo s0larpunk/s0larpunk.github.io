@@ -57,7 +57,22 @@ window.Game = (function () {
     },
     linesVeils: false,
     challengeMode: 'random',
-    completed: false
+    completed: false,
+    t354: {
+      ancestor: null,
+      value: null,
+      tool: null,
+      extras: [],
+      challenges: [],
+      response: ''
+    },
+    t759: {
+      challenge: null,
+      customChallenge: '',
+      value: null,
+      tools: [],
+      action: ''
+    }
   };
 
   let _state = JSON.parse(JSON.stringify(DEFAULT_STATE));
@@ -105,6 +120,22 @@ window.Game = (function () {
     if (dc.values) dc.values.forEach(function (v) { if (v) _drawnIds.add(v.id); });
     if (dc.tools) dc.tools.forEach(function (t) { if (t) _drawnIds.add(t.id); });
     if (dc.challenge) _drawnIds.add(dc.challenge.id);
+    // t354 cards
+    var t3 = _state.t354;
+    if (t3) {
+      if (t3.ancestor) _drawnIds.add(t3.ancestor.id);
+      if (t3.value) _drawnIds.add(t3.value.id);
+      if (t3.tool) _drawnIds.add(t3.tool.id);
+      if (t3.extras) t3.extras.forEach(function(c) { if (c) _drawnIds.add(c.id); });
+      if (t3.challenges) t3.challenges.forEach(function(c) { if (c) _drawnIds.add(c.id); });
+    }
+    // t759 cards
+    var t7 = _state.t759;
+    if (t7) {
+      if (t7.challenge) _drawnIds.add(t7.challenge.id);
+      if (t7.value) _drawnIds.add(t7.value.id);
+      if (t7.tools) t7.tools.forEach(function(c) { if (c) _drawnIds.add(c.id); });
+    }
   }
 
   // ──────────────────────────────────────────────────────────
@@ -201,7 +232,15 @@ window.Game = (function () {
         'phase2-challenge': 2,
         'phase2-notepad': 2,
         'phase3-notepad': 3,
-        'phase4': 4
+        'phase4': 4,
+        't354-setup': 1,
+        't354-challenges': 1,
+        't354-play': 1,
+        't354-complete': 1,
+        't759-challenge': 1,
+        't759-value': 1,
+        't759-spark': 1,
+        't759-action': 1
       };
       if (screenPhaseMap[screen] !== undefined) {
         var newPhase = screenPhaseMap[screen];
@@ -493,7 +532,14 @@ document.addEventListener('DOMContentLoaded', function () {
     btnBeginGame.addEventListener('click', function () {
       // Sync lines/veils checkbox state before advancing
       if (checkLinesVeils) window.Game.setState({ linesVeils: checkLinesVeils.checked });
-      window.Game.goTo('timer-setup');
+      var technique = window.Game.getState().technique;
+      if (technique === '354') {
+        window.Game.goTo('t354-setup');
+      } else if (technique === '759') {
+        window.Game.goTo('t759-challenge');
+      } else {
+        window.Game.goTo('timer-setup');
+      }
     });
   }
 
@@ -942,4 +988,296 @@ document.addEventListener('DOMContentLoaded', function () {
   // ── 29. Initial i18n pass ─────────────────────────────────
   if (window.UI && window.UI.refreshI18n) window.UI.refreshI18n();
   refreshTimerTable();
+
+  // ══════════════════════════════════════════════════════════
+  // ── 30. Technique 354 — Nail, Meet Hammer ─────────────────
+  // ══════════════════════════════════════════════════════════
+
+  // Delegated deck-stack clicks for T354 setup screen
+  document.addEventListener('click', function (e) {
+    var stack = e.target.closest('.deck-stack[data-context="t354"]');
+    if (!stack) return;
+    var screen354Setup = $('screen-t354-setup');
+    if (!screen354Setup || screen354Setup.style.display === 'none') return;
+
+    var type = stack.getAttribute('data-type');
+    var st = window.Game.getState();
+    var t354 = JSON.parse(JSON.stringify(st.t354 || {}));
+
+    // Enforce: one card per slot
+    if (type === 'ancestor' && t354.ancestor) return;
+    if (type === 'values' && t354.value) return;
+    if (type === 'tools' && t354.tool) return;
+
+    var card = window.Game.drawCard(type);
+    if (!card) return;
+
+    var handEl = $('hand-t354-setup');
+    if (window.Cards && handEl) window.Cards.deal(card, stack, handEl, 0);
+
+    if (type === 'ancestor') t354.ancestor = card;
+    else if (type === 'values') t354.value = card;
+    else if (type === 'tools') t354.tool = card;
+
+    window.Game.setState({ t354: t354 });
+
+    // Enable continue when all 3 drawn
+    var allDrawn = t354.ancestor && t354.value && t354.tool;
+    var localBtn = $('btn-t354-setup-continue');
+    if (localBtn) localBtn.disabled = !allDrawn;
+    var globalBtn = $('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = !allDrawn;
+  });
+
+  var btnT354SetupContinue = $('btn-t354-setup-continue');
+  if (btnT354SetupContinue) {
+    btnT354SetupContinue.addEventListener('click', function () {
+      window.Game.goTo('t354-challenges');
+    });
+  }
+
+  // Delegated deck-stack clicks for T354 challenges screen
+  document.addEventListener('click', function (e) {
+    var stack = e.target.closest('.deck-stack[data-context="t354-challenge"]');
+    if (!stack) return;
+    var screenChallenges = $('screen-t354-challenges');
+    if (!screenChallenges || screenChallenges.style.display === 'none') return;
+
+    var st = window.Game.getState();
+    var t354 = JSON.parse(JSON.stringify(st.t354 || {}));
+    if (!t354.challenges) t354.challenges = [];
+    if (t354.challenges.length >= 3) return;
+
+    var card = window.Game.drawCard('challenge');
+    if (!card) return;
+
+    t354.challenges.push(card);
+    window.Game.setState({ t354: t354 });
+
+    var handEl = $('hand-t354-challenges');
+    if (window.Cards && handEl) window.Cards.deal(card, null, handEl, 0);
+
+    // Update progress dots
+    var dots = document.querySelectorAll('#draw-progress-t354 .progress-dot');
+    for (var di = 0; di < dots.length; di++) {
+      if (di < t354.challenges.length) dots[di].classList.add('filled');
+    }
+
+    // If deck exhausted
+    if (t354.challenges.length >= 3) {
+      stack.classList.add('dealt');
+    }
+
+    // Enable continue when 3 drawn
+    var localBtn = $('btn-t354-challenges-continue');
+    if (localBtn) localBtn.disabled = t354.challenges.length < 3;
+    var globalBtn = $('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = t354.challenges.length < 3;
+  });
+
+  var btnT354ChallengesContinue = $('btn-t354-challenges-continue');
+  if (btnT354ChallengesContinue) {
+    btnT354ChallengesContinue.addEventListener('click', function () {
+      window.Game.goTo('t354-play');
+    });
+  }
+
+  // T354 extra card button
+  var btnT354Extra = $('btn-t354-extra');
+  if (btnT354Extra) {
+    btnT354Extra.addEventListener('click', function () {
+      var types = ['ancestor', 'values', 'tools'];
+      var type = types[Math.floor(Math.random() * types.length)];
+      var card = window.Game.drawCard(type);
+      if (!card) return;
+
+      var st = window.Game.getState();
+      var t354 = JSON.parse(JSON.stringify(st.t354 || {}));
+      if (!t354.extras) t354.extras = [];
+      t354.extras.push(card);
+      window.Game.setState({ t354: t354 });
+
+      var handEl = $('hand-t354-extras');
+      if (window.Cards && handEl) window.Cards.deal(card, null, handEl, 0);
+    });
+  }
+
+  // T354 response textarea autosave
+  var t354ResponseArea = $('t354-response');
+  if (t354ResponseArea) {
+    t354ResponseArea.addEventListener('input', function () {
+      window.Game.setState({ t354: { response: t354ResponseArea.value } });
+    });
+  }
+
+  var btnT354PlayContinue = $('btn-t354-play-continue');
+  if (btnT354PlayContinue) {
+    btnT354PlayContinue.addEventListener('click', function () {
+      window.Game.goTo('t354-complete');
+    });
+  }
+
+  var btnT354PlayAgain = $('btn-t354-play-again');
+  if (btnT354PlayAgain) {
+    btnT354PlayAgain.addEventListener('click', function () {
+      window.Game.resetState();
+      window.Game.goTo('welcome');
+    });
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // ── 31. Technique 759 — IRL RFN ───────────────────────────
+  // ══════════════════════════════════════════════════════════
+
+  // T759 custom challenge textarea
+  var t759CustomChallenge = $('t759-custom-challenge');
+  if (t759CustomChallenge) {
+    t759CustomChallenge.addEventListener('input', function () {
+      var val = t759CustomChallenge.value.trim();
+      window.Game.setState({ t759: { customChallenge: t759CustomChallenge.value } });
+
+      // If user typed something, clear drawn challenge card and enable continue
+      var st = window.Game.getState();
+      var localBtn = $('btn-t759-challenge-continue');
+      var globalBtn = $('btn-continue-global');
+      var enabled = val.length > 0 || !!(st.t759 && st.t759.challenge);
+      if (localBtn) localBtn.disabled = !enabled;
+      if (globalBtn) globalBtn.disabled = !enabled;
+    });
+  }
+
+  // Delegated deck-stack clicks for T759 challenge screen
+  document.addEventListener('click', function (e) {
+    var stack = e.target.closest('.deck-stack[data-context="t759-challenge"]');
+    if (!stack) return;
+    var screenT759Ch = $('screen-t759-challenge');
+    if (!screenT759Ch || screenT759Ch.style.display === 'none') return;
+
+    var st = window.Game.getState();
+    var t759 = JSON.parse(JSON.stringify(st.t759 || {}));
+    if (t759.challenge) return; // already drawn
+
+    var card = window.Game.drawCard('challenge');
+    if (!card) return;
+
+    t759.challenge = card;
+    window.Game.setState({ t759: t759 });
+
+    var handEl = $('hand-t759-challenge');
+    if (window.Cards && handEl) window.Cards.deal(card, stack, handEl, 0);
+
+    // Clear custom textarea if present
+    if (t759CustomChallenge) {
+      t759CustomChallenge.value = '';
+      window.Game.setState({ t759: { customChallenge: '' } });
+    }
+
+    var localBtn = $('btn-t759-challenge-continue');
+    if (localBtn) localBtn.disabled = false;
+    var globalBtn = $('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = false;
+  });
+
+  var btnT759ChallengeContinue = $('btn-t759-challenge-continue');
+  if (btnT759ChallengeContinue) {
+    btnT759ChallengeContinue.addEventListener('click', function () {
+      window.Game.goTo('t759-value');
+    });
+  }
+
+  // Delegated deck-stack clicks for T759 value screen
+  document.addEventListener('click', function (e) {
+    var stack = e.target.closest('.deck-stack[data-context="t759-value"]');
+    if (!stack) return;
+    var screenT759Val = $('screen-t759-value');
+    if (!screenT759Val || screenT759Val.style.display === 'none') return;
+
+    var st = window.Game.getState();
+    var t759 = JSON.parse(JSON.stringify(st.t759 || {}));
+    if (t759.value) return; // already drawn
+
+    var card = window.Game.drawCard('values');
+    if (!card) return;
+
+    t759.value = card;
+    window.Game.setState({ t759: t759 });
+
+    var handEl = $('hand-t759-value');
+    if (window.Cards && handEl) window.Cards.deal(card, stack, handEl, 0);
+
+    var localBtn = $('btn-t759-value-continue');
+    if (localBtn) localBtn.disabled = false;
+    var globalBtn = $('btn-continue-global');
+    if (globalBtn) globalBtn.disabled = false;
+  });
+
+  var btnT759ValueContinue = $('btn-t759-value-continue');
+  if (btnT759ValueContinue) {
+    btnT759ValueContinue.addEventListener('click', function () {
+      window.Game.goTo('t759-spark');
+    });
+  }
+
+  // T759 draw tool button
+  var btnT759DrawTool = $('btn-t759-draw-tool');
+  if (btnT759DrawTool) {
+    btnT759DrawTool.addEventListener('click', function () {
+      var card = window.Game.drawCard('tools');
+      if (!card) return;
+
+      var st = window.Game.getState();
+      var t759 = JSON.parse(JSON.stringify(st.t759 || {}));
+      if (!t759.tools) t759.tools = [];
+      t759.tools.push(card);
+      window.Game.setState({ t759: t759 });
+
+      var handEl = $('hand-t759-spark');
+      if (window.Cards && handEl) window.Cards.deal(card, null, handEl, 0);
+
+      // Update count label
+      var countEl = $('t759-tool-count');
+      if (countEl) {
+        var count = t759.tools.length;
+        var label = window.i18n ? window.i18n.t('t759_tools_drawn') : 'tools drawn';
+        countEl.textContent = count + ' ' + label;
+      }
+    });
+  }
+
+  // T759 spark continue (idea button — always enabled)
+  var btnT759SparkContinue = $('btn-t759-spark-continue');
+  if (btnT759SparkContinue) {
+    btnT759SparkContinue.addEventListener('click', function () {
+      window.Game.goTo('t759-action');
+    });
+  }
+
+  // T759 action textarea autosave
+  var t759ActionText = $('t759-action-text');
+  if (t759ActionText) {
+    t759ActionText.addEventListener('input', function () {
+      window.Game.setState({ t759: { action: t759ActionText.value } });
+    });
+  }
+
+  // T759 commit to action button
+  var btnT759ActionContinue = $('btn-t759-action-continue');
+  if (btnT759ActionContinue) {
+    btnT759ActionContinue.addEventListener('click', function () {
+      // Show completion message, hide commit button
+      var donePart = $('t759-action-done');
+      if (donePart) donePart.style.display = 'block';
+      var globalBtn = $('btn-continue-global');
+      if (globalBtn) globalBtn.style.display = 'none';
+      if (btnT759ActionContinue) btnT759ActionContinue.style.display = 'none';
+    });
+  }
+
+  var btnT759PlayAgain = $('btn-t759-play-again');
+  if (btnT759PlayAgain) {
+    btnT759PlayAgain.addEventListener('click', function () {
+      window.Game.resetState();
+      window.Game.goTo('welcome');
+    });
+  }
 });
